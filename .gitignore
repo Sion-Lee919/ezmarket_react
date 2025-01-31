@@ -1,0 +1,91 @@
+### 1. OS 관련 파일 무시 ###
+.DS_Store
+Thumbs.db
+
+### 2. STS4(Eclipse) 관련 파일 무시 ###
+.metadata/
+*.classpath
+*.project
+*.settings/
+bin/
+target/
+
+### 3. IntelliJ IDEA 관련 파일 무시 (혹시 사용한다면) ###
+.idea/
+*.iml
+*.ipr
+*.iws
+
+### 4. VS Code 관련 파일 무시 ###
+.vscode/
+*.code-workspace
+
+### 5. Spring Boot - Maven 관련 파일 무시 ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### 6. Spring Boot 환경 설정 파일 무시 ###
+application-*.properties
+application-*.yml
+.env
+*.env
+
+### 7. Lombok 설정 파일 무시 ###
+.lombok.config
+
+### 8. MyBatis 및 기타 ORM 관련 파일 무시 ###
+*.db
+*.mv.db
+*.h2.db
+*.trace.db
+
+### 9. 로그 및 임시 파일 무시 ###
+logs/
+*.log
+*.out
+hs_err_pid*
+*.pid
+*.seed
+
+### 10. React (VS Code) 프론트엔드 관련 파일 무시 ###
+# Node.js 모듈 및 빌드 파일
+frontend/node_modules/
+frontend/build/
+frontend/.next/
+frontend/.nuxt/
+frontend/.cache/
+frontend/dist/
+frontend/out/
+frontend/.parcel-cache/
+
+# npm, yarn, pnpm 관련 파일
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/.pnpm-debug.log*
+frontend/package-lock.json
+frontend/yarn.lock
+frontend/pnpm-lock.yaml
+
+# 환경 설정 파일 및 민감한 정보
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+### 11. Docker 관련 파일 무시 ###
+.dockerignore
+docker-compose.override.yml
+
+### 12. Git Ignore 파일 추가 및 예외 처리 ###
+!.gitignore
