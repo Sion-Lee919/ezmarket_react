@@ -1,5 +1,5 @@
 {
-  "name": "hello-react",
+  "name": "react_ezmarket",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +16,7 @@
     "styled-components": "^6.1.13",
     "web-vitals": "^2.1.4"
   },
+  "proxy": "http://localhost:9090",
   "scripts": {
     "start": "set PORT=4000 && react-scripts start",
     "build": "react-scripts build",
@@ -39,5 +40,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }
