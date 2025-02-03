@@ -89,3 +89,5 @@ docker-compose.override.yml
 
 ### 12. Git Ignore 파일 추가 및 예외 처리 ###
 !.gitignore
+
+.gitattributes
