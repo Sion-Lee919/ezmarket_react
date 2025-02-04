@@ -9,7 +9,13 @@ const JoinN = () => {
     password: '',
     realname: '',
     nickname: '',
-    email: '',
+    email_name: "",
+    email_domain: "",
+    email_extension: "com",
+    email: "",
+    phone_first: "010",
+    phone_second: "",
+    phone_third: "",
     phone: '',
     address: '',
   });
@@ -33,10 +39,6 @@ const JoinN = () => {
       member_id: uniqueId,
     }));
   }, [])
-
-  const handleChange = (e) => {
-    setForm({...form, [e.target.name]: e.target.value,});
-  };
 
   //중복 확인
   const checkId = async (e) => {
@@ -81,18 +83,42 @@ const JoinN = () => {
     }
   };
 
-  const checkEmail = async (e) => {
-    const enteredEmail = e.target.value;
-    setForm({ ...form, email: enteredEmail });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
 
-    if (enteredEmail.length === 0) {
+  useEffect(() => {
+    const { email_name, email_domain, email_extension } = form;
+    const merge_email = `${email_name}@${email_domain}.${email_extension}`;
+
+    const { phone_first, phone_second, phone_third } = form;
+    const merge_phone = `${phone_first}-${phone_second}-${phone_third}`;
+
+  setForm((prevForm) => ({
+      ...prevForm,
+      email: merge_email,
+      phone: merge_phone,
+    }));
+
+    checkEmail(merge_email);
+    checkPhone(merge_phone);
+
+  }, [form.email_name, form.email_domain, form.email_extension, form.phone_first, form.phone_second, form.phone_third]);
+
+
+  const checkEmail = async (fullEmail) => {
+    if (fullEmail.length === 0) {
       setEmailCheckResult('');
       return;
     }
 
     try {
       const response = await axios.get('http://localhost:9090/checkEmail', {
-        params: { email: enteredEmail },
+        params: { email: fullEmail },
       });
 
       setEmailCheckResult(response.data);
@@ -102,18 +128,15 @@ const JoinN = () => {
     }
   };
 
-  const checkPhone = async (e) => {
-    const enteredPhone = e.target.value;
-    setForm({ ...form, phone: enteredPhone });
-
-    if (enteredPhone.length === 0) {
+  const checkPhone = async (fullPhone) => {
+    if (fullPhone.length === 0) {
       setPhoneCheckResult('');
       return;
     }
 
     try {
       const response = await axios.get('http://localhost:9090/checkPhone', {
-        params: { phone: enteredPhone },
+        params: { phone: fullPhone },
       });
 
       setPhoneCheckResult(response.data);
@@ -123,9 +146,16 @@ const JoinN = () => {
     }
   };
 
+
   //회원가입 폼 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const fullEmail = `${form.email_name}@${form.email_domain}.${form.email_extension}`; //이메일 합치기
+    setForm((prevForm) => ({
+      ...prevForm,
+      email: fullEmail, 
+    }));
 
     try {
       await axios.post('http://localhost:9090/joinN', form, {
@@ -171,14 +201,33 @@ const JoinN = () => {
 
         <div>
           <label htmlFor="email">이메일: </label>
-          <input type="email" name="email" value={form.email} onChange={checkEmail} placeholder="XXXX@XXXX.com/kr/net" maxLength={100} required />
-          <span>{emailCheckResult}</span>
+          <div>
+            <input type="text" name="email_name" value={form.email_name} onChange={handleChange} maxLength={40} required />
+            @
+            <input type="text" name="email_domain" value={form.email_domain} onChange={handleChange} maxLength={50} required />
+            .
+            <select name="email_extension" value={form.email_extesnion} onChange={handleChange}>
+              <option value="com">com</option>
+              <option value="kr">kr</option>
+              <option value="net">net</option>
+            </select>
+            <span>{emailCheckResult}</span>
+          </div>
         </div>
 
         <div>
           <label htmlFor="phone">전화번호: </label>
-          <input type="text" name="phone" value={form.phone} onChange={checkPhone} pattern="010-\d{3,4}-\d{4}" placeholder="010-XXXX-XXXX" title="010-XXXX-XXXX로 입력." required />
-          <span>{phoneCheckResult}</span>
+          <div>
+            <select name="phone_first" value={form.phone_first} onChange={handleChange}>
+            <option value="010">010</option>
+            <option value="011">011</option>
+            </select>
+            -
+            <input type="text" name="phone_second" value={form.phone_second} onChange={handleChange} pattern="\d{3,4}" title="3~4개의 숫자로 입력하세요." maxLength={4} required />
+            -
+            <input type="text" name="phone_third" value={form.phone_third} onChange={handleChange} pattern="\d{4}" title="4개의 숫자로 입력하세요." maxLength={4} required />
+            <span>{phoneCheckResult}</span>
+          </div>
         </div>
 
         <div>

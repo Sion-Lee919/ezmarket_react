@@ -3,30 +3,32 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate(); 
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate(); 
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+    const handleSubmit = (event) => {
+        event.preventDefault();
+    
+        const params = new URLSearchParams();
+        params.append('username', username);
+        params.append('password', password);
 
-    const params = new URLSearchParams();
-    params.append('username', username);
-    params.append('password', password);
+        axios.post('/login', params.toString(),
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        )
+        .then(response => {
+            if (response.status === 200) {
+                navigate('/');  
+            }
+        })
+        .catch(error => {
+            alert(error.response.data); 
+        });
+    };
 
-    axios.post('/login', params.toString(),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-  )
-      .then(response => {
-        navigate('/');
-      })
-      .catch(error => {
-        alert('아이디 혹은 비밀번호가 틀렸습니다.');
-      });
-  };
-
-  const handlePrevClick = () => {
-    navigate(-1);
+  const handleHomeClick = () => {
+    navigate("/");
   };
 
   const handleJoinClick = () => {
@@ -45,8 +47,8 @@ const Login = () => {
         <button onClick={handleJoinClick}>
           회원가입
         </button>
-        <button onClick={handlePrevClick}>
-          이전
+        <button onClick={handleHomeClick}>
+          홈
         </button>
       </form>
       <div>
