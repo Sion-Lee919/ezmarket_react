@@ -1,6 +1,5 @@
 // Search.js
 import React, { useState, useEffect } from 'react';
-
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -10,7 +9,6 @@ const SearchComponent = () => {
     const [allItems, setAllItems] = useState([]);
     const [filteredItems, setFilteredItems] = useState([]);
     const navigate = useNavigate();  // useNavigate 훅을 통해 페이지 이동을 제어
-
 
     useEffect(() => {
         axios({
@@ -48,7 +46,6 @@ const SearchComponent = () => {
 
 
     /* 검색바 밑 검색어 결과창 이펙트 관련 함수. css 추가 후 주석처리 해제 예정
-
     const highlightTerm = (text) => {
         if (!searchTerm) return text; // 검색어가 없으면 그대로 반환
         const regex = new RegExp(`(${searchTerm})`, 'gi'); // 대소문자 구분 없이 검색어 강조
@@ -66,7 +63,6 @@ const SearchComponent = () => {
                 type="text" 
                 placeholder="상품 검색..." 
                 value={searchTerm} 
-
                 onChange={handleSearch}
                 onKeyDown={(e) => { 
                     if (e.key === 'Enter') handleSearchButtonClick();
@@ -79,7 +75,6 @@ const SearchComponent = () => {
             >
             검색
             </button>
-
             {searchTerm && filteredItems.length > 0 && (
             <div className='search-result'>
                 {filteredItems.slice(0,5).map(item => ( // slice 로 자동완성 길이 제한
