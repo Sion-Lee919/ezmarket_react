@@ -1,5 +1,6 @@
 //import './App.css';
 import React from 'react';
+
 import { BrowserRouter, Routes, Route, Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CartList from './components/CartList';
@@ -24,6 +25,7 @@ function App() {
       <Routes> 
         <Route path='/cart' element={<CartList/>}/>
         <Route path='/item/:itemid' element={<ItemDetail/>}/>
+
         <Route path='/brand/:id' element={<BrandPage/>}/>
         <Route path='/search' element={<SearchResultComponent/>}/>
 
@@ -32,6 +34,7 @@ function App() {
         <Route path="/joinN" element={<JoinN />} />
         <Route path="/my" element={<MyPage />} />
         <Route path="/" element={<Main />} />
+
       </Routes>
       
       </BrowserRouter>

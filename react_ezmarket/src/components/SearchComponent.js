@@ -34,6 +34,8 @@ const SearchComponent = () => {
         } else { setFilteredItems(allItems); }
     };
 
+
+
     const handleSearchButtonClick = () => {
         if (searchTerm){
             navigate(`/search?keyword=${encodeURIComponent(searchTerm)}`,
