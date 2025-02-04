@@ -1,21 +1,21 @@
 //import './App.css';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import Home from './components/home';
+import GoogleLoginButton from './components/GoogleLoginButton';
 
 
 function App() {
 
   return (
-    <div>
-      <BrowserRouter>
-      
+  
+    <Router>
       <Routes>
-        
+        <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<GoogleLoginButton />} />
       </Routes>
-     
-      </BrowserRouter>
-    </div>
+    </Router>
   );
 }
 
