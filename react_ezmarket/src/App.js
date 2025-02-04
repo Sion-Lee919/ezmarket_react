@@ -3,6 +3,11 @@ import React from 'react';
 
 import { BrowserRouter, Routes, Route, Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+import Home from './components/home';
+import GoogleLoginButton from './components/GoogleLoginButton';
+
 import CartList from './components/CartList';
 import HeaderComponent from './components/HeaderComponent';
 import ItemDetail from './components/ItemDetail';
@@ -15,9 +20,11 @@ import BrandPage from './components/BrandPage.js';
 import SearchResultComponent from './components/SearchResultComponent.js';
 
 
+
 function App() {
 
   return (
+
     <div>
       <BrowserRouter>
       <HeaderComponent/>
@@ -34,11 +41,14 @@ function App() {
         <Route path="/joinN" element={<JoinN />} />
         <Route path="/my" element={<MyPage />} />
         <Route path="/" element={<Main />} />
-
+        
+         <Route path="/home" element={<Home />} />
+        <Route path="/loginn" element={<GoogleLoginButton />} />
       </Routes>
       
       </BrowserRouter>
     </div>
+
   );
 }
 
