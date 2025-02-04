@@ -1,6 +1,10 @@
 //import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link} from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import CartList from './components/CartList';
+import HeaderComponent from './components/HeaderComponent';
+import ItemDetail from './components/ItemDetail';
 import Login from './pages/member/login/login.js';
 import JoinN from './pages/member/join/joinN';
 import Join from './pages/member/join/join';
@@ -13,13 +17,18 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-      <Routes>
-      <Route path="/login" element={<Login />} />
+      <HeaderComponent/>
+      
+      <Routes> 
+        <Route path='/cart' element={<CartList/>}/>
+        <Route path='/item/:itemid' element={<ItemDetail/>}/>
+        <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/joinN" element={<JoinN />} />
         <Route path="/my" element={<MyPage />} />
         <Route path="/" element={<Main />} />
       </Routes>
+      
       </BrowserRouter>
     </div>
   );
