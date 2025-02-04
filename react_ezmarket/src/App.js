@@ -43,7 +43,7 @@ function App() {
         <Route path="/" element={<Main />} />
         
          <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<GoogleLoginButton />} />
+        <Route path="/loginn" element={<GoogleLoginButton />} />
       </Routes>
       
       </BrowserRouter>
