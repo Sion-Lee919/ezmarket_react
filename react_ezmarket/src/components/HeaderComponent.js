@@ -6,6 +6,10 @@ const HeaderComponent = (prop) => {
     <div>
         <Link to="/">이지마켓</Link><br/>
         <Link to="/cart">장바구니</Link>
+
+        <Link to="/brand">판매자페이지</Link>
+
+
         <SearchComponent></SearchComponent>
 
     </div>
