@@ -17,7 +17,7 @@ function App() {
       <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/joinN" element={<JoinN />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/my" element={<MyPage />} />
         <Route path="/" element={<Main />} />
       </Routes>
       </BrowserRouter>
