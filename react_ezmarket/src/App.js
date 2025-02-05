@@ -17,7 +17,7 @@ import Join from './pages/member/join/join';
 import Main from './pages/member/main';
 import MyPage from './pages/member/my/myPage.js';
 import BrandPage from './components/BrandPage.js';
-import SearchResultComponent from './components/SerachResultComponent.js';
+import SearchResultComponent from './components/SearchResultComponent.js';
 
 
 

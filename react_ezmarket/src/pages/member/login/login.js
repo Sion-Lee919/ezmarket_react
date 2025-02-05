@@ -14,7 +14,7 @@ const Login = () => {
         params.append('username', username);
         params.append('password', password);
 
-        axios.post('/login', params.toString(),
+        axios.post('http://localhost:9090/login', params.toString(),
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         )
         .then(response => {
