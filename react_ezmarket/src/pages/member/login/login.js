@@ -20,6 +20,11 @@ const Login = () => {
         withCredentials: true
       })
 
+
+        axios.post('/login', params.toString(),
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        )
+
         .then(response => {
             const token = response.data.token;
             localStorage.setItem('token', token);

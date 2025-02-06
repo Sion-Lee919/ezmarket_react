@@ -22,6 +22,7 @@ import FindId from './pages/member/login/findId.js';
 import FindPw from './pages/member/login/findPw.js';
 import ResetPw from './pages/member/login/resetPw.js';
 import Modify from './pages/member/my/modify.js';
+import ItemRegister from './components/Itemregister.js';
 
 
 
@@ -37,8 +38,11 @@ function App() {
         <Route path='/cart' element={<CartList/>}/>
         <Route path='/item/:itemid' element={<ItemDetail/>}/>
 
-        <Route path='/brand/:id' element={<BrandPage/>}/>
+        <Route path='/brand/:brandid' element={<BrandPage/>}/>
+        <Route path='/brand/:brandid/itemregister/' element={<ItemRegister/>}/>
         <Route path='/search' element={<SearchResultComponent/>}/>
+
+        
 
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
