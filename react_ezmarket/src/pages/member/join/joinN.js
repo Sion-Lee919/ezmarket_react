@@ -56,7 +56,7 @@ const JoinN = () => {
       });
 
       setIdCheckResult(response.data);
-      setIsRegisterDisabled(response.data.includes('중복된 아이디'));
+      checkRegisterDisabled(response.data, nicknameCheckResult, emailCheckResult, phoneCheckResult);
     } catch (error) {
       console.error('아이디 중복 확인 오류', error);
     }
@@ -77,7 +77,7 @@ const JoinN = () => {
       });
 
       setNicknameCheckResult(response.data);
-      setIsRegisterDisabled(response.data.includes('중복된 닉네임'));
+      checkRegisterDisabled(idCheckResult, response.data, emailCheckResult, phoneCheckResult);
     } catch (error) {
       console.error('닉네임 중복 확인 오류', error);
     }
@@ -122,7 +122,7 @@ const JoinN = () => {
       });
 
       setEmailCheckResult(response.data);
-      setIsRegisterDisabled(response.data.includes('중복된 이메일'));
+      checkRegisterDisabled(idCheckResult, response.data, nicknameCheckResult, phoneCheckResult);
     } catch (error) {
       console.error('이메일 중복 확인 오류', error);
     }
@@ -140,22 +140,29 @@ const JoinN = () => {
       });
 
       setPhoneCheckResult(response.data);
-      setIsRegisterDisabled(response.data.includes('중복된 전화번호'));
+      checkRegisterDisabled(idCheckResult, response.data, nicknameCheckResult, emailCheckResult);
     } catch (error) {
       console.error('전화번호 중복 확인 오류', error);
     }
   };
+  
+  const checkRegisterDisabled = (idResult, nicknameResult, emailResult, phoneResult) => {
+	  if (
+	  idResult.includes('중복된 아이디') ||
+	  nicknameResult.includes('중복된 닉네임') ||
+	  emailResult.includes('중복된 이메일') ||
+	  phoneResult.includes('중복된 전화번호')
+	  ) {
+		setIsRegisterDisabled(true);
+	  } else {
+		setIsRegisterDisabled(false);  
+	  }
+  }
 
 
   //회원가입 폼 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const fullEmail = `${form.email_name}@${form.email_domain}.${form.email_extension}`; //이메일 합치기
-    setForm((prevForm) => ({
-      ...prevForm,
-      email: fullEmail, 
-    }));
 
     try {
       await axios.post('http://localhost:9090/joinN', form, {
