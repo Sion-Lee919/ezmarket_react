@@ -5,25 +5,36 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('')
     const navigate = useNavigate(); 
 
     const handleSubmit = (event) => {
         event.preventDefault();
     
-        const params = new URLSearchParams();
-        params.append('username', username);
-        params.append('password', password);
+        const data = {
+          username: username,
+          password: password
+      };
+
+      axios.post('http://localhost:9090/login', JSON.stringify(data), {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+      })
+
 
         axios.post('/login', params.toString(),
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         )
+
         .then(response => {
+            const token = response.data.token;
+            localStorage.setItem('token', token);
             if (response.status === 200) {
                 navigate('/');  
             }
         })
         .catch(error => {
-            alert(error.response.data); 
+            alert(error.response.data.message); 
         });
     };
 
@@ -33,6 +44,10 @@ const Login = () => {
 
   const handleJoinClick = () => {
     navigate('/join');
+  };
+
+  const handleNaverLogin = () => {
+    window.location.href = 'http://localhost:9090/oauth2/authorization/naver';
   };
 
   return (
@@ -52,12 +67,7 @@ const Login = () => {
         </button>
       </form>
       <div>
-      <a href="/oauth2/authorization/naver">
-        <img
-          src="https://static.nid.naver.com/oauth/big_g.PNG"
-          alt="네이버 로그인"
-        />
-      </a>
+        <button onClick={handleNaverLogin}>네이버 로그인</button>
     </div>
     </div>
   );

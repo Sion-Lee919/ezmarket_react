@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';  
 import { useNavigate } from 'react-router-dom';  
+import Cookies from 'js-cookie';
 
 const MyPage = () => {
   const [user, setUser] = useState({
@@ -15,24 +16,38 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/userinfo')  
+    const token = Cookies.get('jwt_token'); 
+
+    if (token) {
+      axios.get('http://localhost:9090/userinfo', { 
+        headers: { 'Authorization': `Bearer ${token}` }, 
+        withCredentials: true 
+      })
       .then(response => {
         setUser(response.data);
       })
       .catch(error => {
-        console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
+        console.error('사용자 정보를 가져오는 데 실패.', error);
       });
-  }, []);
+    } else {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const handleLogout = () => {
-    axios.get('/logout')  
-      .then(() => {
-        navigate('/login');  
-      })
-      .catch((error) => {
-        console.error('로그아웃 실패', error);
-      });
-  };
+    Cookies.remove('jwt_token'); 
+    navigate('/login');
+  }
+  //   axios.post('http://localhost:9090/logout',{ withCredentials: true }) 
+  //     .then(() => {
+  //       Cookies.remove('jwt_token'); 
+  //       navigate('/login');  
+  //     })
+  //     .catch((error) => {
+  //       console.error('로그아웃 실패', error);
+  //     });
+  // };
+  // 백에서 처리하려고 했는데 302에러 해결 못해서 그냥 프론트에서만 지움 백에는 쿠키 남음
 
   return (
     <div>
