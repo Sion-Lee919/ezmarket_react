@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Modify = () => {
   const [form, setForm] = useState({
@@ -10,7 +10,7 @@ const Modify = () => {
     nickname: '',
     email_name: "",
     email_domain: "",
-    email_extension: "com",
+    email_extension: "",
     email: "",
     phone_first: "010",
     phone_second: "",
@@ -20,10 +20,52 @@ const Modify = () => {
   });
 
   const [nicknameCheckResult, setNicknameCheckResult] = useState('');
-  const [emailCheckResult, setEmailCheckResult] = useState('');
-  const [phoneCheckResult, setPhoneCheckResult] = useState('');
   const [isRegisterDisabled, setIsRegisterDisabled] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  //기존 정보 불러오기
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const usernameFromUrl = params.get('username');;
+    if (usernameFromUrl) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        username: usernameFromUrl, 
+      }));
+      fetchUserData(usernameFromUrl);
+    }
+  }, [location.search]);
+
+  const fetchUserData = (username) => {
+    fetch(`http://localhost:9090/user/data?username=${username}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setForm((prevForm) => ({
+          ...prevForm,
+          realname: data.realname,
+          nickname: data.nickname,
+          email_name: data.email_name,
+          email_domain: data.email_domain,
+          email_extension: data.email_extension,
+          email: data.email,
+          phone_first: data.phone_first, 
+          phone_second: data.phone_second,
+          phone_third: data.phone_third,
+          phone: data.phone,
+          address: data.address,
+        }));
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error);
+      });
+  };
 
   //중복 확인
   const checkNickname = async (e) => {
@@ -33,7 +75,7 @@ const Modify = () => {
     if (enteredNickname.length === 0) {
       setNicknameCheckResult('');
       return;
-    }
+    }      
 
     try {
       const response = await axios.get('http://localhost:9090/checkNickname', {
@@ -41,9 +83,9 @@ const Modify = () => {
       });
 
       setNicknameCheckResult(response.data);
-      checkRegisterDisabled(response.data, emailCheckResult, phoneCheckResult);
+      setIsRegisterDisabled(response.data.includes('중복된 닉네임'));
     } catch (error) {
-      console.error('닉네임 중복 확인 오류', error);
+        console.error('닉네임 중복 확인 오류', error);
     }
   };
 
@@ -54,73 +96,8 @@ const Modify = () => {
       [name]: value,
     }));
   };
-
-  useEffect(() => {
-    const { email_name, email_domain, email_extension } = form;
-    const merge_email = `${email_name}@${email_domain}.${email_extension}`;
-
-    const { phone_first, phone_second, phone_third } = form;
-    const merge_phone = `${phone_first}-${phone_second}-${phone_third}`;
-
-  setForm((prevForm) => ({
-      ...prevForm,
-      email: merge_email,
-      phone: merge_phone,
-    }));
-
-    checkEmail(merge_email);
-    checkPhone(merge_phone);
-
-  }, [form.email_name, form.email_domain, form.email_extension, form.phone_first, form.phone_second, form.phone_third]);
-
-
-  const checkEmail = async (fullEmail) => {
-    if (fullEmail.length === 0) {
-      setEmailCheckResult('');
-      return;
-    }
-
-    try {
-      const response = await axios.get('http://localhost:9090/checkEmail', {
-        params: { email: fullEmail },
-      });
-
-      setEmailCheckResult(response.data);
-      checkRegisterDisabled(response.data, nicknameCheckResult, phoneCheckResult);
-    } catch (error) {
-      console.error('이메일 중복 확인 오류', error);
-    }
-  };
-
-  const checkPhone = async (fullPhone) => {
-    if (fullPhone.length === 0) {
-      setPhoneCheckResult('');
-      return;
-    }
-
-    try {
-      const response = await axios.get('http://localhost:9090/checkPhone', {
-        params: { phone: fullPhone },
-      });
-
-      setPhoneCheckResult(response.data);
-      checkRegisterDisabled(response.data, nicknameCheckResult, emailCheckResult);
-    } catch (error) {
-      console.error('전화번호 중복 확인 오류', error);
-    }
-  };
   
-  const checkRegisterDisabled = (nicknameResult, emailResult, phoneResult) => {
-	  if (
-	  nicknameResult.includes('중복된 닉네임') ||
-	  emailResult.includes('중복된 이메일') ||
-	  phoneResult.includes('중복된 전화번호')
-	  ) {
-		setIsRegisterDisabled(true);
-	  } else {
-		setIsRegisterDisabled(false);  
-	  }
-  }
+
 
 
   const handleSubmit = async (e) => {
@@ -148,7 +125,7 @@ const Modify = () => {
 
         <div>
           <label htmlFor="username">아이디: </label>
-          <input type="text" name="username" value={form.username} onChange={handleChange} maxLength={12} required />
+          <input type="text" name="username" value={form.username} onChange={handleChange} maxLength={12} required readOnly />
         </div>
 
         <div>
@@ -158,7 +135,7 @@ const Modify = () => {
 
         <div>
           <label htmlFor="realname">이름: </label>
-          <input type="text" name="realname" value={form.realname} onChange={handleChange} maxLength={10} required />
+          <input type="text" name="realname" value={form.realname} onChange={handleChange} maxLength={10} required readOnly />
         </div>
 
         <div>
@@ -170,16 +147,15 @@ const Modify = () => {
         <div>
           <label htmlFor="email">이메일: </label>
           <div>
-            <input type="text" name="email_name" value={form.email_name} onChange={handleChange} maxLength={40} required />
+            <input type="text" name="email_name" value={form.email_name} onChange={handleChange} maxLength={40} required readOnly />
             @
-            <input type="text" name="email_domain" value={form.email_domain} onChange={handleChange} maxLength={50} required />
+            <input type="text" name="email_domain" value={form.email_domain} onChange={handleChange} maxLength={50} required readOnly />
             .
             <select name="email_extension" value={form.email_extesnion} onChange={handleChange}>
               <option value="com">com</option>
               <option value="kr">kr</option>
               <option value="net">net</option>
             </select>
-            <span>{emailCheckResult}</span>
           </div>
         </div>
 
@@ -191,10 +167,9 @@ const Modify = () => {
             <option value="011">011</option>
             </select>
             -
-            <input type="text" name="phone_second" value={form.phone_second} onChange={handleChange} pattern="\d{3,4}" title="3~4개의 숫자로 입력하세요." maxLength={4} required />
+            <input type="text" name="phone_second" value={form.phone_second} onChange={handleChange} pattern="\d{3,4}" title="3~4개의 숫자로 입력하세요." maxLength={4} required readOnly />
             -
-            <input type="text" name="phone_third" value={form.phone_third} onChange={handleChange} pattern="\d{4}" title="4개의 숫자로 입력하세요." maxLength={4} required />
-            <span>{phoneCheckResult}</span>
+            <input type="text" name="phone_third" value={form.phone_third} onChange={handleChange} pattern="\d{4}" title="4개의 숫자로 입력하세요." maxLength={4} required readOnly />
           </div>
         </div>
 
@@ -204,7 +179,7 @@ const Modify = () => {
         </div>
 
         <div>
-          <button type="submit" disabled={isRegisterDisabled}>가입하기</button>
+          <button type="submit" disabled={isRegisterDisabled}>수정하기</button>
           <button type="button" onClick={() => navigate(-1)}>이전</button>
         </div>
       </form>
