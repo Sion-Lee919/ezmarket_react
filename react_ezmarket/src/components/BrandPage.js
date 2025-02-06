@@ -6,6 +6,7 @@ function BrandPage(){
     const [items, setItems] = useState([]);
     const {brandid} = useParams();
 
+
     useEffect(() => {
         axios({
             url : `http://localhost:9090/getbranditems/${brandid}`,
@@ -14,7 +15,7 @@ function BrandPage(){
         .then(function(res){
             setItems(res.data);
         })
-    }, [])
+    }, [brandid])
 
     if (!items) {
         return <div>Loading...</div>;
@@ -22,19 +23,37 @@ function BrandPage(){
 
     return (
         <div>
-             <Link to={`/brand/${brandid}/itemregister`}>상품등록</Link>
-            <div className="brand-items">
+          <Link to={`/brand/${brandid}/itemregister`} className="register-link">상품등록</Link>
+          <div className="brand-items">
+            <table className="item-table">
+              <thead>
+                <tr>
+                  <th>제품이름</th>
+                  <th>제품정보</th>
+                  <th>가격</th>
+                  <th>수량</th>
+                </tr>
+              </thead>
+              <tbody>
                 {items.map(item => (
-                    <div key={item.product_id} className="search-item">
-                        <h1>제품이름 : {<a href={`/item/${item.product_id}`}>{item.name}</a> || '정보없음'}</h1>
-                        <p>제품정보 : {item.description || '정보없음'}</p>
-                        <p>가격 : {item.price || '정보없음'}</p>
-                        <p>수량 : {item.stock_quantity || '정보없음'}</p>
-                    </div>
+                  <tr key={item.product_id}>
+                    <td>
+                      <Link to={`/item/${item.product_id}`} className="item-name-link">
+                        {item.name || '정보없음'}
+                      </Link>
+                    </td>
+                    <td>{item.description || '정보없음'}</td>
+                    <td>{item.price || '정보없음'}</td>
+                    <td>{item.stock_quantity || '정보없음'}</td>
+                  </tr>
                 ))}
-            </div>
+              </tbody>
+            </table>
+          </div>
         </div>
-    );
+      );
+      
+      
 
 }
 

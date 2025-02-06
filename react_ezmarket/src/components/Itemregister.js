@@ -13,7 +13,7 @@ const ItemRegister = () => {
     const {brandid} = useParams();
 
     useEffect(() => {
-        const randomId = Math.floor(Math.random() * 10000000000);
+        const randomId = Math.floor(Math.random() * 1000000000);
         setProductId(randomId);
     }, []);
 

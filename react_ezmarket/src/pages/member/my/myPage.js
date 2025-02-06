@@ -16,7 +16,7 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = Cookies.get('jwt_token'); 
+    const token = Cookies.get('jwt_token');
 
     if (token) {
       axios.get('http://localhost:9090/userinfo', { 

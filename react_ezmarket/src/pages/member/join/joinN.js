@@ -29,7 +29,7 @@ const JoinN = () => {
 
   //member_id 생성
   const generateUniqueId = () => {
-    return (Date.now() * Math.floor(Math.random() * 1000)); 
+    return (Date.now() * Math.floor(Math.random() * 10)); 
   };
 
   useEffect(() => {
