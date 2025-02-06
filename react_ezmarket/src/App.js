@@ -18,7 +18,12 @@ import Main from './pages/member/main';
 import MyPage from './pages/member/my/myPage.js';
 import BrandPage from './components/BrandPage.js';
 import SearchResultComponent from './components/SearchResultComponent.js';
+import FindId from './pages/member/login/findId.js';
+import FindPw from './pages/member/login/findPw.js';
+import ResetPw from './pages/member/login/resetPw.js';
+import Modify from './pages/member/my/modify.js';
 import ItemRegister from './components/Itemregister.js';
+
 
 
 function App() {
@@ -42,6 +47,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/joinN" element={<JoinN />} />
+        <Route path="/login/findId" element={<FindId />} />
+        <Route path="/login/findPw" element={<FindPw />} />
+        <Route path="/login/findPw/resetPw" element={<ResetPw />} />
+        <Route path="/my/modify" element={<Modify />} />
         <Route path="/my" element={<MyPage />} />
         <Route path="/" element={<Main />} />
         
