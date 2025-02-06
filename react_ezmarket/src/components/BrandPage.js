@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 function BrandPage(){
 
     const [items, setItems] = useState([]);
@@ -22,6 +22,7 @@ function BrandPage(){
 
     return (
         <div>
+             <Link to={`/brand/${brandid}/itemregister`}>상품등록</Link>
             <div className="brand-items">
                 {items.map(item => (
                     <div key={item.product_id} className="search-item">
