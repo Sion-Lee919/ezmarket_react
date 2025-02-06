@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const JoinN = () => {
+const Modify = () => {
   const [form, setForm] = useState({
-    member_id: '',
     username: '',
     password: '',
     realname: '',
@@ -20,48 +19,13 @@ const JoinN = () => {
     address: '',
   });
 
-  const [idCheckResult, setIdCheckResult] = useState('');
   const [nicknameCheckResult, setNicknameCheckResult] = useState('');
   const [emailCheckResult, setEmailCheckResult] = useState('');
   const [phoneCheckResult, setPhoneCheckResult] = useState('');
   const [isRegisterDisabled, setIsRegisterDisabled] = useState(false);
   const navigate = useNavigate();
 
-  //member_id 생성
-  const generateUniqueId = () => {
-    return ((Date.now() % 100000) * Math.floor(Math.random() * 10)); 
-  };
-
-  useEffect(() => {
-    const uniqueId = generateUniqueId();
-    setForm(prevForm => ({ 
-      ...prevForm,
-      member_id: uniqueId,
-    }));
-  }, [])
-
   //중복 확인
-  const checkId = async (e) => {
-    const enteredId = e.target.value;
-    setForm({ ...form, username: enteredId });
-
-    if (enteredId.length === 0) {
-      setIdCheckResult('');
-      return;
-    }
-
-    try {
-      const response = await axios.get('http://localhost:9090/checkId', {
-        params: { username: enteredId },
-      });
-
-      setIdCheckResult(response.data);
-      checkRegisterDisabled(response.data, nicknameCheckResult, emailCheckResult, phoneCheckResult);
-    } catch (error) {
-      console.error('아이디 중복 확인 오류', error);
-    }
-  };
-
   const checkNickname = async (e) => {
     const enteredNickname = e.target.value;
     setForm({ ...form, nickname: enteredNickname });
@@ -77,7 +41,7 @@ const JoinN = () => {
       });
 
       setNicknameCheckResult(response.data);
-      checkRegisterDisabled(idCheckResult, response.data, emailCheckResult, phoneCheckResult);
+      checkRegisterDisabled(response.data, emailCheckResult, phoneCheckResult);
     } catch (error) {
       console.error('닉네임 중복 확인 오류', error);
     }
@@ -122,7 +86,7 @@ const JoinN = () => {
       });
 
       setEmailCheckResult(response.data);
-      checkRegisterDisabled(idCheckResult, response.data, nicknameCheckResult, phoneCheckResult);
+      checkRegisterDisabled(response.data, nicknameCheckResult, phoneCheckResult);
     } catch (error) {
       console.error('이메일 중복 확인 오류', error);
     }
@@ -140,15 +104,14 @@ const JoinN = () => {
       });
 
       setPhoneCheckResult(response.data);
-      checkRegisterDisabled(idCheckResult, response.data, nicknameCheckResult, emailCheckResult);
+      checkRegisterDisabled(response.data, nicknameCheckResult, emailCheckResult);
     } catch (error) {
       console.error('전화번호 중복 확인 오류', error);
     }
   };
   
-  const checkRegisterDisabled = (idResult, nicknameResult, emailResult, phoneResult) => {
+  const checkRegisterDisabled = (nicknameResult, emailResult, phoneResult) => {
 	  if (
-	  idResult.includes('중복된 아이디') ||
 	  nicknameResult.includes('중복된 닉네임') ||
 	  emailResult.includes('중복된 이메일') ||
 	  phoneResult.includes('중복된 전화번호')
@@ -160,25 +123,24 @@ const JoinN = () => {
   }
 
 
-  //회원가입 폼 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.post('http://localhost:9090/joinN', form, {
-        headers: { "Content-Type": "application/json" } //리액트 json, 스프링 @RequestBody로 받기
+      await axios.post('http://localhost:9090/modify', form, {
+        headers: { "Content-Type": "application/json" } 
       });
-      alert('회원가입 성공!');
+      alert('회원 정보 수정 성공!');
       navigate('/login');
     } catch (error) {
-      alert('회원가입 실패!');
-      console.error('회원가입 오류:', error);
+      alert('회원 정보 수정 실패!');
+      console.error('회원 정보 수정 오류:', error);
     }
   };
 
   return (
     <div>
-      <h1>회원가입</h1>
+      <h1>회원 정보 수정</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <input type="hidden" name="member_id" value={Number(form.member_id)} />
@@ -186,8 +148,7 @@ const JoinN = () => {
 
         <div>
           <label htmlFor="username">아이디: </label>
-          <input type="text" name="username" value={form.username} onChange={checkId} maxLength={12} required />
-          <span>{idCheckResult}</span>
+          <input type="text" name="username" value={form.username} onChange={handleChange} maxLength={12} required />
         </div>
 
         <div>
@@ -251,4 +212,4 @@ const JoinN = () => {
   );
 };
 
-export default JoinN;
+export default Modify;
