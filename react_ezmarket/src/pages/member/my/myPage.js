@@ -38,52 +38,22 @@ const MyPage = () => {
     Cookies.remove('jwt_token'); 
     navigate('/login');
   }
-  //   axios.post('http://localhost:9090/logout',{ withCredentials: true }) 
-  //     .then(() => {
-  //       Cookies.remove('jwt_token'); 
-  //       navigate('/login');  
-  //     })
-  //     .catch((error) => {
-  //       console.error('로그아웃 실패', error);
-  //     });
-  // };
-  // 백에서 처리하려고 했는데 302에러 해결 못해서 그냥 프론트에서만 지움 백에는 쿠키 남음
+
+  const handleModify = () => {
+    navigate(`/my/modify?username=${user.username}`);
+  }
 
   return (
     <div>
-      <h1>내 정보</h1>
+      <h1>{user.nickname} 정보 페이지</h1>
       <div>
-      <label>멤버 아이디: </label>
-      <input type="text" value={user.member_id} disabled />
+        {user.nickname}, {user.realname}, {user.phone}, {user.email}, {user.address};
       </div>
       <div>
-        <label>아이디: </label>
-        <input type="text" value={user.username} disabled />
+        <button onClick={handleLogout}>로그아웃</button>
+        <button onClick={() => navigate(-1)}>이전</button>
+        <button onClick={handleModify}>회원정보수정</button>
       </div>
-
-      <div>
-        <label>이름: </label>
-        <input type="text" value={user.realname} disabled />
-      </div>
-
-      <div>
-        <label>이메일: </label>
-        <input type="email" value={user.email} disabled />
-      </div>
-
-      <div>
-        <label>전화번호: </label>
-        <input type="text" value={user.phone} disabled />
-      </div>
-
-      <div>
-        <label>주소: </label>
-        <input type="text" value={user.address} disabled />
-      </div>
-
-      <button onClick={handleLogout}>로그아웃</button>
-
-      <button onClick={() => navigate(-1)}>이전</button>
     </div>
   );
 };

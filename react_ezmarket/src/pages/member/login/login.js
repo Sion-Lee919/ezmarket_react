@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('')
     const navigate = useNavigate(); 
 
     const handleSubmit = (event) => {
@@ -20,7 +19,8 @@ const Login = () => {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       })
-       .then(response => {
+
+        .then(response => {
             const token = response.data.token;
             localStorage.setItem('token', token);
             if (response.status === 200) {
@@ -40,8 +40,28 @@ const Login = () => {
     navigate('/join');
   };
 
+  const handleFindIdClick = () => {
+    navigate('/login/findId');
+  };
+
+  const handleFindPwClick = () => {
+    navigate('/login/findPw');
+  };
+
   const handleNaverLogin = () => {
     window.location.href = 'http://localhost:9090/oauth2/authorization/naver';
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:9090/oauth2/authorization/google';
+  };
+
+  const handleKakaoLogin = () => {
+    window.location.href = 'http://localhost:9090/oauth2/authorization/kakao';
+  };
+
+  const handleGithubLogin = () => {
+    window.location.href = 'http://localhost:9090/oauth2/authorization/github';
   };
 
   return (
@@ -53,16 +73,19 @@ const Login = () => {
           암호 입력: <input type="password" name="pw" value={password} onChange={(e) => setPassword(e.target.value)}/><br />
         </div>
         <input className="button" type="submit" value="로그인" />
-        <button onClick={handleJoinClick}>
-          회원가입
-        </button>
-        <button onClick={handleHomeClick}>
-          홈
-        </button>
+        <button onClick={handleJoinClick}>회원가입</button>
+        <button onClick={handleHomeClick}>홈</button>
       </form>
       <div>
+        <button onClick={handleFindIdClick}>아이디 찾기</button>
+        <button onClick={handleFindPwClick}>비밀번호 찾기</button>
+      </div>
+      <div>
         <button onClick={handleNaverLogin}>네이버 로그인</button>
-    </div>
+        <button onClick={handleGoogleLogin}>구글 로그인</button>
+        <button onClick={handleKakaoLogin}>카카오 로그인</button>
+        <button onClick={handleGithubLogin}>깃허브 로그인</button>
+      </div>
     </div>
   );
 };
