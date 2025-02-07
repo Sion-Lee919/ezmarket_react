@@ -20,8 +20,6 @@ const Login = () => {
         withCredentials: true
       })
 
-
-
         .then(response => {
             const token = response.data.token;
             localStorage.setItem('token', token);
