@@ -26,7 +26,8 @@ import ItemRegister from './components/Itemregister.js';
 import Modifyitem from './components/Modifyitem.js';
 import FooterComponent from './components/FooterComponent.js';
 
-
+import KakaoLogin from './components/KakaoLogin';
+import KakaoRedirectHandler from './components/KakaoRedirectHandler';
 
 function App() {
 
@@ -59,6 +60,8 @@ function App() {
          <Route path="/home" element={<Home />} />
         <Route path="/loginn" element={<GoogleLoginButton />} />
         <Route path="/brand/:brandid/modify/:productid" element={<Modifyitem/>} />
+        <Route path="/kakao/login" element={<KakaoLogin />} />
+        <Route path="/api/login/oauth2/code/kakao" element={<KakaoRedirectHandler />} />
       </Routes>
       <FooterComponent/>
       </BrowserRouter>
