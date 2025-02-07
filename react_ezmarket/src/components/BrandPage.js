@@ -29,7 +29,7 @@ function BrandPage(){
               <thead>
                 <tr>
                   <th>제품이름</th>
-                  <th>제품정보</th>
+                  <th>도수</th>
                   <th>가격</th>
                   <th>수량</th>
                 </tr>
@@ -42,7 +42,7 @@ function BrandPage(){
                         {item.name || '정보없음'}
                       </Link>
                     </td>
-                    <td>{item.description || '정보없음'}</td>
+                    <td>{item.alcohol || '정보없음'}</td>
                     <td>{item.price || '정보없음'}</td>
                     <td>{item.stock_quantity || '정보없음'}</td>
                   </tr>
