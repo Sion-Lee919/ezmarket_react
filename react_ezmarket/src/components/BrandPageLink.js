@@ -31,9 +31,14 @@ const BrandPageLink = () => {
         if (memberid) {
             axios.get(`http://localhost:9090/brandinfo?memberid=${memberid}`)
                 .then(response => {
-                    setBrandid(response.data.brand_id);
+                    if(response.data){
+                        setBrandid(response.data.brand_id);
+                        navigate(`/brand/${response.data.brand_id}`);
+                    } else {
+                        alert('판매자가 아닙니다!');
+                        navigate(`/`);
+                    }
                     // 요청이 성공하면 브랜드 페이지로 리디렉션
-                    navigate(`/brand/${response.data.brand_id}`);
                 })
                 .catch(error => {
                     console.error('브랜드 정보를 가져오는 데 실패.', error);
