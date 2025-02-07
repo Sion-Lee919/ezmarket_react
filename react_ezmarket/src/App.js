@@ -23,6 +23,8 @@ import FindPw from './pages/member/login/findPw.js';
 import ResetPw from './pages/member/login/resetPw.js';
 import Modify from './pages/member/my/modify.js';
 import ItemRegister from './components/Itemregister.js';
+import Modifyitem from './components/Modifyitem.js';
+import FooterComponent from './components/FooterComponent.js';
 
 
 
@@ -56,8 +58,9 @@ function App() {
         
          <Route path="/home" element={<Home />} />
         <Route path="/loginn" element={<GoogleLoginButton />} />
+        <Route path="/brand/:brandid/modify/:productid" element={<Modifyitem/>} />
       </Routes>
-      
+      <FooterComponent/>
       </BrowserRouter>
     </div>
 
