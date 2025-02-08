@@ -28,6 +28,11 @@ function ItemDetail(){
             <p>제품정보 : {dto.description || '정보없음'}</p>
             <p>가격 : {dto.price || '정보없음'}</p>
             <p>수량 : {dto.stock_quantity || '정보없음'}</p>
+            <img alt="제품 이미지"
+                 src={`http://localhost:9090/showimage?filename=${dto.image_url}`}
+                 style={{ maxWidth: '20%', height: '20%' }}
+                />
+
         </div>
     );
 
