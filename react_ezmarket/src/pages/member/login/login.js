@@ -17,7 +17,7 @@ const Login = () => {
 
       axios.post('http://localhost:9090/login', JSON.stringify(data), {
         headers: { 'Content-Type': 'application/json' },
-        withCredentials: true
+       withCredentials: true, 
       })
 
         .then(response => {
