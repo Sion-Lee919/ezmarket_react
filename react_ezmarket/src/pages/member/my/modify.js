@@ -1,71 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Modify = () => {
   const [form, setForm] = useState({
-    username: '',
-    password: '',
-    realname: '',
-    nickname: '',
-    email_name: "",
-    email_domain: "",
-    email_extension: "",
+    username: "",
+    password: "",
+    realname: "",
+    nickname: "",
     email: "",
-    phone_first: "010",
-    phone_second: "",
-    phone_third: "",
-    phone: '',
-    address: '',
+    phone: "",
+    address: "",
+    social: "",
   });
 
   const [nicknameCheckResult, setNicknameCheckResult] = useState('');
   const [isRegisterDisabled, setIsRegisterDisabled] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
-  //기존 정보 불러오기
+  //토큰 받아오기
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const usernameFromUrl = params.get('username');;
-    if (usernameFromUrl) {
-      setForm((prevForm) => ({
-        ...prevForm,
-        username: usernameFromUrl, 
-      }));
-      fetchUserData(usernameFromUrl);
-    }
-  }, [location.search]);
-
-  const fetchUserData = (username) => {
-    fetch(`http://localhost:9090/user/data?username=${username}`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setForm((prevForm) => ({
-          ...prevForm,
-          realname: data.realname,
-          nickname: data.nickname,
-          email_name: data.email_name,
-          email_domain: data.email_domain,
-          email_extension: data.email_extension,
-          email: data.email,
-          phone_first: data.phone_first, 
-          phone_second: data.phone_second,
-          phone_third: data.phone_third,
-          phone: data.phone,
-          address: data.address,
-        }));
+    const token = Cookies.get('jwt_token'); 
+    
+    if (token) {
+      axios.get('http://localhost:9090/userinfo', { 
+        headers: { 'Authorization': `Bearer ${token}` }, 
+        withCredentials: true
       })
-      .catch((error) => {
-        console.error('Error fetching user data:', error);
+      .then(response => {
+        setForm(response.data);
+      })
+      .catch(error => {
+        console.error('사용자 정보를 가져오는 데 실패.', error);
       });
-  };
+    } else {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   //중복 확인
   const checkNickname = async (e) => {
@@ -97,15 +69,16 @@ const Modify = () => {
     }));
   };
   
-
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = Cookies.get('jwt_token');
 
     try {
       await axios.post('http://localhost:9090/modify', form, {
-        headers: { "Content-Type": "application/json" } 
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // 토큰 추가
+        }
       });
       alert('회원 정보 수정 성공!');
       navigate('/login');
@@ -125,17 +98,17 @@ const Modify = () => {
 
         <div>
           <label htmlFor="username">아이디: </label>
-          <input type="text" name="username" value={form.username} onChange={handleChange} maxLength={12} required readOnly />
+          <input type="text" name="username" value={form.username} onChange={handleChange} disabled />
         </div>
 
         <div>
           <label htmlFor="password">비밀번호: </label>
-          <input type="password" name="password" value={form.password} onChange={handleChange} maxLength={100} required />
+          <input type="password" name="password" value={form.password} onChange={handleChange} maxLength={100} required disabled={form.social === 1}/>
         </div>
 
         <div>
           <label htmlFor="realname">이름: </label>
-          <input type="text" name="realname" value={form.realname} onChange={handleChange} maxLength={10} required readOnly />
+          <input type="text" name="realname" value={form.realname} onChange={handleChange} disabled />
         </div>
 
         <div>
@@ -146,31 +119,12 @@ const Modify = () => {
 
         <div>
           <label htmlFor="email">이메일: </label>
-          <div>
-            <input type="text" name="email_name" value={form.email_name} onChange={handleChange} maxLength={40} required readOnly />
-            @
-            <input type="text" name="email_domain" value={form.email_domain} onChange={handleChange} maxLength={50} required readOnly />
-            .
-            <select name="email_extension" value={form.email_extesnion} onChange={handleChange}>
-              <option value="com">com</option>
-              <option value="kr">kr</option>
-              <option value="net">net</option>
-            </select>
-          </div>
+          <input type="text" name="email" value={form.email} onChange={handleChange} maxLength={40} disabled />
         </div>
 
         <div>
           <label htmlFor="phone">전화번호: </label>
-          <div>
-            <select name="phone_first" value={form.phone_first} onChange={handleChange}>
-            <option value="010">010</option>
-            <option value="011">011</option>
-            </select>
-            -
-            <input type="text" name="phone_second" value={form.phone_second} onChange={handleChange} pattern="\d{3,4}" title="3~4개의 숫자로 입력하세요." maxLength={4} required readOnly />
-            -
-            <input type="text" name="phone_third" value={form.phone_third} onChange={handleChange} pattern="\d{4}" title="4개의 숫자로 입력하세요." maxLength={4} required readOnly />
-          </div>
+          <input type="text" name="phone" value={form.phone} disabled/>
         </div>
 
         <div>
@@ -181,6 +135,9 @@ const Modify = () => {
         <div>
           <button type="submit" disabled={isRegisterDisabled}>수정하기</button>
           <button type="button" onClick={() => navigate(-1)}>이전</button>
+        </div>
+        <div>
+        <button type="submit">탈퇴하기</button>
         </div>
       </form>
     </div>

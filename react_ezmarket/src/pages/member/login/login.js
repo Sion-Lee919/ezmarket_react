@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate(); 
 
+    //토큰 있을 때 로그인 접근시 내 정보로 이동
+    useEffect(() => {
+      const token = Cookies.get('jwt_token');
+      if (token) {
+          navigate('/my');
+      }
+    }, [navigate]);
+  
     const handleSubmit = (event) => {
         event.preventDefault();
     
@@ -20,15 +29,11 @@ const Login = () => {
         withCredentials: true
       })
 
-
-        axios.post('/login', params.toString(),
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-        )
-
         .then(response => {
             const token = response.data.token;
             localStorage.setItem('token', token);
             if (response.status === 200) {
+                alert(response.data.message);
                 navigate('/');  
             }
         })
