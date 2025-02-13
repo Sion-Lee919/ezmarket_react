@@ -57,7 +57,7 @@ function App() {
         <Route path="/my" element={<MyPage />} />
         <Route path="/" element={<Main />} />
         
-         <Route path="/home" element={<Home />} />
+        
         <Route path="/loginn" element={<GoogleLoginButton />} />
         <Route path="/brand/:brandid/modify/:productid" element={<Modifyitem/>} />
         <Route path="/kakao/login" element={<KakaoLogin />} />

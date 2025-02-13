@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/FooterComponent.css"; // 스타일 파일 추가
+import "../styles/FooterComponent.css";
 
 const FooterComponent = () => {
   return (
@@ -7,7 +7,7 @@ const FooterComponent = () => {
       <div className="footer-container">
         {/* 판매자 문의 버튼 */}
         <div className="seller_inquiry">
-          <a href="https://www.soolmarket.com/board/list.php?bdId=businessinquiry" className="seller_btn">
+          <a href="" className="seller_btn">
             판매자 문의하기
           </a>
         </div>
@@ -27,7 +27,7 @@ const FooterComponent = () => {
           <p><strong>대표번호:</strong> 070-4563-7899</p>
           <p><strong>팩스번호:</strong> 02-123-4567</p>
           <p>
-            <strong>메일:</strong> <a href="mailto:ezmarket@naver.com" className="btn_email">soolmarket@naver.com</a>
+            <strong>메일:</strong> <a href="mailto:ezmarket@naver.com" className="btn_email">ezmarket@naver.com</a>
           </p>
         </div>
 
