@@ -1,30 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
 import { SearchComponent } from "./SearchComponent";
+
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import Cookies from 'js-cookie';
 
-const HeaderComponent = () => {
-    const brandid = 1;
-    // const [user, setUser] = useState({
-    //     member_id: '',
-    //     username: '',
-    //     realname: '',
-    //     phone: '',
-    //     email: '',
-    //     address: ''
-    //   });
+import BrandPageLink from "./BrandPageLink";
+import CategoryComponent from "./CategoryComponent";
+import { useNavigate } from 'react-router-dom'; 
+import "../styles/HeaderComponent.css";
 
-    // useEffect(() => {
-    //     axios.get('/userinfo')  
-    //       .then(response => {
-    //         setUser(response.data);
-    //       })
-    //       .catch(error => {
-    //         console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
-    //       });
-    //   }, []);
+
+const HeaderComponent = () => {
+
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const navigate = useNavigate();
@@ -47,10 +37,15 @@ const HeaderComponent = () => {
         window.location.reload();
       }
 
+    const handleMyPageClick = () => {
+        navigate('/my');  
+    };
+
     return (
-    <div>
-        <Link to="/">이지마켓</Link><br/>
+    <div className="header">
+        <Link to="/">이지마켓</Link><CategoryComponent></CategoryComponent>
         <Link to="/cart">장바구니</Link><br/>
+
         <Link to={`/brand/${brandid}`}>판매자페이지</Link>
 
         {!isLoggedIn && (
@@ -62,9 +57,18 @@ const HeaderComponent = () => {
         <button onClick={handleLogout}>로그아웃</button>
         )}
 
+
+        <BrandPageLink></BrandPageLink>
+
         <SearchComponent></SearchComponent>
+        <div>
+      <button onClick={handleMyPageClick}>
+        내 정보
+      </button>
 
     </div>
+    </div>
+    
     )
 }
 
