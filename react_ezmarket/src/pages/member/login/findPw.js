@@ -23,6 +23,7 @@ const FindPw = () => {
         })
         .then(response => {
             alert(response.data.message); 
+            sessionStorage.setItem('findPwValid', 'true');
             navigate(`/login/findPw/resetPw?username=${username}`); 
         })
         .catch(error => {
