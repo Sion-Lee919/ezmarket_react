@@ -97,13 +97,19 @@ const Modifyitem = () => {
 
 
                 <label>현재 이미지:</label>
-                {/*!!!!!!!!!!!!!!! url 수정하기!!!!!!!!! */}
-                {product.image_url && <img src={`http://localhost:9090/upload/${product.image_url}`} alt="Product" />}
-
+                {product.image_url ? (
+                <img
+                    src={`http://localhost:9090/showimage?filename=${product.image_url}`}
+                    alt="Product"
+                    style={{ maxWidth: '20%', height: '20%' }}
+                    
+                />
+            ) : (
+                <p>이미지가 없습니다.</p>
+            )}
                 <label>새 이미지 업로드:</label>
-                {/* @@@@@@@@@@@@@@@@잠시 막아놈@@@@@@@@@@@@@@@@@  */}
+                
                 <input type="file" name="image" onChange={handleFileChange} />
-
                 <button type="submit">수정하기</button>
             </form>
         </div>
