@@ -14,28 +14,31 @@ const Login = () => {
       if (token) {
           navigate('/my');
       }
-    }, [navigate]);
-  
+      }, [navigate]);        
+    
+    //로그인
     const handleSubmit = (event) => {
         event.preventDefault();
     
         const data = {
           username: username,
-          password: password
+          password: password,
       };
 
       axios.post('http://localhost:9090/login', JSON.stringify(data), {
         headers: { 'Content-Type': 'application/json' },
-       withCredentials: true, 
+        withCredentials: true, 
       })
 
-        .then(response => {
-            const token = response.data.token;
+        .then(response => {  
+            const token= response.data.token;
+
             localStorage.setItem('token', token);
             if (response.status === 200) {
                 alert(response.data.message);
                 navigate('/');  
-            }
+            } 
+            window.location.reload();
         })
         .catch(error => {
             alert(error.response.data.message); 
@@ -83,9 +86,11 @@ const Login = () => {
           암호 입력: <input type="password" name="pw" value={password} onChange={(e) => setPassword(e.target.value)}/><br />
         </div>
         <input className="button" type="submit" value="로그인" />
+      </form>
+      <div>
         <button onClick={handleJoinClick}>회원가입</button>
         <button onClick={handleHomeClick}>홈</button>
-      </form>
+      </div>
       <div>
         <button onClick={handleFindIdClick}>아이디 찾기</button>
         <button onClick={handleFindPwClick}>비밀번호 찾기</button>
