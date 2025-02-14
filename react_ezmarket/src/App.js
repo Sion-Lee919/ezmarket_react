@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './components/home';
 import GoogleLoginButton from './components/GoogleLoginButton';
 
-import CartList from './components/CartList';
+import Cart from './components/Cart';
 import HeaderComponent from './components/HeaderComponent';
 import ItemDetail from './components/ItemDetail';
 import Login from './pages/member/login/login.js';
@@ -30,7 +30,7 @@ import KakaoLogin from './components/KakaoLogin';
 import KakaoRedirectHandler from './components/KakaoRedirectHandler';
 
 function App() {
- 
+  
   return (
 
     <div>
@@ -38,7 +38,7 @@ function App() {
       <HeaderComponent/>
       
       <Routes> 
-        <Route path='/cart' element={<CartList/>}/>
+        <Route path='/cart' element={<Cart/>}/>
         <Route path='/item/:itemid' element={<ItemDetail/>}/>
 
         <Route path='/brand/:brandid' element={<BrandPage/>}/>
