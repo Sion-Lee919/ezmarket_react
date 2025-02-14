@@ -10,6 +10,7 @@ const ResetPw = () => {
     const navigate = useNavigate(); 
     const location = useLocation();
 
+    //접근 시 비밀번호 찾기 유효성 검사 필요
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const usernameFromUrl = params.get('username');
@@ -30,6 +31,7 @@ const ResetPw = () => {
         }
     }, [location]);
 
+    //비밀번호 재설정
     const handleChangePassword = () => {
         if (newPassword.trim() === '') {
             alert('새 비밀번호를 입력해주세요.');

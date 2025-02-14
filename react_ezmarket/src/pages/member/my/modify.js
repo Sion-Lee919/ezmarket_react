@@ -32,7 +32,9 @@ const Modify = () => {
         setForm(response.data);
       })
       .catch(error => {
-        console.error('사용자 정보를 가져오는 데 실패.', error);
+        alert(error.response.data.message);
+        Cookies.remove('jwt_token');
+        navigate('/login');
       });
     } else {
       navigate('/login');
@@ -57,7 +59,7 @@ const Modify = () => {
       setNicknameCheckResult(response.data);
       setIsRegisterDisabled(response.data.includes('중복된 닉네임'));
     } catch (error) {
-        console.error('닉네임 중복 확인 오류', error);
+        alert(error.response.data.message);
     }
   };
 
@@ -69,6 +71,7 @@ const Modify = () => {
     }));
   };
   
+  //회원 수정
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = Cookies.get('jwt_token');
@@ -77,14 +80,42 @@ const Modify = () => {
       await axios.post('http://localhost:9090/modify', form, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // 토큰 추가
+          "Authorization": `Bearer ${token}`,
         }
       });
       alert('회원 정보 수정 성공!');
       navigate('/login');
     } catch (error) {
       alert('회원 정보 수정 실패!');
-      console.error('회원 정보 수정 오류:', error);
+    }
+  };
+
+  //회원 탈퇴
+  const handleResign = async () => {
+    if (!window.confirm("정말 탈퇴하시겠습니까?")) {
+      return;
+    }
+
+    const token = Cookies.get('jwt_token');
+
+    try {
+      if(form.social == 1) {
+        alert('소셜 로그인 회원의 탈퇴는 관리자에게 문의해주세요.');
+        return;
+      }
+
+      const response = await axios.post('http://localhost:9090/resign', null, {
+        params: { username: form.username },
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+
+      alert(response.data);
+      
+      Cookies.remove('jwt_token');
+      navigate('/');
+      window.location.reload();
+    } catch (error) {
+      alert('회원 탈퇴 요청 실패!');
     }
   };
 
@@ -103,7 +134,7 @@ const Modify = () => {
 
         <div>
           <label htmlFor="password">비밀번호: </label>
-          <input type="password" name="password" value={form.password} onChange={handleChange} maxLength={100} required disabled={form.social === 1}/>
+          <input type="password" name="password" value={form.password} onChange={handleChange} maxLength={100} required disabled={form.social == 1}/>
         </div>
 
         <div>
@@ -137,7 +168,7 @@ const Modify = () => {
           <button type="button" onClick={() => navigate(-1)}>이전</button>
         </div>
         <div>
-        <button type="submit">탈퇴하기</button>
+          <button type="button" onClick={handleResign}>회원 탈퇴 요청</button>
         </div>
       </form>
     </div>

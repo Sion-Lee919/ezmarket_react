@@ -28,7 +28,9 @@ const MyPage = () => {
         setUser(response.data);
       })
       .catch(error => {
-        console.error('사용자 정보를 가져오는 데 실패.', error);
+        alert(error.response.data.message);
+        Cookies.remove('jwt_token');
+        navigate('/login');
       });
     } else {
       navigate('/login');
