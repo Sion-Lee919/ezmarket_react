@@ -7,7 +7,6 @@ import Cookies from 'js-cookie';
 
 import BrandPageLink from "./BrandPageLink";
 import CategoryComponent from "./CategoryComponent";
-//import { useNavigate } from 'react-router-dom'; 
 import "../styles/HeaderComponent.css";
 
 
