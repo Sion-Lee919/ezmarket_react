@@ -1,14 +1,14 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation,Link } from "react-router-dom";
 import { useState } from "react";
-//import axios from "axios";
+import {Container, Row, Col, Image, Card} from "react-bootstrap";
 
 function SearchResultComponent(){
     const location = useLocation();
     const filteredItems = location.state?.filteredItems || [];
 
     const [currentPage, setCurrentPage] = useState(1);  // 현재 페이지
-    const [pageSize] = useState(10);
+    const [pageSize] = useState(9);
     const indexOfLastItem = currentPage * pageSize;
     const indexOfFirstItem = indexOfLastItem - pageSize;
     const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
@@ -22,11 +22,27 @@ function SearchResultComponent(){
         <div>
             총 검색 결과 {filteredItems.length}개
             <div className="search-results">
+                <Container>
+                <Row>
                 {currentItems.map(item => (
-                    <div key={item.product_id} className="search-item">
-                        <a href={`/item/${item.product_id}`}>{item.name}</a>
-                    </div>
+                    <Col key={item.product_id} xs={12} sm={6} md={4} >
+                    
+                    <Card style={{ width: '100%', height: '100%'}}>
+                    <Link to={`/item/${item.product_id}`} style={{ width: '90%', height: '80%'}}>
+                    <Image 
+                        src={`http://localhost:9090/showimage?filename=${item.image_url}`}
+                        style={{ width: '90%', height: '80%'}}
+                        fluid />
+                    </Link>
+                    <Card.Body>
+                        <Card.Title style={{ fontSize: '2rem' }}>{item.name}</Card.Title>
+                        <Card.Text style={{ fontSize: '1.9rem' }}>{item.price}원</Card.Text>
+                    </Card.Body>
+                    </Card>
+                    </Col>
                 ))}
+                </Row>
+                </Container>
             </div>
 
             <div className="pagination">

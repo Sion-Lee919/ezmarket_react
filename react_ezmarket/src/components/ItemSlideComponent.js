@@ -42,7 +42,7 @@ function ItemSlideComponent() {
                     <img src={`http://localhost:9090/showimage?filename=${item.image_url}`} style={style.carouselImg}/>
                     </Link>
                     <Carousel.Caption>
-                    <h2>${item.name}</h2>
+                    <h3>Second slide label</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                     </Carousel.Caption>
                 </Carousel.Item>
