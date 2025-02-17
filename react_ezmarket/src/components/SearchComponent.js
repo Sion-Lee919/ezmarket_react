@@ -11,16 +11,19 @@ const SearchComponent = () => {
     const navigate = useNavigate();  // useNavigate 훅을 통해 페이지 이동을 제어
 
     useEffect(() => {
-        axios({
-            url : `http://localhost:9090/getallitemsforsearch`,
-            method : 'GET',
+    //     axios({
+    //         url : `http://localhost:9090/getallitemsforsearch`,
+    //         method : 'GET',
 
-        })
-        .then(function(res){
-            setAllItems(res.data);
-            setFilteredItems(res.data);
-        });
-    }, [])
+    //     })
+    //     .then(function(res){
+    //         setAllItems(res.data);
+    //         setFilteredItems(res.data);
+    //     });
+    // }, [])
+    axios.get(`http://localhost:9090/filtered-items`, { params: { searchKeyword: searchTerm } })
+    .then(res => setFilteredItems(res.data));
+    }, [searchTerm]);
 
     const handleSearch = (e) => {
         const term = e.target.value;
@@ -39,7 +42,8 @@ const SearchComponent = () => {
     const handleSearchButtonClick = () => {
         if (searchTerm){
             navigate(`/search?keyword=${encodeURIComponent(searchTerm)}`,
-            {state : {filteredItems}
+            {state : {filteredItems},
+            
         });
         }
     };

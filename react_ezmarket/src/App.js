@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-import Home from './components/home';
+
 import GoogleLoginButton from './components/GoogleLoginButton';
 
 import Cart from './components/Cart';

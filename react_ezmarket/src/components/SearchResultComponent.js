@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation,Link } from "react-router-dom";
-import { useState } from "react";
 import {Container, Row, Col, Image, Card} from "react-bootstrap";
+import axios from "axios";
+import FilterComponent from "./FilterComponent";
 
 function SearchResultComponent(){
     const location = useLocation();
-    const filteredItems = location.state?.filteredItems || [];
-
+    //const filteredItems = location.state?.filteredItems || [];
+    const [filteredItems, setFilteredItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);  // 현재 페이지
     const [pageSize] = useState(9);
     const indexOfLastItem = currentPage * pageSize;
@@ -18,9 +19,21 @@ function SearchResultComponent(){
         setCurrentPage(newPage);
     };
 
+    const queryParams = new URLSearchParams(location.search);
+    const searchKeyword = queryParams.get("keyword") || "";
+    const [filters, setFilters] = useState({ searchKeyword });
+
+    useEffect(() => {
+        axios.get(`http://localhost:9090/filtered-items`, { params: { searchKeyword } })
+            .then(res => setFilteredItems(res.data))
+            .catch(err => console.error("검색 결과 불러오기 실패!", err));
+    }, [searchKeyword]);
+
+    
     return (
         <div>
             총 검색 결과 {filteredItems.length}개
+            <FilterComponent setFilters={setFilters} />
             <div className="search-results">
                 <Container>
                 <Row>

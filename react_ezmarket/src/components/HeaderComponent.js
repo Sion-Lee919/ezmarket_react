@@ -1,20 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import { SearchComponent } from "./SearchComponent";
-
 import { useState } from "react";
 import { useEffect } from "react";
 import Cookies from 'js-cookie';
-
 import BrandPageLink from "./BrandPageLink";
-import CategoryComponent from "./CategoryComponent";
+import CategoryComponent from "./FilterComponent";
 import "../styles/HeaderComponent.css";
-
+import FilterComponent from "./FilterComponent";
 
 const HeaderComponent = () => {
 
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -41,7 +38,7 @@ const HeaderComponent = () => {
 
     return (
     <div className="header">
-        <Link to="/">이지마켓</Link><CategoryComponent></CategoryComponent>
+        <Link to="/">이지마켓</Link>
         <Link to="/cart">장바구니</Link><br/>
 
         {!isLoggedIn && (
@@ -55,7 +52,7 @@ const HeaderComponent = () => {
 
 
         <BrandPageLink></BrandPageLink>
-
+        
         <SearchComponent></SearchComponent>
         <div>
       <button onClick={handleMyPageClick}>
