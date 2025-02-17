@@ -28,6 +28,7 @@ import FooterComponent from './components/FooterComponent.js';
 
 import KakaoLogin from './components/KakaoLogin';
 import KakaoRedirectHandler from './components/KakaoRedirectHandler';
+import SellerApplication from './pages/member/seller/sellerApplicatoin.js';
 
 function App() {
   
@@ -56,6 +57,7 @@ function App() {
         <Route path="/my/modify" element={<Modify />} />
         <Route path="/my" element={<MyPage />} />
         <Route path="/" element={<Main />} />
+        <Route path="/commerce" element={<SellerApplication />} />
         
         
         <Route path="/loginn" element={<GoogleLoginButton />} />

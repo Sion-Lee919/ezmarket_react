@@ -12,6 +12,13 @@ const FooterComponent = () => {
           </a>
         </div>
 
+        {/* 판매자 신청 - 현진 추가*/}
+        <div className="commerce">
+          <a href="../commerce" className="commerce_btn">
+            판매자 신청하기
+          </a>
+        </div>
+
         {/* 회사 정보 */}
         <div className="footer-section company-info">
           <h4>회사 정보</h4>
