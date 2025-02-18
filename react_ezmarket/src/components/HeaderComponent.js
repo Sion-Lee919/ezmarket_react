@@ -48,7 +48,8 @@ const HeaderComponent = ({ resetFilters }) => {
         )}
 
 
-        <BrandPageLink />
+        <BrandPageLink></BrandPageLink>
+
         
         <SearchComponent></SearchComponent>
         <div>

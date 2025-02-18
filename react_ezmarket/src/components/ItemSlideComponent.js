@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 
 const style = {
     carouselImg : {
-        width: "100%",
-        height: "300px",      
+        width: "500px",
+        height: "300px",
         objectFit: "cover"    
     },
     carousel : {

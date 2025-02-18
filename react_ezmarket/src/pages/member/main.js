@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import ItemSlideComponent from '../../components/ItemSlideComponent';
+import KakaomapShopInfoComponent from '../../components/KakaomapShopInfoComponent';
 const Main = () => {
 
   return (
     <div>
-      <p>슬라이드 넣기</p>
       <ItemSlideComponent></ItemSlideComponent>
-      <p>추천목록 넣기</p>
+      <h1>가까운마트</h1><KakaomapShopInfoComponent></KakaomapShopInfoComponent>
       <p>등</p>
     </div>
   );

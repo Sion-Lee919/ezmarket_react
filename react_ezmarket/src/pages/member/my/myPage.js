@@ -41,9 +41,16 @@ const MyPage = () => {
     navigate(`/my/modify?username=${user.username}`);
   }
 
+  const handleAdminPageClick = () => {
+    navigate(`/admin`);
+  }
+
   return (
     <div>
       <h1>{user.nickname}님의 정보</h1>
+      {user.userauthor === 0 && (
+        <button onClick={handleAdminPageClick}>관리자 페이지</button>
+        )}
       <div>
         적립금: {user.points}원, 충전금: {user.ezpay}원;
       </div>
