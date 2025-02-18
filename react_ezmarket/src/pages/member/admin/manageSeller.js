@@ -1,9 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';  
 import { useNavigate } from 'react-router-dom';  
+import Cookies from 'js-cookie'
 
 const ManageSeller = () => {
   const [allBrands, setAllBrands] = useState([]);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  //관리자가 아니면 리디렉션
+  useEffect(() => {
+    const token = Cookies.get('jwt_token');  
+
+    if (token) {
+        axios.get('http://localhost:9090/userinfo', { 
+            headers: { 'Authorization': `Bearer ${token}` }, 
+            withCredentials: true
+        })
+        .then(response => {
+            setUser(response.data);  
+
+            if (response.data.userauthor !== 0) {
+                navigate('/login');
+            }
+        })
+        .catch(error => {
+            alert(error.response.data.message); 
+            Cookies.remove('jwt_token');  
+            navigate('/login');
+        });
+    } else {
+        navigate('/login');  
+    }
+}, [navigate]);
 
   // 판매자 목록 가져오기
   useEffect(() => {
@@ -32,6 +61,7 @@ const ManageSeller = () => {
       })
       .then(() => {
         alert("판매자 신청 승인 완료");
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
@@ -42,7 +72,7 @@ const ManageSeller = () => {
 
   // 판매자 신청 거절
   const handleRefuse = (brand_id) => {
-    if (window.confirm("정말 판매자의 신청을 거절하시겠습니까?")) {
+    if (window.confirm(`정말 ${brand_id}의 신청을 거절하시겠습니까?`)) {
       const comment = prompt("거절 사유를 입력하세요:");
       if (!comment) return;
 
@@ -52,6 +82,7 @@ const ManageSeller = () => {
         })
         .then(() => {
           alert("판매자 신청 거절 완료");
+          window.location.reload();
         })
         .catch((error) => {
           console.error(error);
@@ -72,6 +103,7 @@ const ManageSeller = () => {
         })
         .then(() => {
           alert("판매자 승인 취소 완료");
+          window.location.reload();
         })
         .catch((error) => {
           console.error(error);
