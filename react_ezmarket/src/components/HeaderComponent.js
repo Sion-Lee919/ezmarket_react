@@ -1,14 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { SearchComponent } from "./SearchComponent";
-import { useState } from "react";
-import { useEffect } from "react";
+import SearchComponent  from "./SearchComponent";
+import { useState,useEffect } from "react";
 import Cookies from 'js-cookie';
 import BrandPageLink from "./BrandPageLink";
-import CategoryComponent from "./FilterComponent";
 import "../styles/HeaderComponent.css";
-import FilterComponent from "./FilterComponent";
 
-const HeaderComponent = () => {
+const HeaderComponent = ({ resetFilters }) => {
 
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -51,7 +48,7 @@ const HeaderComponent = () => {
         )}
 
 
-        <BrandPageLink></BrandPageLink>
+        <BrandPageLink />
         
         <SearchComponent></SearchComponent>
         <div>
