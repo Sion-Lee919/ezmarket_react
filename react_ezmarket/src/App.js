@@ -31,6 +31,7 @@ import KakaoRedirectHandler from './components/KakaoRedirectHandler';
 import SellerApplication from './pages/member/seller/sellerApplicatoin.js';
 import ManageSeller from './pages/member/admin/manageSeller.js';
 import AdminPage from './pages/member/admin/adminPage.js';
+import ManageUser from './pages/member/admin/manageUser.js';
 
 function App() {
   
@@ -60,8 +61,9 @@ function App() {
         <Route path="/my" element={<MyPage />} />
         <Route path="/" element={<Main />} />
         <Route path="/commerce" element={<SellerApplication />} />
-        <Route path="/admin" element={<AdminPage/>} />
-        <Route path="/admin/seller" element={<ManageSeller />} />
+        <Route path="/my/admin" element={<AdminPage/>} />
+        <Route path="/my/admin/user" element={<ManageUser />} />
+        <Route path="/my/admin/seller" element={<ManageSeller />} />
         
         
         <Route path="/loginn" element={<GoogleLoginButton />} />

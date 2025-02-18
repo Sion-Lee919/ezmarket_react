@@ -16,6 +16,7 @@ const MyPage = () => {
 
   const navigate = useNavigate();
 
+  //로그인 안했을 때 내정보 접근시 리디렉트
   useEffect(() => {
     const token = Cookies.get('jwt_token'); 
     
