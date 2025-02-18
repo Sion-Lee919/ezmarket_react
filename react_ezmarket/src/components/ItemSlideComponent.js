@@ -10,7 +10,7 @@ const style = {
         objectFit: "cover"    
     },
     carousel : {
-        width: "50%",    
+        width: "500px",    
     }
 }
 
