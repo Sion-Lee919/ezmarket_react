@@ -13,12 +13,14 @@ const SellerApplication = () => {
   });
 
   const [brandLicenseFile, setBrandLicenseFile] = useState(null);
+  const [BrandNumberCheckResult, setBrandNumberCheckResult] = useState('');
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   
   const navigate = useNavigate();
   
   // brand_id 생성
   const generateUniqueId = () => {
-    return ((Date.now() % 1000000000000000) * Math.floor(Math.random() * 10)); 
+    return ((Date.now() % 1000000000000000) * (Math.floor(Math.random() * 9) + 1)); 
   };
 
   useEffect(() => {
@@ -29,6 +31,7 @@ const SellerApplication = () => {
     }));
   }, []);
 
+  // 토큰에서 정보 가져오기
   useEffect(() => {
     const token = Cookies.get('jwt_token'); 
     
@@ -40,7 +43,7 @@ const SellerApplication = () => {
       .then(response => {
         setForm(prevForm => ({
           ...prevForm,
-          member_id: response.data.member_id,  // 응답에서 member_id를 가져와서 상태에 저장
+          member_id: response.data.member_id,
         }));
       })
       .catch(error => {
@@ -57,6 +60,33 @@ const SellerApplication = () => {
     setBrandLicenseFile(e.target.files[0]);
   };
 
+  //중복 확인
+  const checkBrandNumber = async (e) => {
+    const enteredBrandNumber = e.target.value;
+    setForm({ ...form, brand_number: enteredBrandNumber });
+
+    if (enteredBrandNumber.length === 0) {
+      setBrandNumberCheckResult('');
+      return;
+    }
+
+    try {
+      const response = await axios.get('http://localhost:9090/checkBrandNumber', {
+        params: { brand_number: enteredBrandNumber },
+      });
+
+      setBrandNumberCheckResult(response.data);
+      if (response.data === "중복된 사업자 번호입니다.") {
+        setIsSubmitDisabled(true);
+      } else {
+        setIsSubmitDisabled(false);
+      }
+    } catch (error) {
+      console.error('사업자 번호 중복 확인 오류', error);
+    }
+  };
+
+  //판매자 신청 폼 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -72,7 +102,7 @@ const SellerApplication = () => {
       };
 
       try {
-        const response = await axios.post('http://localhost:9090/sell_application', formData, {
+        const response = await axios.post('http://localhost:9090/sellApplication', formData, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -106,33 +136,19 @@ const SellerApplication = () => {
 
         <div>
           <label htmlFor="brandName">상호명: </label>
-          <input
-            type="text"
-            id="brandName"
-            value={form.brandname}
-            onChange={(e) => setForm({ ...form, brandname: e.target.value })}
-            required
-          />
+          <input type="text" id="brandName" value={form.brandname} onChange={(e) => setForm({ ...form, brandname: e.target.value })} maxLength={100} required />
         </div>
         <div>
           <label htmlFor="brandNumber">사업자 번호: </label>
-          <input
-            type="text"
-            id="brandNumber"
-            value={form.brand_number}
-            onChange={(e) => setForm({ ...form, brand_number: e.target.value })}
-            required
-          />
+          <input type="text" id="brandNumber" value={form.brand_number} onChange={checkBrandNumber} placeholder="'-'를 제외한 사업자 번호 10자리를 적어주세요." pattern="\d{10}" title="'-'를 제외한 사업자 번호 10자리를 적어주세요." maxLength={10} required />
+          <span>{BrandNumberCheckResult}</span>
         </div>
         <div>
           <label htmlFor="brandLicenseFile">사업자 등록증: </label>
-          <input
-            type="file"
-            id="brandLicenseFile"
-            onChange={handleFileChange}
+          <input type="file" id="brandLicenseFile" onChange={handleFileChange}
           />
         </div>
-        <button type="submit">판매자 신청</button>
+        <button type="submit" disabled={isSubmitDisabled}>판매자 신청</button>
       </form>
     </div>
   );
