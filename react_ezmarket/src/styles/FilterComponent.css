@@ -1,0 +1,19 @@
+.filter-container {
+    width: 100%;
+    background-color: gainsboro; 
+    border: 2px solid red; 
+}
+
+.filter-button {
+    background-color: white;
+}
+
+.filter-button.active {
+    background-color: blue;
+    color: white;
+}
+
+.filter-button:hover {
+    background-color: blue;
+    color: white;
+}
