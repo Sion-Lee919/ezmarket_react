@@ -34,11 +34,11 @@ const AdminPage = () => {
     }, [navigate]);
 
     const handleUserManageClick = () => {
-        navigate('/admin/user');  
+        navigate('/my/admin/user');  
     };
 
     const handleSellerManageClick = () => {
-        navigate('/admin/seller');  
+        navigate('/my/admin/seller');  
     };
 
     return (

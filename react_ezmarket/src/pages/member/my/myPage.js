@@ -43,7 +43,7 @@ const MyPage = () => {
   }
 
   const handleAdminPageClick = () => {
-    navigate(`/admin`);
+    navigate(`/my/admin`);
   }
 
   return (

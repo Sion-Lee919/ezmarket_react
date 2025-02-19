@@ -20,7 +20,7 @@ const SellerApplication = () => {
   
   // brand_id 생성
   const generateUniqueId = () => {
-    return ((Date.now() % 1000000000000000) * (Math.floor(Math.random() * 9) + 1)); 
+    return ((Date.now() % 100000) * (Math.floor(Math.random() * 9) + 1)); 
   };
 
   useEffect(() => {
@@ -110,6 +110,7 @@ const SellerApplication = () => {
 
         if (response.status === 200) {
           alert('판매자 신청이 완료되었습니다.');
+          navigate("/");
         } else {
           alert('신청 실패. 다시 시도해 주세요.');
         }
@@ -141,7 +142,7 @@ const SellerApplication = () => {
         <div>
           <label htmlFor="brandNumber">사업자 번호: </label>
           <input type="text" id="brandNumber" value={form.brand_number} onChange={checkBrandNumber} placeholder="'-'를 제외한 사업자 번호 10자리를 적어주세요." pattern="\d{10}" title="'-'를 제외한 사업자 번호 10자리를 적어주세요." maxLength={10} required />
-          <span>{BrandNumberCheckResult}</span>
+          {form.brand_number.length === 10 && <span>{BrandNumberCheckResult}</span>}
         </div>
         <div>
           <label htmlFor="brandLicenseFile">사업자 등록증: </label>

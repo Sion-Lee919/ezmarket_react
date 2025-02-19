@@ -25,11 +25,26 @@ const JoinN = () => {
   const [emailCheckResult, setEmailCheckResult] = useState('');
   const [phoneCheckResult, setPhoneCheckResult] = useState('');
   const [isRegisterDisabled, setIsRegisterDisabled] = useState(false);
+
   const navigate = useNavigate();
+
+  //접근 시 회원가입 약간 동의 필요
+      useEffect(() => {
+          const isJoinValid = sessionStorage.getItem('joinValid');
+  
+          if (!isJoinValid) {
+              alert('잘못된 접근입니다. 회원가입 약관 동의를 먼저 진행해주세요.');
+              navigate('/join');
+              sessionStorage.removeItem('joinValid');
+          }
+
+          sessionStorage.removeItem('joinValid');
+
+      }, [navigate]);
 
   //member_id 생성
   const generateUniqueId = () => {
-    return ((Date.now() % 1000000000000000) * (Math.floor(Math.random() * 9) + 1)); 
+    return (((Date.now() % 1000000000) * (Math.floor(Math.random() * 9) + 1))); 
   };
 
   useEffect(() => {
@@ -146,6 +161,10 @@ const JoinN = () => {
     }
   };
   
+  useEffect(() => {
+    checkRegisterDisabled(idCheckResult, nicknameCheckResult, emailCheckResult, phoneCheckResult);
+  }, [idCheckResult, nicknameCheckResult, emailCheckResult, phoneCheckResult]);
+
   const checkRegisterDisabled = (idResult, nicknameResult, emailResult, phoneResult) => {
 	  if (
 	  idResult.includes('중복된 아이디') ||
@@ -218,7 +237,7 @@ const JoinN = () => {
               <option value="kr">kr</option>
               <option value="net">net</option>
             </select>
-            <span>{emailCheckResult}</span>
+            {form.email_name.length > 0  && form.email_domain.length > 0 && <span>{emailCheckResult}</span>}
           </div>
         </div>
 
@@ -233,7 +252,7 @@ const JoinN = () => {
             <input type="text" name="phone_second" value={form.phone_second} onChange={handleChange} pattern="\d{3,4}" title="3~4개의 숫자로 입력하세요." maxLength={4} required />
             -
             <input type="text" name="phone_third" value={form.phone_third} onChange={handleChange} pattern="\d{4}" title="4개의 숫자로 입력하세요." maxLength={4} required />
-            <span>{phoneCheckResult}</span>
+            {(form.phone_second.length === 3 || form.phone_second.length === 4) && form.phone_third.length === 4 && <span>{phoneCheckResult}</span>}
           </div>
         </div>
 
