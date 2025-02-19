@@ -142,7 +142,7 @@ const ManageSeller = () => {
                 <td><img src={brand.brandlicense_url} alt="사업자 등록증" /></td>
                 <td>{brand.username}</td>
                 <td>{brand.realname}</td>
-                <td><a href={`../brand/${brand.brand_id}`}>이동</a></td>
+                <td><a href={`../../brand/${brand.brand_id}`}>이동</a></td>
                 <td>{brand.brand_status}</td>
                 <td>
                   {brand.brand_status === "검토 중" && (

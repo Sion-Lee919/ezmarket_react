@@ -20,6 +20,7 @@ const ResetPw = () => {
         if (!isFindPwValid) {
             alert('잘못된 접근입니다. 비밀번호 찾기를 먼저 진행해주세요.');
             navigate('/login/findPw'); 
+            sessionStorage.removeItem('findPwValid');
             return;
         }
 
@@ -28,7 +29,11 @@ const ResetPw = () => {
         } else {
             alert('유효하지 않은 사용자입니다. 다시 시도해주세요.');
             navigate('/login/findPw'); 
+            sessionStorage.removeItem('findPwValid');
         }
+
+        sessionStorage.removeItem('findPwValid');
+        
     }, [location]);
 
     //비밀번호 재설정

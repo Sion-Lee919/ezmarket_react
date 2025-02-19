@@ -12,13 +12,14 @@ const Join = () => {
   const handleNextClick = () => {
     if (agreeToTerms) {
       navigate('/joinN'); 
+      sessionStorage.setItem('joinValid', 'true');
     } else {
       alert('약관에 동의해주세요.');
     }
   };
 
   const handlePrevClick = () => {
-      navigate(-1);
+      navigate('/login');
   };
 
   return (
@@ -35,11 +36,12 @@ const Join = () => {
         <br></br>
         <strong>제 3 조 (서비스 이용)</strong><br></br>
         1. 회원가입 후 제공되는 서비스는 본 사이트에서 제공하는 모든 기능을 포함합니다.<br></br>
-        2. 서비스 이용 중 발생할 수 있는 문제에 대해서는 회사가 해결 책임을 지지 않습니다.<br></br>
+        2. 서비스 이용 중 고객님의 과실로 인한 문제에 대해서 회사는 해결 책임을 지지 않습니다.<br></br>
         <br></br>
         <strong>제 4 조 (회원탈퇴)</strong><br></br>
-        1. 회원은 언제든지 회원탈퇴를 요청할 수 있습니다.<br></br>
-        2. 탈퇴 후, 모든 회원 정보는 1년간 보관 뒤 삭제됩니다.<br></br>
+        1. 회원은 언제든지 회원 탈퇴를 요청할 수 있습니다.<br></br>
+        2. 탈퇴 후, 모든 회원 정보는 1년간 보관 뒤 자동으로 삭제됩니다.<br></br>
+        3. 탈퇴한 회원의 정보 복구는 1년 이내에 관리자에게 문의해주세요..<br></br>
         </p>
       </div>
       
