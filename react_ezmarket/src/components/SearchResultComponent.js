@@ -27,7 +27,6 @@ function SearchResultComponent() {
     };
 
     useEffect(() => {
-      
         setFilters({});
         setResetFilters(true); 
         fetchFilteredItems({});
@@ -36,6 +35,10 @@ function SearchResultComponent() {
     useEffect(() => {
         fetchFilteredItems(filters);
     }, [filters]);
+
+    const cleanTitle = (title) => {
+        return title.split(" - ")[0];  
+    };
 
     return (
         <div>
@@ -55,7 +58,7 @@ function SearchResultComponent() {
                                     <Image src={`http://localhost:9090/showimage?filename=${item.image_url}`} fluid />
                                 </Link>
                                 <Card.Body>
-                                    <Card.Title>{item.name}</Card.Title>
+                                    <Card.Title>{cleanTitle(item.name)}</Card.Title>
                                     <Card.Text>{item.price}원</Card.Text>
                                 </Card.Body>
                             </Card>
