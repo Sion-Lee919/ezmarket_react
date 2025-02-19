@@ -2,21 +2,25 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
 
+const style = {
+    review_box: {
+        borderBottom: '1px solid black',
+    }
+
+}
 
 const ReviewComponent = (props) => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const [reviewList, setReviewList] = useState(null);
+    const [reviewList, setReviewList] = useState([]);
     var product_id = props.product?.product_id;
     const [reviewId, setReviewId] = useState("");
     const [imageUrl, setImageUrl] = useState(null);
     const [comments, setComments] = useState(null);
     const [memberId, setMemberId] = useState("");
 
-    
-    useEffect(() => {
-
+    useEffect(() =>{
         const token = Cookies.get('jwt_token');
         if (token) {
             setIsLoggedIn(true);
@@ -31,10 +35,10 @@ const ReviewComponent = (props) => {
             setIsLoggedIn(false);
         }
 
+    }, [])
+    
+    useEffect(() => {
 
-        const randomId = Math.floor(Math.random() * 10000000);
-        setReviewId(randomId);
-        
         axios({
             url : `http://localhost:9090/getreview/${product_id}`,
             method : 'GET',
@@ -45,8 +49,21 @@ const ReviewComponent = (props) => {
 
     }, [product_id])
 
+    const anonymize = (nickname) => {
+        if (nickname.length > 1) {
+            const firstChar = nickname.charAt(0);
+            const masked = '*'.repeat(nickname.length - 1);
+            return firstChar + masked;
+        }
+        return nickname;
+    };
+
     const handleReviewSubmit = async (e) => {
+
         e.preventDefault();
+
+        const randomId = Math.floor(Math.random() * 10000000);
+        setReviewId(randomId);
 
         const formData = new FormData();
         formData.append("product_id", product_id);
@@ -65,6 +82,17 @@ const ReviewComponent = (props) => {
                 },
             });
             console.log("리뷰 등록 성공:", response.data);
+            alert("리뷰등록 성공");
+
+            axios({
+                url: `http://localhost:9090/getreview/${product_id}`,
+                method: 'GET',
+            })
+            .then(function(res){
+                setReviewList(res.data);  // 새로운 리뷰 목록으로 갱신
+            });
+
+            setComments("");
         } catch (error) {
             console.error("리뷰 등록 실패:", error);
             alert("리뷰 등록 실패")
@@ -75,7 +103,7 @@ const ReviewComponent = (props) => {
     return (
         <div>
             <div id="review-form">
-                <form id="add-review-form" onsubmit={handleReviewSubmit}>
+                <form id="add-review-form" onSubmit={handleReviewSubmit}>
                     <label htmlFor="product_id"></label>
                     <input type="hidden" id="review_id" name="review_id" value={reviewId}/>
                     
@@ -106,6 +134,15 @@ const ReviewComponent = (props) => {
 
             <div id="review-section">
                 <div id="review-list">
+                    {reviewList.map(review => (
+                        <div style={style.review_box}>
+                            <span>
+                            <p>{(memberId == review.member_id)? review.nickname : anonymize(review.nickname)}</p>
+                            <p>{review.review_date}</p>
+                            </span>
+                            <span><p>{review.comments}</p></span>
+                        </div>
+                    ))}
                 </div>
             </div>
     

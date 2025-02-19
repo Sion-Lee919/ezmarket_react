@@ -32,7 +32,7 @@ function ItemDetail(){
     const navigate = useNavigate();
 
     useEffect(() => {
-            const token = Cookies.get('jwt_token');
+        const token = Cookies.get('jwt_token');
             if (token) {
               setIsLoggedIn(true);
             }
@@ -40,8 +40,6 @@ function ItemDetail(){
 
     useEffect(() => {
 
-        
-        console.log(itemid);
         axios({
             url : `http://localhost:9090/item/${itemid}`,
             method : 'GET',
@@ -98,7 +96,7 @@ function ItemDetail(){
                 <div className="product-image" style={{ width: '500px', height: 'auto', border: '2px solid #838383' }}>
                     <img
                     alt="제품 이미지"
-                    src={`http://localhost:9090/showimage?filename=${dto.image_url}`}
+                    src={`http://localhost:9090/showimage?filename=${dto.image_url}&obj=product`}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                 </div>
