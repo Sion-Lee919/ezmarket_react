@@ -8,6 +8,7 @@ function ItemDetail(){
     const [dto, setDto] = useState(null);
     const {itemid} = useParams();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [quantity, setQuantity] = useState(1);
 
     const navigate = useNavigate();
 
@@ -34,7 +35,26 @@ function ItemDetail(){
 
     const handleLoginClick = () => {
         navigate('/login');  
-      };
+    };
+
+    const handleIncreaseQuantity = () => {
+        if (quantity < dto.stock_quantity)
+        setQuantity(prevQuantity => prevQuantity + 1);
+    };
+
+    const handleDecreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(prevQuantity => prevQuantity - 1);
+        }
+    };
+
+    const handleQuantityChange = (e) => {
+        const value = e.target.value;
+        // 숫자인지 확인하고 양수로만 유지
+        if (/^\d+$/.test(value)) {
+            setQuantity(Math.min(dto.stock_quantity, Math.max(1, parseInt(value)))); // 최소값 1로 설정
+        }
+    };
 
     if (!dto) {
         return <div>Loading...</div>;
@@ -64,26 +84,59 @@ function ItemDetail(){
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <tbody>
                     <tr>
-                    <td style={{ padding: '8px', borderTop: '3px solid #333333' }}><strong>판매가</strong></td>
+                    <td style={{ padding: '8px', borderTop: '3px solid #333333', minWidth: '60px' }}><strong>판매가</strong></td>
                     <td style={{ padding: '8px', borderTop: '3px solid #333333' }}>{dto.price ? `${dto.price}원` : '정보없음'}</td>
                     </tr>
                     <tr>
-                    <td style={{ padding: '8px'}}><strong>구매혜택</strong></td>
+                    <td style={{ padding: '8px', minWidth: '60px'}}><strong style={{}}>구매혜택</strong></td>
                     <td style={{ padding: '8px'}}>적립 포인트 : {(dto.price * 0.05) || '정보없음'}이지</td>
                     </tr>
                     <tr>
-                    <td style={{ padding: '8px'}}><strong>브랜드</strong></td>
+                    <td style={{ padding: '8px', minWidth: '60px'}}><strong>브랜드</strong></td>
                     <td style={{ padding: '8px'}}>{dto.brand_id || '정보없음'}</td>
                     </tr>
                     <tr>
-                    <td style={{ padding: '8px', borderBottom: '3px solid #333333' }}><strong>양조장</strong></td>
+                    <td style={{ padding: '8px', minWidth: '60px'}}><strong>구매제한</strong></td>
+                    <td style={{ padding: '8px'}}>{dto.stock_quantity || '정보없음'}</td>
+                    </tr>
+                    <tr>
+                    <td style={{ padding: '8px', minWidth: '60px', borderBottom: '3px solid #333333' }}><strong>양조장</strong></td>
                     <td style={{ padding: '8px', borderBottom: '3px solid #333333' }}>{dto.product_region || '정보없음'}</td>
                     </tr>
+
                 </tbody>
                 </table>
                 <div>
                     {isLoggedIn? (
                     <>
+                        {/* 구매수량 체크 필요 */}
+                        <div style={{ width: '100px',marginTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <strong style={{ marginLeft: '10px',marginRight: '10px',minWidth: '40px'  }}>수량</strong>
+                                <button
+                                    onClick={handleDecreaseQuantity}
+                                    style={{ padding: '5px 10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc' }}
+                                >
+                                    -
+                                </button>
+                                <input
+                                type="text"
+                                value={quantity}
+                                onChange={handleQuantityChange}
+                                style={{
+                                    width: '50px',
+                                    textAlign: 'center',
+                                    padding: '5px',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '4px'
+                                }}
+                            />
+                                <button
+                                    onClick={handleIncreaseQuantity}
+                                    style={{ padding: '5px 8px', backgroundColor: '#f0f0f0', border: '1px solid #ccc' }}
+                                >
+                                    +
+                                </button>
+                        </div>
                         <button className="add-to-cart" style={{ width: '100%', padding: '10px', marginTop: '10px' }}>장바구니에 추가</button>
                         <button className="buy-now" style={{ width: '100%', padding: '10px', marginTop: '10px' }}>즉시 구매</button>
                     </>
