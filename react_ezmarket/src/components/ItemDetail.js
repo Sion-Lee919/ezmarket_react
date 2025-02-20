@@ -29,7 +29,19 @@ function ItemDetail(){
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('detail');
 
+    const [reviewList, setReviewList] = useState([]);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        axios({
+            url: `http://localhost:9090/getreview/${itemid}`,
+            method: 'GET',
+        })
+        .then(function(res){
+            setReviewList(res.data);
+        });
+          }, [reviewList])
 
     useEffect(() => {
         const token = Cookies.get('jwt_token');
@@ -184,7 +196,7 @@ function ItemDetail(){
                     <button style={style.tabButton} onClick={() => handleTabClick('detail')}>상품 상세 정보</button>
                     <button style={style.tabButton} onClick={() => handleTabClick('delivery')}>배송 안내</button>
                     <button style={style.tabButton} onClick={() => handleTabClick('return')}>교환 및 반품 안내</button>
-                    <button style={style.tabButton} onClick={() => handleTabClick('review')}>상품 후기</button>
+                    <button style={style.tabButton} onClick={() => handleTabClick('review')}>상품 후기 ({reviewList.length})</button>
                     <button style={style.tabButton} onClick={() => handleTabClick('inquiry')}>상품 문의</button>
                 </div>
                 <></>
