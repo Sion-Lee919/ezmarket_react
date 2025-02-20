@@ -39,7 +39,7 @@ function ItemSlideComponent() {
     {allItems.map(item => (
                 <Carousel.Item interval={3000}>
                     <Link to={`/item/${item.product_id}`}>
-                    <img src={`http://localhost:9090/showimage?filename=${item.image_url}`} style={style.carouselImg}/>
+                    <img src={`http://localhost:9090/showimage?filename=${item.image_url}&obj=product`} style={style.carouselImg}/>
                     </Link>
                     <Carousel.Caption>
                     <h3>Second slide label</h3>

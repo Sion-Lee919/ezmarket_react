@@ -55,7 +55,7 @@ function SearchResultComponent() {
                         <Col key={item.product_id} xs={12} sm={6} md={4}>
                             <Card>
                                 <Link to={`/item/${item.product_id}`}>
-                                    <Image src={`http://localhost:9090/showimage?filename=${item.image_url}`} fluid />
+                                    <Image src={`http://localhost:9090/showimage?filename=${item.image_url}&obj=product`} fluid />
                                 </Link>
                                 <Card.Body>
                                     <Card.Title>{cleanTitle(item.name)}</Card.Title>
