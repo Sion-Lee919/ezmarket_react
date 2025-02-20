@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../styles/FilterComponent.css"; 
 
+import { useCallback } from "react";
+import _ from "lodash";
+
 const FilterComponent = ({ setFilters, resetFilters, setResetFilters }) => {
     const categories = [
         { label: "전체", value: "" },
@@ -32,17 +35,26 @@ const FilterComponent = ({ setFilters, resetFilters, setResetFilters }) => {
     const [sortType, setSortType] = useState("latest");
 
     useEffect(() => {
-        setFilters({
-            bigcategory: selectedCategory,
-            subcategories: selectedSubcategories,
-            alcoholRanges,
-            regions: selectedRegions,
-            priceRanges,
-            newProduct,
-            sortType
-        });
+       
+        const debouncedUpdate = _.debounce(() => {
+            setFilters({
+                bigcategory: selectedCategory,
+                subcategories: selectedSubcategories,
+                alcoholRanges,
+                regions: selectedRegions,
+                priceRanges,
+                newProduct,
+                sortType
+            });
+        }, 300); 
+    
+        
+        debouncedUpdate();
+    
+ 
+        return () => debouncedUpdate.cancel();
     }, [selectedCategory, selectedSubcategories, selectedRegions, alcoholRanges, priceRanges, newProduct, sortType]);
-
+    
     useEffect(() => {
         if (resetFilters) {
             setSelectedCategory("");
