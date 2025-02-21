@@ -89,6 +89,44 @@ function ItemDetail(){
         setActiveTab(tab); // 클릭된 버튼에 해당하는 정보를 활성화
     };
 
+    const getTokenFromCookie = () => {
+        return Cookies.get("jwt_token") || null;
+    };
+
+    const handleAddToCart = async (productId, quantity) => {
+        const token = getTokenFromCookie();
+        if (!token) {
+            alert("로그인 후 장바구니를 이용할 수 있습니다.");
+            console.warn("장바구니 추가 실패 - 로그인 필요!");
+            return;
+        }
+
+        console.log("장바구니 추가 버튼 클릭됨 - 상품 ID:", productId, "수량:", quantity);
+
+        try {
+            const response = await axios.post(
+                "http://localhost:9090/api/cart/add",
+                null,
+                {
+                    params: {
+                        productId: productId,
+                        quantity: quantity
+                    },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    withCredentials: true
+                }
+            );
+
+            console.log("장바구니 추가 성공! 응답 데이터:", response.data);
+            alert("장바구니에 추가되었습니다!");
+        } catch (error) {
+            console.error("장바구니 추가 실패:", error.response?.data || error.message);
+            alert(error.response?.data || "장바구니 추가 실패!");
+        }
+    };
+
     if (!dto) {
         return <div>Loading...</div>;
     }
@@ -171,7 +209,7 @@ function ItemDetail(){
                                         +
                                     </button>
                             </div>
-                            <button className="add-to-cart" style={{ width: '100%', padding: '10px', marginTop: '10px' }}>장바구니에 추가</button>
+                            <button className="add-to-cart" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={() => handleAddToCart(itemid,quantity)}>장바구니에 추가</button>
                             <button className="buy-now" style={{ width: '100%', padding: '10px', marginTop: '10px' }}>즉시 구매</button>
                         </>
                         ) : (
