@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
 
@@ -7,6 +7,11 @@ import starIcon from '../assets/star.svg';
 import starOnIcon from '../assets/staron.svg';
 
 const style = {
+
+    edit_buttons_container: {
+        display: 'flex',
+        gap: '5px', // 버튼 간의 간격을 5px로 설정 (원하는 간격으로 조정 가능)
+    },
 
     star_rating: {
         width: '100%',
@@ -91,7 +96,7 @@ const style = {
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
-        width: '140px',
+        width: '120px',
         fontSize: '21px',
         height: '50px',
     },
@@ -135,6 +140,7 @@ const style = {
 const ReviewComponent = (props) => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     const [reviewList, setReviewList] = useState([]);
     var product_id = props.product?.product_id;
@@ -143,6 +149,10 @@ const ReviewComponent = (props) => {
     const [comments, setComments] = useState(null);
     const [memberId, setMemberId] = useState("");
     const [rating, setRating] = useState(1);
+    const [previewImg, setPreviewImg] = useState(null);
+
+    const textareaRef = useRef(null);  // textareaRef 생성
+
 
     useEffect(() =>{
 
@@ -177,6 +187,19 @@ const ReviewComponent = (props) => {
 
     }, [product_id])
 
+    const preview = ((imageUrl) => {
+        const file = imageUrl;
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setPreviewImg(reader.result);
+            };
+        } else {
+            setPreviewImg(null);
+        }
+    })
+
     const anonymize = (nickname) => {
         if (nickname.length > 1) {
             const firstChar = nickname.charAt(0);
@@ -199,9 +222,6 @@ const ReviewComponent = (props) => {
 
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
-
-
-        console.log(reviewId);
 
         const formData = new FormData();
         formData.append("product_id", product_id);
@@ -232,16 +252,96 @@ const ReviewComponent = (props) => {
             });
 
             setComments("");
+            setRating(1);
+            setImageUrl(null);
+            setPreviewImg(null);
         } catch (error) {
             console.error("리뷰 등록 실패:", error);
             alert("리뷰 등록 실패")
         }
     };
 
+    const handleReviewDelete = async (review) => {
+        if (window.confirm("정말 삭제하시겠습니까?")) {
+            try {
+                await axios.delete(`http://localhost:9090/review/delete?reviewId=${review}`);
+                alert("리뷰가 삭제되었습니다.");
+                setReviewList(reviewList.filter(target => target.review_id !== review)); // UI 업데이트
+            } catch (error) {
+                alert("삭제 중 오류가 발생했습니다.");
+            }
+        }
+    };
+
+    const handleReviewUpdateStart = (review) => {
+
+
+        setIsEditing(true); // 수정모드 시작
+        setReviewId(review.review_id);
+        setComments(review.comments);
+        setRating(review.rating);
+        setImageUrl(review.image_url);
+        setPreviewImg(`http://localhost:9090/showimage?filename=${review.image_url}&obj=review`);
+
+        // textarea에 포커스를 맞추기
+        if (textareaRef.current) {
+            textareaRef.current.focus();
+            textareaRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+    };
+
+    const handleReviewUpdateEnd = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("member_id", memberId);
+        formData.append("review_id", reviewId);
+        formData.append("comments", comments);
+        formData.append("rating", rating);
+
+        if (imageUrl) {
+            formData.append("image", imageUrl);
+        }
+
+        try {
+            await axios.put(`http://localhost:9090/review/update?reviewid=${reviewId}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            alert("리뷰 수정 완료!");
+
+            // 리뷰 목록 새로 고침
+            axios({
+                url: `http://localhost:9090/getreview/${product_id}`,
+                method: 'GET',
+            })
+            .then(function(res){
+                setReviewList(res.data);
+            });
+
+            setIsEditing(false); // 수정 모드 종료
+            setComments("");
+            setRating(1);
+            setImageUrl(null);
+            setPreviewImg(null);
+        } catch (error) {
+            console.error("리뷰 수정 실패:", error);
+            alert("리뷰 수정 실패");
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setIsEditing(false);
+        setComments("");
+        setRating(1);
+        setImageUrl(null);
+        setPreviewImg(null);
+    };
+
     return (
         <div>
             <div id="review-form" style={style.review_form}>
-                <form id="add-review-form" onSubmit={handleReviewSubmit}>
+                <form id="add-review-form" onSubmit={isEditing ? handleReviewUpdateEnd : handleReviewSubmit}>
 
                 <div style={style.star_rating}>
                     {Array.from({ length: 5 }, (_, index) => (
@@ -265,13 +365,20 @@ const ReviewComponent = (props) => {
 
                     <div style={style.review_textarea_container}>
                         <textarea
+                            ref={textareaRef}
                             id="comments"
                             name="comments"
                             placeholder="후기 내용을 입력하세요"
+                            value={comments}
                             required
                             onChange={(e) => setComments(e.target.value)}
                             style={style.review_textarea}
                         ></textarea>
+                        <img
+                            src={previewImg ? previewImg : null}
+                            alt="" 
+                            onChange={setPreviewImg}
+                        />
                     </div>
 
                     <div style={style.button_container}>
@@ -281,11 +388,24 @@ const ReviewComponent = (props) => {
                         name="image_url"
                         id="image_url"
                         accept="image/*"
-                        onChange={(e) => setImageUrl(e.target.files[0])}
+                        onChange={(e) => {
+                            setImageUrl(e.target.files[0]);
+                            preview(e.target.files[0]);
+                        }}
                         style={{ display: 'none' }}
                     />
 
-                    <button type="submit" style={style.review_submit_button}>후기 작성</button>
+                    {!isEditing ? 
+                        (
+                            <button type="submit" style={style.review_submit_button}>후기 작성</button>
+                        )
+                         : 
+                        (
+                            <div style={style.edit_buttons_container}>
+                            <button type="button" onClick={handleCancelEdit} style={style.review_submit_button}>수정 취소</button>
+                            <button type="submit" style={style.review_submit_button}>수정 완료</button>
+                            </div>
+                        )}
                     </div>
 
                 </form>
@@ -303,10 +423,9 @@ const ReviewComponent = (props) => {
                             </div>
                             {(memberId == review.member_id)? 
                             (<div>
-                                <span>수정</span>
+                                <span onClick={() => handleReviewUpdateStart(review)}>수정</span>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <span>삭제</span>
-                                {/* 수정 삭제 기능 추가 예정 */}
+                                <span onClick={() => handleReviewDelete(review.review_id)}>삭제</span>
                             </div>)
                              : 
                             (null)}
@@ -316,7 +435,7 @@ const ReviewComponent = (props) => {
                         </div>
                         <div style={style.review_right}>
                             <p>{review.comments}</p>
-                            {review.image_url && (<img src={`http://localhost:9090/showimage?filename=${review.image_url}&obj=review`} alt="Review Image" style={style.review_image} />)}
+                            {review.image_url && (<img src={`http://localhost:9090/showimage?filename=${review.image_url}&obj=review`} alt="Review" style={style.review_image} />)}
                         </div>
                         </div>
                     ))}
