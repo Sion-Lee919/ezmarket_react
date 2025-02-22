@@ -99,7 +99,7 @@ const Modifyitem = () => {
                 <label>현재 이미지:</label>
                 {product.image_url ? (
                 <img
-                    src={`http://localhost:9090/showimage?filename=${product.image_url}`}
+                    src={`http://localhost:9090/showimage?filename=${product.image_url}&obj=product`}
                     alt="Product"
                     style={{ maxWidth: '20%', height: '20%' }}
                     
