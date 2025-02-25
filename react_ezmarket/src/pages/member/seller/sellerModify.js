@@ -5,12 +5,14 @@ import Cookies from 'js-cookie';
 
 const SellerModify = () => {
   const [form, setForm] = useState({
+    brand_id: "",
     brandname: "",
     brand_number: "",
     brandlogo_url: "",
-    brandlicense_url: ""
   });
-
+  
+  const [brandLogoFile, setBrandLogoFile] = useState(null);
+  const [brandLogoPreview, setBrandLogoPreview] = useState(null);
   const navigate = useNavigate();
 
   //토큰 받아오기
@@ -24,6 +26,7 @@ const SellerModify = () => {
       })
       .then(response => {
         setForm(response.data);
+        setBrandLogoPreview(response.data.brandlogo_url);
       })
       .catch(error => {
         alert(error.response.data.message);
@@ -39,32 +42,47 @@ const SellerModify = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = Cookies.get('jwt_token');
+    const formData = new FormData();
+    formData.append("brand_id", form.brand_id);
+    formData.append("brandname", form.brandname);
+    formData.append("brand_number", form.brand_number);
+    if (brandLogoFile) {
+      formData.append("brandlogo_url", brandLogoFile); 
+    } else {
+      formData.append("existing_brandlogo_url", form.brandlogo_url);
+    }
 
     try {
-      await axios.post('http://localhost:9090/sellermodify', form, {
+      await axios.post('http://localhost:9090/sellModify', formData, {
         headers: {
-          "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         }
       });
       alert('판매자 정보 수정 성공!');
-      navigate('../');
+      navigate(`/brand/${form.brand_id}`);
     } catch (error) {
       alert('판매자 정보 수정 실패!');
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm(prevForm => ({
-      ...prevForm,
-      [name]: value
-    }));
+  //로고 미리보기
+  const handleBrandLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setBrandLogoFile(file);
+      
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBrandLogoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
     <div>
-      <h1>회원 정보 수정</h1>
+      <h1>판매자 정보 수정</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <input type="hidden" name="brand_id" value={Number(form.brand_id)} />
@@ -72,28 +90,26 @@ const SellerModify = () => {
 
         <div>
           <label htmlFor="brandname">상호명: </label>
-          <input type="text" name="brandname" value={form.brandname} onChange={handleChange} />
+          <input type="text" name="brandname" value={form.brandname} onChange={(e) => setForm({ ...form, brandname: e.target.value })} />
         </div>
 
         <div>
           <label htmlFor="brand_number">사업자번호: </label>
-          <input type="text" name="brand_number" value={form.brand_number} onChange={handleChange} disabled />
+          <input type="text" name="brand_number" value={form.brand_number} onChange={(e) => setForm({ ...form, brand_number: e.target.value })} disabled />
         </div>
 
         <div>
-          <label htmlFor="brandlogo_url">상표 로고: </label>
-          <input type="text" name="brandlogo_url" value={form.brandlogo_url} onChange={handleChange} />
+          <label htmlFor="brandLicenseFile">상호 로고: </label>
+          {/* {form.brandlogo_url && !previewLogo && (<img src={aws 배포 후 설정} alt="상호 로고") */}
+          {brandLogoPreview && <img src={brandLogoPreview} alt="상호 로고 미리보기"/>}
+          <input type="file" id="brandLogoFile" accept="image/*" onChange={handleBrandLogoChange} />
         </div>
-
-        <div>
-          <label htmlFor="brandlicense_url">사업자 등록증: </label>
-          <input type="text" name="brandlicense_url" value={form.brandlicense_url} onChange={handleChange} disabled />
-        </div>
-
+        
         <div>
           <button type="submit">수정하기</button>
           <button type="button" onClick={() => navigate(-1)}>이전</button>
         </div>
+
       </form>
     </div>
   );

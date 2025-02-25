@@ -32,6 +32,7 @@ import SellerApplication from './pages/member/seller/sellerApplicatoin.js';
 import ManageSeller from './pages/member/admin/manageSeller.js';
 import AdminPage from './pages/member/admin/adminPage.js';
 import ManageUser from './pages/member/admin/manageUser.js';
+import SellerModify from './pages/member/seller/sellerModify.js';
 
 function App() {
   
@@ -64,6 +65,7 @@ function App() {
         <Route path="/my/admin" element={<AdminPage/>} />
         <Route path="/my/admin/user" element={<ManageUser />} />
         <Route path="/my/admin/seller" element={<ManageSeller />} />
+        <Route path='/brand/:brandid/modify/' element={<SellerModify/>}/>
         
         
         <Route path="/loginn" element={<GoogleLoginButton />} />

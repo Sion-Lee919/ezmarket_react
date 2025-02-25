@@ -9,10 +9,12 @@ const SellerApplication = () => {
     member_id: '',
     brandname: '',
     brand_number: '',
-    brandlicense_url: '',
   });
 
+  const [brandLogoFile, setBrandLogoFile] = useState(null);
+  const [brandLogoPreview, setBrandLogoPreview] = useState(null);
   const [brandLicenseFile, setBrandLicenseFile] = useState(null);
+
   const [BrandNumberCheckResult, setBrandNumberCheckResult] = useState('');
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   
@@ -41,6 +43,19 @@ const SellerApplication = () => {
         withCredentials: true
       })
       .then(response => {
+        const brand_id = response.data.brand_id;
+        const brand_status = response.data.brand_status;
+        if (brand_id) {
+          if(brand_status === "승인") {
+            alert('이미 판매자로 승인된 상태입니다. 판매자 페이지로 이동합니다.');
+            return navigate(`/brand/${brand_id}`);
+          } else if (brand_status === "검토 중") {
+            alert('관리자가 판매자 신청을 검토 중입니다.')
+          } else {
+            alert('판매자 승인 거부된 상태입니다. 관리자에게 문의해주세요.')
+          }
+            navigate('/');
+        }
         setForm(prevForm => ({
           ...prevForm,
           member_id: response.data.member_id,
@@ -55,10 +70,6 @@ const SellerApplication = () => {
       navigate('/login');
     }
   }, [navigate]);
-
-  const handleFileChange = (e) => {
-    setBrandLicenseFile(e.target.files[0]);
-  };
 
   //중복 확인
   const checkBrandNumber = async (e) => {
@@ -90,39 +101,48 @@ const SellerApplication = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const reader = new FileReader(); // 파일(사진) 불러오기 위해 추가
+    if (!brandLogoFile || !brandLicenseFile) {
+      alert('상호 로고와 사업자 등록증 파일을 모두 선택해주세요.');
+      return;
+    }
 
-    reader.onloadend = async () => {
-      const formData = {
-        brand_id: form.brand_id,
-        member_id: form.member_id,
-        brandname: form.brandname,
-        brand_number: form.brand_number,
-        brandlicense_url: reader.result,
-      };
+    const formData = new FormData();
+    formData.append('brand_id', form.brand_id);
+    formData.append('member_id', form.member_id);
+    formData.append('brandname', form.brandname);
+    formData.append('brand_number', form.brand_number);
+    formData.append('brandlogo_url', brandLogoFile);
+    formData.append('brandlicense_url', brandLicenseFile); 
 
-      try {
-        const response = await axios.post('http://localhost:9090/sellApplication', formData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+    try {
+      const response = await axios.post('http://localhost:9090/sellApplication', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-        if (response.status === 200) {
-          alert('판매자 신청이 완료되었습니다.');
-          navigate("/");
-        } else {
-          alert('신청 실패. 다시 시도해 주세요.');
-        }
-      } catch (error) {
-        alert('서버 오류. 잠시 후 다시 시도해 주세요.');
+      if (response.status === 200) {
+        alert('판매자 신청이 완료되었습니다.');
+        navigate("/");
+      } else {
+        alert('신청 실패. 다시 시도해 주세요.');
       }
-    };
-    
-    if (brandLicenseFile) {
-      reader.readAsDataURL(brandLicenseFile);  // 파일을 Base64로 읽기
-    } else {
-      alert('파일을 선택하세요');
+    } catch (error) {
+      alert('서버 오류. 잠시 후 다시 시도해 주세요.');
+    }
+  };
+
+  //로고 미리보기
+  const handleBrandLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setBrandLogoFile(file);
+      
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBrandLogoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -140,14 +160,18 @@ const SellerApplication = () => {
           <input type="text" id="brandName" value={form.brandname} onChange={(e) => setForm({ ...form, brandname: e.target.value })} maxLength={100} required />
         </div>
         <div>
+          <label htmlFor="brandLicenseFile">상호 로고: </label>
+          {brandLogoPreview && <img src={brandLogoPreview} alt="상호 로고 미리보기"/>}
+          <input type="file" id="brandLogoFile" accept="image/*" onChange={handleBrandLogoChange} required />
+        </div>
+        <div>
           <label htmlFor="brandNumber">사업자 번호: </label>
           <input type="text" id="brandNumber" value={form.brand_number} onChange={checkBrandNumber} placeholder="'-'를 제외한 사업자 번호 10자리를 적어주세요." pattern="\d{10}" title="'-'를 제외한 사업자 번호 10자리를 적어주세요." maxLength={10} required />
           {form.brand_number.length === 10 && <span>{BrandNumberCheckResult}</span>}
         </div>
         <div>
           <label htmlFor="brandLicenseFile">사업자 등록증: </label>
-          <input type="file" id="brandLicenseFile" onChange={handleFileChange}
-          />
+          <input type="file" id="brandLicenseFile" accept="application/pdf" onChange={(e) => setBrandLicenseFile(e.target.files[0])} required />
         </div>
         <button type="submit" disabled={isSubmitDisabled}>판매자 신청</button>
       </form>
