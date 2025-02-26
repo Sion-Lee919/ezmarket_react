@@ -100,7 +100,10 @@ const Modify = () => {
 
     try {
       if(form.social == 1) {
-        alert('소셜 로그인 회원의 탈퇴는 관리자에게 문의해주세요.');
+        alert('소셜 회원의 탈퇴는 관리자에게 문의해주세요.');
+        return;
+      } else if(form.brand_id) {
+        alert('판매자 회원의 탈퇴는 관리자에게 문의해주세요.');
         return;
       }
 
