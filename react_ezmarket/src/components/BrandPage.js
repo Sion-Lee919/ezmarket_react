@@ -50,6 +50,7 @@ function BrandPage(){
     return (
         <div>
           <Link to={`/brand/${brandid}/itemregister`} className="register-link">상품등록</Link>
+          <br></br><Link to={`/brand/${brandid}/modify`}>판매자 정보 수정</Link>
           <div className="brand-items">
             <table className="item-table">
               <thead>

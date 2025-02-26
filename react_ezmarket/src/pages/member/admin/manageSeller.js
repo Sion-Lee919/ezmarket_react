@@ -140,6 +140,7 @@ const ManageSeller = () => {
                 <td>{brand.brand_number}</td>
                 <td><img src={brand.brandlogo_url} alt="브랜드 로고" /></td>
                 <td><img src={brand.brandlicense_url} alt="사업자 등록증" /></td>
+                {/* 미리보기는 aws 배포 후 */}
                 <td>{brand.username}</td>
                 <td>{brand.realname}</td>
                 <td><a href={`../../brand/${brand.brand_id}`}>이동</a></td>
