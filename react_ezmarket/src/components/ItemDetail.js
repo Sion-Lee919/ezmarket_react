@@ -133,6 +133,14 @@ function ItemDetail(){
 
     return (
         <div>
+            <div
+            className="brandlogo"
+            onClick={() => navigate(`/brandItems?brand_id=${dto.brand_id}`)}
+            style={{ cursor: 'pointer' }}
+            >
+                {dto.brand_id}
+            </div>
+
             <div className="product-page-top" style={{
             display: 'flex', 
             flexDirection: 'row', 
