@@ -1,7 +1,7 @@
 //import './App.css';
 import React from 'react';
 
-import { BrowserRouter, Routes, Route, Link} from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -32,6 +32,8 @@ import SellerApplication from './pages/member/seller/sellerApplicatoin.js';
 import ManageSeller from './pages/member/admin/manageSeller.js';
 import AdminPage from './pages/member/admin/adminPage.js';
 import ManageUser from './pages/member/admin/manageUser.js';
+import BrandItem from './components/BrandItem.js';
+import BrandHeader from './components/BrandHeader.js'; 
 
 function App() {
   
@@ -39,7 +41,7 @@ function App() {
 
     <div>
       <BrowserRouter>
-      <HeaderComponent/>
+      <DynamicHeader/>
       
       <Routes> 
         <Route path='/cart' element={<Cart/>}/>
@@ -47,8 +49,8 @@ function App() {
 
         <Route path='/brand/:brandid' element={<BrandPage/>}/>
         <Route path='/brand/:brandid/itemregister/' element={<ItemRegister/>}/>
-        <Route path='/search' element={<SearchResultComponent/>}/>
-
+        <Route path='/items' element={<SearchResultComponent/>}/>
+        <Route path='/brandItems' element={<BrandItem/>}/>
         
 
         <Route path="/login" element={<Login />} />
@@ -77,5 +79,9 @@ function App() {
 
   );
 }
-
+const DynamicHeader = () => {
+  const location = useLocation();
+  const isBrandPage = location.pathname.startsWith("/brandItems");
+  return isBrandPage ? <BrandHeader /> : <HeaderComponent />;
+};
 export default App;

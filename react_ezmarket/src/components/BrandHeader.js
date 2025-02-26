@@ -1,18 +1,15 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import SearchComponent  from "./SearchComponent";
+
 import { useState,useEffect } from "react";
 import Cookies from 'js-cookie';
 import BrandPageLink from "./BrandPageLink";
 import "../styles/HeaderComponent.css";
-import HeaderCategory from "./HeaderCategory";
 
 
-const HeaderComponent = ({ }) => {
-
-    const location = useLocation();
+const BrandHeader = () => {
+   const location = useLocation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
-    const queryParams = new URLSearchParams(location.search);
 
     useEffect(() => {
         const token = Cookies.get('jwt_token');
@@ -39,11 +36,8 @@ const HeaderComponent = ({ }) => {
     return (
     <div className="header">
         <Link to="/">이지마켓</Link>
+        <div>브랜드 로고 넣기</div>
         <Link to="/cart">장바구니</Link><br/>
-
-        <HeaderCategory text="전통주 종류" />
-        <HeaderCategory text="지역" />
-
         {!isLoggedIn && (
         <button onClick={handleLoginClick}>
           로그인
@@ -52,12 +46,7 @@ const HeaderComponent = ({ }) => {
         {isLoggedIn && (
         <button onClick={handleLogout}>로그아웃</button>
         )}
-
-
         <BrandPageLink></BrandPageLink>
-
-        
-        <SearchComponent></SearchComponent>
         <div>
       <button onClick={handleMyPageClick}>
         내 정보
@@ -67,6 +56,6 @@ const HeaderComponent = ({ }) => {
     </div>
     
     )
-}
+};
 
-export default HeaderComponent;
+export default BrandHeader;
