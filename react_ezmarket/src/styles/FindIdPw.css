@@ -1,0 +1,89 @@
+.id-pw-find-container {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 200px;
+}
+
+.id-pw-find-container .find-flow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.id-pw-find-container .find-flow .find-title {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.id-pw-find-container .id-find-title {
+    text-align: left;
+    font-weight: bold;
+    font-size: 20px;
+    margin: auto;
+    padding: 30px 70px;
+}
+
+.id-pw-find-container input {
+    width: 500px;
+    height: 100px;
+    font-size: 25px;
+    padding: 10px;
+    margin: 20px;
+}
+
+.id-pw-find-container .found-id-box {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.home-find {
+    width: 250px;
+    height: 70px;
+    margin: 10px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 1px solid #c7c6c6;
+    border-radius: 10px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.home-find:hover{
+    background-color:rgb(226, 226, 226);
+}
+
+.id-find-button {
+    width: 200px;
+    height: 100px;
+    margin: 20px;
+    margin-left: 11px;
+    background-color: rgb(24, 159, 219);
+    color: rgb(255, 255, 255);
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.id-find-button:hover {
+    background-color: rgb(15, 138, 190);
+}
+
+.pw-find-button {
+    width: 500px;
+    height: 100px;
+    margin: 20px;
+    margin-left: 11px;
+    background-color: rgb(24, 159, 219);
+    color: rgb(255, 255, 255);
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.pw-find-button:hover {
+    background-color: rgb(15, 138, 190);
+}

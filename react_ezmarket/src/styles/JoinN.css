@@ -1,0 +1,136 @@
+.join-form-container {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 200px;
+}
+
+.join-form-container .join-flow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.join-form-container .join-flow .join-flow-title {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.join-form-container .join-flow .join-flow-content {
+    font-weight: bold;
+    color: rgb(15, 138, 190);
+    font-size: 20px;
+}
+
+.join-form-container .join-form {
+    margin: auto;
+    padding: 30px 70px;
+    text-align: center;
+}
+
+.join-form-container .join-form .join-form-title {
+    text-align: left;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.join-form-container .join-form input {
+    width: 530px;
+    margin: 15px auto;
+    height: 60px;
+    font-size: 20px;
+}
+
+.join-form-container .join-email .join-email-first{
+    width: 200px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.join-form-container .join-email .join-email-second{
+    width: 200px;
+    height: 50px;
+    margin: 0 10px;
+}
+
+.join-form-container .join-email-third{
+    width: 70px;
+    height: 50px;
+    margin: 0 10px;
+    font-size: 20px;
+}
+
+.join-form-container .join-email, .join-phone {
+    display: flex;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.join-form-container .join-phone-first{
+    width: 80px;
+    height: 50px;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.join-form-container .join-phone .join-phone-second {
+    width: 198px;
+    margin: 10px;
+}
+
+.join-form-container .join-phone .join-phone-third {
+    width: 198px;
+    margin: 10px;
+}
+
+.join-form-container .join-address {
+    width: 300px;
+    height: 100px;
+    margin: 10px;
+    overflow-y: auto;
+}
+
+.join-form-container .join-form .join-button-form {
+    text-align: center;
+}
+
+.join-term-container .join-success {
+    font-weight: bold;
+    font-size: 30px;
+    color: rgb(2, 2, 2);
+    padding: 50px 200px;
+    margin: 10px;
+}
+
+.join-form-container .join-success-content {
+    font-weight: bold;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    padding: 10px;
+}
+
+.join-form-container .join-success-content .join-money{
+    color: rgb(24, 159, 219);
+    font-size: 30px;
+}
+
+.join-join {
+    width: 250px;
+    height: 70px;
+    margin: 10px;
+    margin-left: 11px;
+    background-color: rgb(24, 159, 219);
+    color: rgb(255, 255, 255);
+    border: 1px solid #ffffff;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.join-join:hover {
+    background-color: rgb(15, 138, 190);
+}
+
+.join-join:disabled {
+    background-color: rgba(211, 211, 211, 0.856);
+}
