@@ -4,6 +4,7 @@ import { useParams,useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 import ReviewComponent from "./ReviewComponent";
+import QnAChatComponent from "./QnAChatComponent";
 
 const style = {
     tabButton: {
@@ -273,6 +274,7 @@ function ItemDetail(){
                         <div>
                             <h4>상품 문의</h4>
                             <p>상품에 대한 문의 사항을 여기에 추가하세요.</p>
+                            <QnAChatComponent></QnAChatComponent>
                         </div>
                     )}
                 </div>
