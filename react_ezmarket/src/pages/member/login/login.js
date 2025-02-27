@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import '../../../styles/Login.css';
+import { Placeholder } from 'react-bootstrap';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -45,10 +47,6 @@ const Login = () => {
         });
     };
 
-  const handleHomeClick = () => {
-    navigate("/");
-  };
-
   const handleJoinClick = () => {
     navigate('/join');
   };
@@ -79,27 +77,30 @@ const Login = () => {
 
   return (
     <div>
-      <h1>로그인</h1>
-      <form onSubmit={handleSubmit} className="login-form">
-        <div className="login-box">
-          아이디 입력: <input type="text" className="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)}/><br />
-          암호 입력: <input type="password" name="pw" value={password} onChange={(e) => setPassword(e.target.value)}/><br />
+      <div className="login-form">
+        <form onSubmit={handleSubmit}>
+          <h3 style={{ fontSize: '30px', marginLeft: '10px', marginBottom: '20px', fontWeight: "bold" }}>회원 로그인</h3>
+          <div className="login-box">
+            <div>
+              <input type="text" className="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="아이디"/><br />
+              <input type="password" className="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호"/><br />
+            </div>
+            <input className="login-button" type="submit" value="로그인" />
+          </div>
+        </form>
+        <hr></hr>
+        <div className="member-buttons">
+          <button className="join-login" onClick={handleJoinClick}>회원가입</button>
+          <button className="id-find" onClick={handleFindIdClick}>아이디 찾기</button>
+          <button className="pw-find" onClick={handleFindPwClick}>비밀번호 찾기</button>
         </div>
-        <input className="button" type="submit" value="로그인" />
-      </form>
-      <div>
-        <button onClick={handleJoinClick}>회원가입</button>
-        <button onClick={handleHomeClick}>홈</button>
-      </div>
-      <div>
-        <button onClick={handleFindIdClick}>아이디 찾기</button>
-        <button onClick={handleFindPwClick}>비밀번호 찾기</button>
-      </div>
-      <div>
-        <button onClick={handleNaverLogin}>네이버 로그인</button>
-        <button onClick={handleGoogleLogin}>구글 로그인</button>
-        <button onClick={handleKakaoLogin}>카카오 로그인</button>
-        <button onClick={handleGithubLogin}>깃허브 로그인</button>
+        <hr></hr>
+        <div className="social-login">
+          <button className="naver-login" onClick={handleNaverLogin}><img src="/social-login-icon/naver.svg" alt="네이버 로그인"/></button>
+          <button className="google-login"onClick={handleGoogleLogin}><img src="/social-login-icon/google.svg" alt="구글 로그인 버튼"/></button>
+          <button className="kakao-login"onClick={handleKakaoLogin}><img src="/social-login-icon/kakaotalk.svg" alt="카카오 로그인 버튼"/></button>
+          <button className="github-login"onClick={handleGithubLogin}><img src="/social-login-icon/github.svg" alt="깃허브 로그인 버튼"/></button>
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';  
 import { useNavigate } from 'react-router-dom';  
 import Cookies from 'js-cookie';
+import '../../../styles/MyPage.css';
+import MyPageSideBar from './myPageSideBar';
 
 const MyPage = () => {
   const [user, setUser] = useState({
@@ -47,31 +49,17 @@ const MyPage = () => {
   }
 
   return (
-    <div>
-      <h1>{user.nickname}님의 정보</h1>
-      {user.userauthor === 0 && (
-        <button onClick={handleAdminPageClick}>관리자 페이지</button>
-        )}
+    <div className="mypage-form">
+      <MyPageSideBar />
       <div>
-        적립금: {user.points}원, 충전금: {user.ezpay}원;
+        <div>{user.realname}님은 {user.author === 0 ? "관리자" : user.userauthor === 2 ? "판매자" : "일반회원"}입니다.</div>
+        <div>적립금: {user.points}원</div>
+        <div>충전금: {user.ezpay}원</div>
       </div>
+      <div className="side-bar">
       <div>
-        {user.username}의 주문 내역을 보여줄 계획
-      </div>
-      <div>
-        <button>찜 목록</button>
-      </div>
-      <div>
-        <button>상품 문의</button>
-      </div>
-      <div>
-        <button>1:1  문의</button>
-      </div>
-      <div>
-        <button onClick={handleModify}>회원정보수정</button>
-      </div>
-      <div>
-        <button onClick={() => navigate(-1)}>이전</button>
+          {user.username}의 주문 내역을 보여줄 계획
+        </div>
       </div>
     </div>
   );
