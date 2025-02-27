@@ -172,8 +172,8 @@ function ItemDetail(){
                         <td style={{ padding: '8px'}}>적립 포인트 : {(dto.price * 0.05) || '정보없음'}이지</td>
                         </tr>
                         <tr>
-                        <td style={{ padding: '8px', minWidth: '60px'}}><strong>브랜드</strong></td>
-                        <td style={{ padding: '8px'}}>{dto.brand_id || '정보없음'}</td>
+                        <td style={{ padding: '8px', minWidth: '60px'}}><strong>판매자</strong></td>
+                        <td style={{ padding: '8px'}}>{dto.brandname || '정보없음'}</td>
                         </tr>
                         <tr>
                         <td style={{ padding: '8px', minWidth: '60px'}}><strong>구매제한</strong></td>

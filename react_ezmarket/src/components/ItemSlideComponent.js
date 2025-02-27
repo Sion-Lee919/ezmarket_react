@@ -28,10 +28,6 @@ function ItemSlideComponent() {
         });
     }, [])
 
-  const handleSelect = (selectedIndex) => {
-    setIndex(selectedIndex);
-  };
-
   return (
     <div>
     <h1>추천상품</h1>
@@ -42,8 +38,7 @@ function ItemSlideComponent() {
                     <img src={`http://localhost:9090/showimage?filename=${item.image_url}&obj=product`} style={style.carouselImg}/>
                     </Link>
                     <Carousel.Caption>
-                    <h3>Second slide label</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <strong style={{fontSize:"33px", color:"#555555"}}>{item.name}</strong>
                     </Carousel.Caption>
                 </Carousel.Item>
                 ))}
