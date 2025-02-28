@@ -134,3 +134,27 @@
 .join-join:disabled {
     background-color: rgba(211, 211, 211, 0.856);
 }
+
+.resign-modify {
+    width: 250px;
+    height: 70px;
+    margin: 10px;
+    margin-left: 11px;
+    background-color: rgb(177, 177, 177);
+    color: rgb(255, 255, 255);
+    border: 1px solid #ffffff;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.resign-modify:hover {
+    width: 250px;
+    height: 70px;
+    margin: 10px;
+    margin-left: 11px;
+    background-color: rgb(110, 110, 110);
+    color: rgb(255, 255, 255);
+    border: 1px solid #ffffff;
+    font-size: 25px;
+    font-weight: bold;
+}
