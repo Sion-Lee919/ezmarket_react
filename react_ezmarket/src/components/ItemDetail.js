@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 
 import ReviewComponent from "./ReviewComponent";
 import QnAChatComponent from "./QnAChatComponent";
+import QnAChatRoomListComponent from "./QnAChatRoomListComponent";
 
 const style = {
     tabButton: {
@@ -29,6 +30,8 @@ function ItemDetail(){
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('detail');
+    const [user, setUser] = useState(null);
+    const [brandid, setBrandid] = useState();
 
     const [reviewList, setReviewList] = useState([]);
 
@@ -48,6 +51,18 @@ function ItemDetail(){
         const token = Cookies.get('jwt_token');
             if (token) {
               setIsLoggedIn(true);
+              axios.get('http://localhost:9090/userinfo', { 
+                headers: { 'Authorization': `Bearer ${token}` }, 
+                withCredentials: true
+              })
+              .then(response => {
+                setUser(response.data);
+              })
+              .catch(error => {
+                alert(error.response.data.message);
+                Cookies.remove('jwt_token');
+                navigate('/login');
+              });
             }
           }, [])
 
@@ -89,6 +104,25 @@ function ItemDetail(){
     const handleTabClick = (tab) => {
         setActiveTab(tab); // 클릭된 버튼에 해당하는 정보를 활성화
     };
+
+    const checkUserState = (user) => {
+        if (user != null){
+            axios.get(`http://localhost:9090/brandinfo?memberid=${user.member_id}`)
+                .then(response => {
+                    if(response.data){
+                        setBrandid(response.data.brand_id);
+                    } else {
+                        setBrandid(null);
+                    }
+                })
+                .catch(error => {
+                    console.error('브랜드 정보를 가져오는 데 실패.', error);
+                });
+        } else {
+            alert("로그인 후 가능한 기능입니다");
+            navigate('/login');
+        }
+    }
 
     const getTokenFromCookie = () => {
         return Cookies.get("jwt_token") || null;
@@ -244,7 +278,7 @@ function ItemDetail(){
                     <button style={style.tabButton} onClick={() => handleTabClick('delivery')}>배송 안내</button>
                     <button style={style.tabButton} onClick={() => handleTabClick('return')}>교환 및 반품 안내</button>
                     <button style={style.tabButton} onClick={() => handleTabClick('review')}>상품 후기 ({reviewList.length})</button>
-                    <button style={style.tabButton} onClick={() => handleTabClick('inquiry')}>상품 문의</button>
+                    <button style={style.tabButton} onClick={() => {checkUserState(user); handleTabClick('inquiry'); }}>상품 문의</button>
                 </div>
                 <></>
                 {/* 각 탭별 내용 표시 */}
@@ -271,11 +305,17 @@ function ItemDetail(){
                         <ReviewComponent product={ dto }></ReviewComponent>
                     )}
                     {activeTab === 'inquiry' && (
-                        <div>
-                            <h4>상품 문의</h4>
-                            <p>상품에 대한 문의 사항을 여기에 추가하세요.</p>
-                            <QnAChatComponent></QnAChatComponent>
-                        </div>
+                        brandid === dto.brand_id ? (
+                            <div>
+                                <QnAChatRoomListComponent product={dto} isSeller = {true}/>
+                            </div>
+                        ) : (
+                            <div>
+                                <h4>상품 문의</h4>
+                                <p>상품에 대한 문의 사항을 여기에 추가하세요.</p>
+                                <QnAChatComponent product={dto} isSeller = {false}/>
+                            </div>
+                        )
                     )}
                 </div>
             </div>
