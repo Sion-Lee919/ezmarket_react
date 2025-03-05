@@ -21,7 +21,6 @@ const QnAChatComponent = (props) => {
       const response = await axios.get(`http://localhost:9090/chat/records`, {
         params: { channelId },
       });
-      //console.log("Fetched chat history:", response.data);
       setChatList(response.data);  // DB에서 가져온 채팅 기록을 상태에 저장
     } catch (error) {
       console.error("Failed to fetch chat history:", error);
@@ -32,7 +31,6 @@ const QnAChatComponent = (props) => {
     client.current = new StompJs.Client({
       brokerURL: 'ws://localhost:9090/ws',
       onConnect: () => {
-        console.log('WebSocket connected');
         subscribe();
       },
       onWebSocketError: (error) => {
@@ -65,10 +63,8 @@ const QnAChatComponent = (props) => {
 
   const subscribe = () => {
     if (channel) {
-      console.log(channel);
       client.current.subscribe('/sub/chat/' + channel, (body) => {
         const json_body = JSON.parse(body.body);
-        console.log('New chat message:', json_body);
         setChatList((_chat_list) => {
           return [..._chat_list, json_body];
         });
