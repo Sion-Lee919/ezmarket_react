@@ -182,26 +182,26 @@ const JoinN = () => {
 	  }
   }
 
-    //비밀번호 확인
-    const handlePasswordConfirm = (e) => {
-      const { name, value } = e.target;
-      setForm(prevForm => ({
-        ...prevForm,
-        [name]: value,
-      }));
-    };
-  
-    useEffect(() => {
-      if (form.password && form.confirmPassword) {
-        if (form.password !== form.confirmPassword) {
-          setPasswordCheckResult('비밀번호가 틀립니다.');
-        } else {
-          setPasswordCheckResult('비밀번호가 일치합니다.');
-        }
+  //비밀번호 확인
+  const handlePasswordConfirm = (e) => {
+    const { name, value } = e.target;
+    setForm(prevForm => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    if (form.password && form.confirmPassword) {
+      if (form.password !== form.confirmPassword) {
+        setPasswordCheckResult('비밀번호가 일치하지 않습니다.');
       } else {
-        setPasswordCheckResult('');
+        setPasswordCheckResult('비밀번호가 일치합니다.');
       }
-    }, [form.password, form.confirmPassword]);
+    } else {
+      setPasswordCheckResult('');
+    }
+  }, [form.password, form.confirmPassword]);
 
   //회원가입 폼 제출
   const handleSubmit = async (e) => {
@@ -212,10 +212,9 @@ const JoinN = () => {
         headers: { "Content-Type": "application/json" } //리액트 json, 스프링 @RequestBody로 받기
       });
       alert('회원가입 성공!');
-      navigate('/joinN/joinSuccess');
+      navigate('/joinN/success');
     } catch (error) {
-      alert('회원가입 실패!');
-      console.error('회원가입 오류:', error);
+      alert('회원가입 실패! 회원가입 정보를 다시 확인해주세요!');
     }
   };
 

@@ -1,8 +1,26 @@
-.mypage-form {
-    background: white;
-    margin: 50px auto;
-    padding: 100px;
-    padding-left: 120px;
-    border: 1px solid rgb(209, 198, 198);
-    width: 1000px;
+.side-bar {
+    width: 200px;
+}
+
+.side-bar button {
+    width: 100%;
+    height: 50px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.side-bar button:hover {
+    background-color: rgb(15, 138, 190);
+    color: white;
+}
+
+.side-bar .side-bar-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+    text-align: center;
 }

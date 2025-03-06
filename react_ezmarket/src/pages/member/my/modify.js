@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import '../../../styles/JoinN.css'
 
 const Modify = () => {
   const [form, setForm] = useState({
@@ -17,6 +18,7 @@ const Modify = () => {
 
   const [nicknameCheckResult, setNicknameCheckResult] = useState('');
   const [isRegisterDisabled, setIsRegisterDisabled] = useState(false);
+  const [passwordCheckResult, setPasswordCheckResult] = useState('');
   const navigate = useNavigate();
 
   //토큰 받아오기
@@ -122,56 +124,86 @@ const Modify = () => {
     }
   };
 
+  //비밀번호 확인
+  const handlePasswordConfirm = (e) => {
+    const { name, value } = e.target;
+    setForm(prevForm => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    if (form.password && form.confirmPassword) {
+      if (form.password !== form.confirmPassword) {
+        setPasswordCheckResult('비밀번호가 일치하지 않습니다.');
+        setIsRegisterDisabled(true);
+      } else {
+        setPasswordCheckResult('비밀번호가 일치합니다.');
+        setIsRegisterDisabled(false);
+      }
+    } else {
+      setPasswordCheckResult('');
+      setIsRegisterDisabled(false);
+    }
+  }, [form.password, form.confirmPassword]);
+
   return (
-    <div>
-      <h1>회원 정보 수정</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="join-form-container">
+      <div className="join-flow">
+        <div className="join-flow-title">회원 정보</div>
+      </div>
+      <hr></hr>
+
+      <form className="join-form" onSubmit={handleSubmit}>
+        <div className="join-form-title">
+            회원 정보 수정<hr></hr>
+        </div>
+
         <div>
           <input type="hidden" name="member_id" value={Number(form.member_id)} />
         </div>
 
         <div>
-          <label htmlFor="username">아이디: </label>
-          <input type="text" name="username" value={form.username} onChange={handleChange} disabled />
+          <input type="text" name="username" className="join-username" value={form.username} onChange={handleChange} disabled />
         </div>
 
         <div>
-          <label htmlFor="password">비밀번호: </label>
-          <input type="password" name="password" value={form.password} onChange={handleChange} maxLength={100} required disabled={form.social == 1}/>
+          <input type="password" name="password" className="join-password" value={form.password} onChange={handleChange} maxLength={100} required disabled={form.social == 1} placeholder="비밀번호"/>
         </div>
 
         <div>
-          <label htmlFor="realname">이름: </label>
-          <input type="text" name="realname" value={form.realname} onChange={handleChange} disabled />
+          <input type="password" name="confirmPassword" className="join-password" value={form.confirmPassword} onChange={handlePasswordConfirm} maxLength={100} required placeholder="비밀번호 확인"/>
+          <div className="check">{passwordCheckResult}</div>
         </div>
 
         <div>
-          <label htmlFor="nickname">닉네임: </label>
-          <input type="text" name="nickname" value={form.nickname} onChange={checkNickname} maxLength={12} required />
-          <span>{nicknameCheckResult}</span>
+          <input type="text" name="realname" className="join-realname" value={form.realname} onChange={handleChange} disabled />
         </div>
 
         <div>
-          <label htmlFor="email">이메일: </label>
+          <input type="text" name="nickname" className="join-nickname" value={form.nickname} onChange={checkNickname} maxLength={12} required placeholder="닉네임 입력"/>
+          <div className="check">{nicknameCheckResult}</div>
+        </div>
+
+        <div>
           <input type="text" name="email" value={form.email} onChange={handleChange} maxLength={40} disabled />
         </div>
 
         <div>
-          <label htmlFor="phone">전화번호: </label>
           <input type="text" name="phone" value={form.phone} disabled/>
         </div>
 
         <div>
-          <label htmlFor="address">주소: </label>
-          <input type="text" name="address" value={form.address} onChange={handleChange} maxLength={1000} />
+          <input type="text" name="address" className="join-address" value={form.address} onChange={handleChange} maxLength={1000} placeholder="주소 입력" />
         </div>
 
-        <div>
-          <button type="submit" disabled={isRegisterDisabled}>수정하기</button>
-          <button type="button" onClick={() => navigate(-1)}>이전</button>
+        <div className="join-button-form">
+          <button type="button" className="prev-join" onClick={() => navigate(-1)}>이전</button>
+          <button type="submit" className="join-join" disabled={isRegisterDisabled}>수정하기</button>
         </div>
         <div>
-          <button type="button" onClick={handleResign}>회원 탈퇴 요청</button>
+          <button type="button" className="resign-modify" onClick={handleResign}>회원 탈퇴 요청</button>
         </div>
       </form>
     </div>
