@@ -311,8 +311,6 @@ function ItemDetail(){
                             </div>
                         ) : (
                             <div>
-                                <h4>상품 문의</h4>
-                                <p>상품에 대한 문의 사항을 여기에 추가하세요.</p>
                                 <QnAChatComponent product={dto} isSeller = {false}/>
                             </div>
                         )
