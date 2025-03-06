@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Cart = () => {
-    const [cartItems, setCartItems] = useState([]); // 장바구니 목록
-    const [loading, setLoading] = useState(true); // 로딩 상태
-    const [error, setError] = useState(null); // 오류 상태
-    const [selectedItems, setSelectedItems] = useState([]); // 선택한 항목
+    const [cartItems, setCartItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [selectedItems, setSelectedItems] = useState([]);
+    const navigate = useNavigate();
 
     const getTokenFromCookie = () => {
         const cookies = document.cookie.split(';');
@@ -16,25 +19,18 @@ const Cart = () => {
     const fetchCart = async () => {
         try {
             const token = getTokenFromCookie();
-            console.log("JWT 토큰 확인:", token);
-
             if (!token) {
                 setError("로그인이 필요합니다.");
                 setLoading(false);
                 return;
             }
-
-            console.log("[API 요청] 장바구니 불러오기 실행...");
             const response = await axios.get("http://localhost:9090/api/cart/me", {
                 headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true
             });
-
-            console.log("[응답 성공] 장바구니 데이터:", response.data);
             setCartItems(response.data);
             setLoading(false);
         } catch (error) {
-            console.error("장바구니 불러오기 실패", error.response?.data || error.message);
             setError("장바구니 불러오기 실패!");
         }
     };
@@ -43,62 +39,45 @@ const Cart = () => {
         fetchCart();
     }, []);
 
-    const removeFromCart = async (cartId) => {
+    const handleIncreaseQuantity = (cartId) => {
+        setCartItems((prevItems) =>
+            prevItems.map((item) =>
+                item.cartId === cartId ? { ...item, quantity: item.quantity + 1 } : item
+            )
+        );
+    };
+
+    const handleDecreaseQuantity = (cartId) => {
+        setCartItems((prevItems) =>
+            prevItems.map((item) =>
+                item.cartId === cartId && item.quantity > 1
+                    ? { ...item, quantity: item.quantity - 1 }
+                    : item
+            )
+        );
+    };
+
+    const handleRemoveItem = async (cartId) => {
         try {
             const token = getTokenFromCookie();
-            if (!token) return;
+            if (!token) {
+                setError("로그인이 필요합니다.");
+                return;
+            }
 
-            console.log("[삭제 요청] cartId:", cartId);
+            console.log(`[삭제 요청] cartId: ${cartId}`);
+
             await axios.delete(`http://localhost:9090/api/cart/remove/${cartId}`, {
                 headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true
             });
 
-            console.log("[삭제 완료] 장바구니 상품 제거");
+            console.log("[삭제 완료] 장바구니에서 제거됨");
+
             fetchCart();
         } catch (error) {
             console.error("[삭제 실패]", error.response?.data || error.message);
-        }
-    };
-
-    const updateQuantity = async (cartId, newQuantity) => {
-        if (newQuantity < 1) return;
-
-        try {
-            const token = getTokenFromCookie();
-            if (!token) return;
-
-            console.log("[수량 변경] cartId:", cartId, "새 수량:", newQuantity);
-            await axios.put(
-                `http://localhost:9090/api/cart/update/${cartId}`, 
-                { quantity: newQuantity },
-                { 
-                    headers: { 
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json" 
-                    },
-                    withCredentials: true
-                }
-            );
-
-            console.log("[수량 변경 완료] cartId:", cartId);
-            fetchCart();
-        } catch (error) {
-            console.error("[수량 업데이트 실패]", error.response?.data || error.message);
-        }
-    };
-
-    const handleSelectItem = (cartId) => {
-        setSelectedItems((prev) =>
-            prev.includes(cartId) ? prev.filter((id) => id !== cartId) : [...prev, cartId]
-        );
-    };
-
-    const handleSelectAll = () => {
-        if (selectedItems.length === cartItems.length) {
-            setSelectedItems([]);
-        } else {
-            setSelectedItems(cartItems.map((item) => item.cartId));
+            setError("상품 삭제 실패!");
         }
     };
 
@@ -108,62 +87,73 @@ const Cart = () => {
             .reduce((total, item) => total + item.price * item.quantity, 0);
     };
 
-    if (loading) return <div>로딩 중...</div>;
-    if (error) return <div style={{ color: 'red' }}>{error}</div>;
+    if (loading) return <div className="text-center mt-5">로딩 중...</div>;
+    if (error) return <div className="text-danger text-center mt-5">{error}</div>;
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h2 style={{ marginBottom: '20px' }}>장바구니</h2>
+        <div className="container mt-5">
+            <h2 className="mb-4">장바구니</h2>
             {cartItems.length === 0 ? (
-                <p>장바구니가 비어 있습니다.</p>
+                <p className="text-center">장바구니가 비어 있습니다.</p>
             ) : (
-                <div>
-                    <div style={{ marginBottom: '20px' }}>
+                <div className="card p-3">
+                    <div className="d-flex justify-content-between mb-3">
                         <input
                             type="checkbox"
                             checked={selectedItems.length === cartItems.length}
-                            onChange={handleSelectAll}
-                        /> 전체 선택
+                            onChange={() => setSelectedItems(selectedItems.length === cartItems.length ? [] : cartItems.map((item) => item.cartId))}
+                        />
+                        <span>전체 선택</span>
                     </div>
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
-                        {cartItems.map((item) => (
-                            <li key={item.cartId} style={{ marginBottom: '10px', padding: '10px', border: '1px solid #ddd' }}>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedItems.includes(item.cartId)}
-                                    onChange={() => handleSelectItem(item.cartId)}
-                                />
-                                <img 
-                                    src={`http://localhost:9090/showimage?filename=${item.image}&obj=product`} 
-                                    alt={item.productName} 
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover', margin: '0 10px' }}
-                                    onError={(e) => { 
-                                        console.error("이미지 로드 실패:", item.image);
-                                        e.target.src = "/default-image.png";
-                                    }}
-                                />
-                                <span>{item.productName}</span>
-                                <span style={{ margin: '0 10px' }}>{item.price.toLocaleString()}원</span>
-                                <button onClick={() => updateQuantity(item.cartId, item.quantity - 1)}>-</button>
-                                <span style={{ margin: '0 10px' }}>{item.quantity}개</span>
-                                <button onClick={() => updateQuantity(item.cartId, item.quantity + 1)}>+</button>
-                                <button 
-                                    onClick={() => removeFromCart(item.cartId)}
-                                    style={{ marginLeft: '10px', color: 'red' }}
-                                >
-                                    삭제
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                    <div style={{ marginTop: '20px', textAlign: 'right' }}>
-                        <h3>총 가격: {getTotalPrice().toLocaleString()} 원</h3>
+                    {cartItems.map((item) => (
+                        <div key={item.cartId} className="d-flex align-items-center border-bottom pb-3 mb-3">
+                            <input
+                                type="checkbox"
+                                checked={selectedItems.includes(item.cartId)}
+                                onChange={() => setSelectedItems((prev) =>
+                                    prev.includes(item.cartId) ? prev.filter((id) => id !== item.cartId) : [...prev, item.cartId])
+                                }
+                            />
+                            <img 
+                                src={`http://localhost:9090/showimage?filename=${item.image}&obj=product`} 
+                                alt={item.productName} 
+                                className="mx-3 rounded" 
+                                style={{ width: '60px', height: '60px', objectFit: 'cover' }}
+                            />
+                            <div className="flex-grow-1">
+                                <strong>{item.productName}</strong>
+                                <p className="mb-0">{item.price.toLocaleString()}원</p>
+                            </div>
+                            <div>
+                                <button className="btn btn-info btn-sm mx-1" onClick={() => handleDecreaseQuantity(item.cartId)}>-</button>
+                                <span className="mx-2">{item.quantity}</span>
+                                <button className="btn btn-info btn-sm mx-1" onClick={() => handleIncreaseQuantity(item.cartId)}>+</button>
+                            </div>
+                            <button className="btn btn-secondary btn-sm ms-3" onClick={() => handleRemoveItem(item.cartId)}>삭제</button>
+                        </div>
+                    ))}
+                    <div className="text-end mt-3">
+                        <h4>총 가격: {getTotalPrice().toLocaleString()} 원</h4>
                         <button 
-                            onClick={() => alert("결제 페이지로 이동")}
-                            style={{ marginTop: '10px', padding: '10px 20px' }}
-                        >
-                            결제하기
-                        </button>
+    onClick={() => {
+        const selectedCartItems = cartItems
+            .filter(item => selectedItems.includes(item.cartId))
+            .map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                totalPrice: item.price * item.quantity,
+                productName: item.productName, 
+                price: item.price,
+                image: item.image
+            }));
+
+        navigate(`/order`, { state: { selectedCartItems } });
+    }}
+    style={{ marginTop: '10px', padding: '10px 20px' }}
+    className="btn btn-info mt-2"
+>
+    결제하기
+</button>
                     </div>
                 </div>
             )}

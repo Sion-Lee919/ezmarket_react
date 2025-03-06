@@ -11,6 +11,8 @@ import GoogleLoginButton from './components/GoogleLoginButton';
 import Cart from './components/Cart';
 import HeaderComponent from './components/HeaderComponent';
 import ItemDetail from './components/ItemDetail';
+import OrderComponent from './components/OrderComponent';
+import MyOrder from './components/MyOrder';
 import Login from './pages/member/login/login.js';
 import JoinN from './pages/member/join/joinN';
 import Join from './pages/member/join/join';
@@ -51,6 +53,8 @@ function App() {
       <Routes> 
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/item/:itemid' element={<ItemDetail/>}/>
+        <Route path='/order' element={<OrderComponent/>}/>
+        <Route path='/my/order' element={<MyOrder/>}/>
 
         <Route path='/brand/:brandid' element={<BrandPage/>}/>
         <Route path='/brand/:brandid/itemregister/' element={<ItemRegister/>}/>
