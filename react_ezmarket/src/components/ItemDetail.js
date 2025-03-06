@@ -93,6 +93,31 @@ function ItemDetail(){
         return Cookies.get("jwt_token") || null;
     };
 
+    const handleBuyNow = () => {
+        const token = getTokenFromCookie();
+        if (!token) {
+            alert("로그인 후 구매가 가능합니다.");
+            return;
+        }
+
+        // 상품 정보 구성
+        const productInfo = {
+            productId: parseInt(itemid),
+            quantity: quantity,
+            productName: dto.name,
+            price: dto.price,
+            image: dto.image_url,
+            totalPrice: dto.price * quantity
+        };
+
+        // 주문 페이지로 이동
+        navigate("/order", { 
+            state: { 
+                selectedCartItems: [productInfo] 
+            } 
+        });
+    };
+
     const handleAddToCart = async (productId, quantity) => {
         const token = getTokenFromCookie();
         if (!token) {
@@ -218,7 +243,7 @@ function ItemDetail(){
                                     </button>
                             </div>
                             <button className="add-to-cart" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={() => handleAddToCart(itemid,quantity)}>장바구니에 추가</button>
-                            <button className="buy-now" style={{ width: '100%', padding: '10px', marginTop: '10px' }}>즉시 구매</button>
+                            <button className="buy-now" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleBuyNow}>즉시 구매</button>
                         </>
                         ) : (
                         <button className="sign-up-to-buy" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleLoginClick}>회원가입 후 구매</button>
