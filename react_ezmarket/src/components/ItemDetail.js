@@ -133,13 +133,6 @@ function ItemDetail(){
 
     return (
         <div>
-            <div
-            className="brandlogo"
-            onClick={() => navigate(`/brandItems?brand_id=${dto.brand_id}`)}
-            style={{ cursor: 'pointer' }}
-            >
-                {dto.brand_id}
-            </div>
 
             <div className="product-page-top" style={{
             display: 'flex', 
@@ -148,7 +141,7 @@ function ItemDetail(){
             maxWidth: '1200px',  // 최대 너비
             margin: '0 auto',    // 가운데 정렬
             justifyContent: 'center', // 수평 가운데 정렬
-            paddingTop: '50px',
+            paddingTop: '10px',
             height: 'auto'
             }}>
                 <div className="product-image" style={{ width: '500px', height: 'auto', border: '2px solid #838383' }}>

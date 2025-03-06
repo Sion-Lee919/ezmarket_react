@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { debounce } from "lodash"; 
-import "../styles/SearchComponent.css"; 
 
 const SearchComponent = () => {
     const location = useLocation();
@@ -76,28 +75,33 @@ const SearchComponent = () => {
     };
 
     return (
-        <div className="search-container" ref={searchContainerRef}>
-            <div className="search-box">
+        <div className="position-relative w-50 w-lg-75 flex-grow-1" ref={searchContainerRef}>
+            <div className="input-group">
                 <input
                     type="text"
-                    placeholder="찾고 싶은 술 상품을 입력해 주세요"
+                    className="form-control"
+                    placeholder="마시고 싶은 술을 검색해보세요!"
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
-                        setIsSearching(false); 
+                        setIsSearching(false);
                     }}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()} 
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
-                {searchTerm && ( 
-                    <button type="button" className="clear-button" onClick={clearSearch}>×</button>
+                {searchTerm && (
+                    <button type="button" className="btn btn-outline-secondary" onClick={clearSearch}>
+                        ×
+                    </button>
                 )}
-                <button onClick={handleSearch} disabled={!searchTerm.trim()}>검색</button>
+                <button className="btn btn-outline-secondary" onClick={handleSearch} disabled={!searchTerm.trim()}>
+                    검색
+                </button>
             </div>
-            
+
             {suggestions.length > 0 && !isSearching && (
-                <ul className="suggestions-list">
+                <ul className="list-group position-absolute w-100 mt-1 bg-white shadow-lg" style={{ zIndex: 1050, maxHeight: "200px", overflowY: "auto" }}>
                     {suggestions.map((suggestion, index) => (
-                        <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                        <li key={index} className="list-group-item list-group-item-action" onClick={() => handleSuggestionClick(suggestion)} style={{ cursor: "pointer" }}>
                             {suggestion}
                         </li>
                     ))}

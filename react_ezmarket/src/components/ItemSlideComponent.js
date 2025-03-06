@@ -1,50 +1,134 @@
-import { useState, useEffect } from 'react';
-import Carousel from 'react-bootstrap/Carousel';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import Slider from "react-slick";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { Card, Image, Container } from "react-bootstrap";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "../styles/ItemSlideComponent.css"; // 스타일 적용
 
-const style = {
-    carouselImg : {
-        width: "500px",
-        height: "300px",
-        objectFit: "cover"    
-    },
-    carousel : {
-        width: "500px",    
-    }
-}
+const API_BASE_URL = "http://localhost:9090";
 
 function ItemSlideComponent() {
-    const [allItems, setAllItems] = useState([]);
-    const [index, setIndex] = useState(0);
+    const [randomItems, setRandomItems] = useState([]);
+    const [popularItems, setPopularItems] = useState([]);
+    const [newItems, setNewItems] = useState([]);
 
     useEffect(() => {
-        axios({
-            url : `http://localhost:9090/getitemsforrandom`,
-            method : 'GET',
-        })
-        .then(function(res){
-            setAllItems(res.data);
-        });
-    }, [])
 
-  return (
-    <div>
-    <h1>추천상품</h1>
-    <Carousel style={style.carousel}>
-    {allItems.map(item => (
-                <Carousel.Item interval={3000}>
-                    <Link to={`/item/${item.product_id}`}>
-                    <img src={`http://localhost:9090/showimage?filename=${item.image_url}&obj=product`} style={style.carouselImg}/>
-                    </Link>
-                    <Carousel.Caption>
-                    <strong style={{fontSize:"33px", color:"#555555"}}>{item.name}</strong>
-                    </Carousel.Caption>
-                </Carousel.Item>
+        axios.get(`${API_BASE_URL}/getitemsforrandom`)
+            .then((res) => {
+                setRandomItems(res.data.random || []);
+                setPopularItems(res.data.popular || []);
+                setNewItems(res.data.new || []);
+            });
+    }, []);
+
+    // react-slick 슬라이더
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 6,
+        slidesToScroll: 3,
+        responsive: [
+            {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                },
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                },
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                },
+            },
+        ],
+    };
+
+    const cleanTitle = (title) => {
+        return title ? title.split(" - ")[0] : "상품명 없음";
+    };
+
+    return (
+        <Container className="mt-4">
+            <h3 className="text-center mb-3">인기 상품 Top 6</h3>
+            <Slider {...sliderSettings}>
+                {popularItems.map((item) => (
+                    <div key={item.product_id} className="slide-item">
+                        <Card className="shadow-sm card-fixed card-hover">
+                            <Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`}>
+                                <Image
+                                    src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`}
+                                    className="card-img-custom"
+                                />
+                            </Link>
+                            <Card.Body className="card-body-custom">
+                                <Card.Title>{cleanTitle(item.name)}</Card.Title>
+                                <Card.Text>{item.price.toLocaleString()}원</Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </div>
                 ))}
-    </Carousel>
-    </div>
-  );
-}
+            </Slider>
 
+     
+            <h3 className="text-center mt-4 mb-3"> 신상품 Top 6</h3>
+            <Slider {...sliderSettings}>
+                {newItems.map((item) => (
+                    <div key={item.product_id} className="slide-item">
+                        <Card className="shadow-sm card-fixed card-hover">
+                            <Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`}>
+                                <Image
+                                    src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`}
+                                    className="card-img-custom"
+                                />
+                            </Link>
+                            <Card.Body className="card-body-custom">
+                                <Card.Title>{cleanTitle(item.name)}</Card.Title>
+                                <Card.Text>{item.price.toLocaleString()}원</Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </div>
+
+                ))}
+            </Slider>
+
+            <h3 className="text-center mt-4 mb-3">이지 마켓의 추천 상품</h3>
+            <Slider {...sliderSettings}>
+                {randomItems.map((item) => (
+                    <div key={item.product_id} className="slide-item">
+                        <Card className="shadow-sm card-fixed card-hover">
+                            <Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`}>
+                                <Image
+                                    src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`}
+                                    className="card-img-custom"
+                                />
+                            </Link>
+                            <Card.Body className="card-body-custom">
+                                <Card.Title>{cleanTitle(item.name)}</Card.Title>
+                                <Card.Text>{item.price.toLocaleString()}원</Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </div>
+                ))}
+            </Slider>
+        </Container>
+    );
+}
 export default ItemSlideComponent;
+
+
+
+
+
