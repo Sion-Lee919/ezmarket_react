@@ -1,0 +1,38 @@
+.slide-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.card-fixed {
+    width: 200px;
+    min-height: 365px;  
+    height: auto;      
+    display: flex;
+    flex-direction: column;
+}
+
+
+.card-img-custom {
+    width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+}
+
+
+.card-body-custom {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}

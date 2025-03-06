@@ -128,6 +128,31 @@ function ItemDetail(){
         return Cookies.get("jwt_token") || null;
     };
 
+    const handleBuyNow = () => {
+        const token = getTokenFromCookie();
+        if (!token) {
+            alert("로그인 후 구매가 가능합니다.");
+            return;
+        }
+
+        // 상품 정보 구성
+        const productInfo = {
+            productId: parseInt(itemid),
+            quantity: quantity,
+            productName: dto.name,
+            price: dto.price,
+            image: dto.image_url,
+            totalPrice: dto.price * quantity
+        };
+
+        // 주문 페이지로 이동
+        navigate("/order", { 
+            state: { 
+                selectedCartItems: [productInfo] 
+            } 
+        });
+    };
+
     const handleAddToCart = async (productId, quantity) => {
         const token = getTokenFromCookie();
         if (!token) {
@@ -168,13 +193,6 @@ function ItemDetail(){
 
     return (
         <div>
-            <div
-            className="brandlogo"
-            onClick={() => navigate(`/brandItems?brand_id=${dto.brand_id}`)}
-            style={{ cursor: 'pointer' }}
-            >
-                {dto.brand_id}
-            </div>
 
             <div className="product-page-top" style={{
             display: 'flex', 
@@ -183,7 +201,7 @@ function ItemDetail(){
             maxWidth: '1200px',  // 최대 너비
             margin: '0 auto',    // 가운데 정렬
             justifyContent: 'center', // 수평 가운데 정렬
-            paddingTop: '50px',
+            paddingTop: '10px',
             height: 'auto'
             }}>
                 <div className="product-image" style={{ width: '500px', height: 'auto', border: '2px solid #838383' }}>
@@ -253,7 +271,7 @@ function ItemDetail(){
                                     </button>
                             </div>
                             <button className="add-to-cart" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={() => handleAddToCart(itemid,quantity)}>장바구니에 추가</button>
-                            <button className="buy-now" style={{ width: '100%', padding: '10px', marginTop: '10px' }}>즉시 구매</button>
+                            <button className="buy-now" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleBuyNow}>즉시 구매</button>
                         </>
                         ) : (
                         <button className="sign-up-to-buy" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleLoginClick}>회원가입 후 구매</button>

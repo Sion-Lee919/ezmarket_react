@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../../../styles/JoinN.css';
 
 const JoinN = () => {
   const [form, setForm] = useState({
     member_id: '',
     username: '',
     password: '',
+    confirmPassword: '',
     realname: '',
     nickname: '',
     email_name: "",
@@ -25,6 +27,7 @@ const JoinN = () => {
   const [emailCheckResult, setEmailCheckResult] = useState('');
   const [phoneCheckResult, setPhoneCheckResult] = useState('');
   const [isRegisterDisabled, setIsRegisterDisabled] = useState(false);
+  const [passwordCheckResult, setPasswordCheckResult] = useState('');
 
   const navigate = useNavigate();
 
@@ -162,15 +165,16 @@ const JoinN = () => {
   };
   
   useEffect(() => {
-    checkRegisterDisabled(idCheckResult, nicknameCheckResult, emailCheckResult, phoneCheckResult);
-  }, [idCheckResult, nicknameCheckResult, emailCheckResult, phoneCheckResult]);
+    checkRegisterDisabled(idCheckResult, nicknameCheckResult, emailCheckResult, phoneCheckResult, passwordCheckResult);
+  }, [idCheckResult, nicknameCheckResult, emailCheckResult, phoneCheckResult, passwordCheckResult]);
 
-  const checkRegisterDisabled = (idResult, nicknameResult, emailResult, phoneResult) => {
+  const checkRegisterDisabled = (idResult, nicknameResult, emailResult, phoneResult, passwordCheckResult) => {
 	  if (
 	  idResult.includes('중복된 아이디') ||
 	  nicknameResult.includes('중복된 닉네임') ||
 	  emailResult.includes('중복된 이메일') ||
-	  phoneResult.includes('중복된 전화번호')
+	  phoneResult.includes('중복된 전화번호') ||
+    passwordCheckResult.includes('비밀번호가 틀립니다.')
 	  ) {
 		setIsRegisterDisabled(true);
 	  } else {
@@ -178,6 +182,26 @@ const JoinN = () => {
 	  }
   }
 
+  //비밀번호 확인
+  const handlePasswordConfirm = (e) => {
+    const { name, value } = e.target;
+    setForm(prevForm => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    if (form.password && form.confirmPassword) {
+      if (form.password !== form.confirmPassword) {
+        setPasswordCheckResult('비밀번호가 일치하지 않습니다.');
+      } else {
+        setPasswordCheckResult('비밀번호가 일치합니다.');
+      }
+    } else {
+      setPasswordCheckResult('');
+    }
+  }, [form.password, form.confirmPassword]);
 
   //회원가입 폼 제출
   const handleSubmit = async (e) => {
@@ -188,82 +212,90 @@ const JoinN = () => {
         headers: { "Content-Type": "application/json" } //리액트 json, 스프링 @RequestBody로 받기
       });
       alert('회원가입 성공!');
-      navigate('/login');
+      navigate('/joinN/success');
     } catch (error) {
-      alert('회원가입 실패!');
-      console.error('회원가입 오류:', error);
+      alert('회원가입 실패! 회원가입 정보를 다시 확인해주세요!');
     }
   };
 
   return (
-    <div>
-      <h1>회원가입</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="join-form-container">
+      <div className="join-flow">
+        <div className="join-flow-title">회원가입</div>
+        <div>01 약관동의 → <span className="join-flow-content">02 회원 가입</span> → 03 가입 완료</div>
+      </div>
+      <hr></hr>
+
+      <form className="join-form">
+        <div className="join-form-title">
+            회원가입<hr></hr>
+        </div>
+
         <div>
           <input type="hidden" name="member_id" value={Number(form.member_id)} />
         </div>
 
         <div>
-          <label htmlFor="username">아이디: </label>
-          <input type="text" name="username" value={form.username} onChange={checkId} maxLength={12} required />
-          <span>{idCheckResult}</span>
+          <input type="text" name="username" className="join-username" value={form.username} onChange={checkId} maxLength={12} required placeholder="아이디"/>
+          <div className="check">{idCheckResult}</div>
         </div>
 
         <div>
-          <label htmlFor="password">비밀번호: </label>
-          <input type="password" name="password" value={form.password} onChange={handleChange} maxLength={100} required />
+          <input type="password" name="password" className="join-password" value={form.password} onChange={handlePasswordConfirm} maxLength={100} required placeholder="비밀번호"/>
         </div>
 
         <div>
-          <label htmlFor="realname">이름: </label>
-          <input type="text" name="realname" value={form.realname} onChange={handleChange} maxLength={10} required />
+          <input type="password" name="confirmPassword" className="join-password" value={form.confirmPassword} onChange={handlePasswordConfirm} maxLength={100} required placeholder="비밀번호 확인"/>
+          <div className="check">{passwordCheckResult}</div>
         </div>
 
         <div>
-          <label htmlFor="nickname">닉네임: </label>
-          <input type="text" name="nickname" value={form.nickname} onChange={checkNickname} maxLength={12} required />
-          <span>{nicknameCheckResult}</span>
+          <input type="text" name="realname" className="join-realname" value={form.realname} onChange={handleChange} maxLength={10} required placeholder="이름"/>
         </div>
 
         <div>
-          <label htmlFor="email">이메일: </label>
+          <input type="text" name="nickname" className="join-nickname" value={form.nickname} onChange={checkNickname} maxLength={12} required placeholder="닉네임"/>
+          <div className="check">{nicknameCheckResult}</div>
+        </div>
+
+        <div className="join-email">
           <div>
-            <input type="text" name="email_name" value={form.email_name} onChange={handleChange} maxLength={40} required />
+            <input type="text" name="email_name" className="join-email-first" value={form.email_name} onChange={handleChange} maxLength={40} required placeholder="이메일 아이디 입력"/>
             @
-            <input type="text" name="email_domain" value={form.email_domain} onChange={handleChange} maxLength={50} required />
+            <input type="text" name="email_domain" className="join-email-second" value={form.email_domain} onChange={handleChange} maxLength={50} required placeholder="이메일 도메인 입력"/>
             .
-            <select name="email_extension" value={form.email_extesnion} onChange={handleChange}>
+            <select name="email_extension" className="join-email-third" value={form.email_extesnion} onChange={handleChange}>
               <option value="com">com</option>
               <option value="kr">kr</option>
               <option value="net">net</option>
             </select>
-            {form.email_name.length > 0  && form.email_domain.length > 0 && <span>{emailCheckResult}</span>}
+            {form.email_name.length > 0  && form.email_domain.length > 0 && <div className="check">{emailCheckResult}</div>}
           </div>
         </div>
 
-        <div>
-          <label htmlFor="phone">전화번호: </label>
+        <div className="join-phone">
           <div>
-            <select name="phone_first" value={form.phone_first} onChange={handleChange}>
+            <select name="phone_first" className="join-phone-first" value={form.phone_first} onChange={handleChange}>
             <option value="010">010</option>
             <option value="011">011</option>
             </select>
             -
-            <input type="text" name="phone_second" value={form.phone_second} onChange={handleChange} pattern="\d{3,4}" title="3~4개의 숫자로 입력하세요." maxLength={4} required />
+            <input type="text" name="phone_second" className="join-phone-second" value={form.phone_second} onChange={handleChange} pattern="\d{3,4}" title="3~4개의 숫자로 입력하세요." maxLength={4} required placeholder="전화번호 앞 4자리" />
             -
-            <input type="text" name="phone_third" value={form.phone_third} onChange={handleChange} pattern="\d{4}" title="4개의 숫자로 입력하세요." maxLength={4} required />
-            {(form.phone_second.length === 3 || form.phone_second.length === 4) && form.phone_third.length === 4 && <span>{phoneCheckResult}</span>}
+            <input type="text" name="phone_third" className="join-phone-third" value={form.phone_third} onChange={handleChange} pattern="\d{4}" title="4개의 숫자로 입력하세요." maxLength={4} required placeholder="전화번호 뒤 4자리"/>
+            {(form.phone_second.length === 3 || form.phone_second.length === 4) && form.phone_third.length === 4 && <div className="check">{phoneCheckResult}</div>}
           </div>
         </div>
 
         <div>
-          <label htmlFor="address">주소: </label>
-          <input type="text" name="address" value={form.address} onChange={handleChange} maxLength={1000} />
+          <input type="text" name="address" className="join-address" value={form.address} onChange={handleChange} maxLength={1000} placeholder="주소 입력"/>
         </div>
 
-        <div>
-          <button type="submit" disabled={isRegisterDisabled}>가입하기</button>
-          <button type="button" onClick={() => navigate(-1)}>이전</button>
+        <hr></hr>
+
+        <div className="join-button-form">
+          <button type="button" className="prev-join" onClick={() => navigate(-1)}>이전</button>
+          <button type="submit" className="join-join" onClick={handleSubmit} disabled={isRegisterDisabled}>가입하기</button>
         </div>
       </form>
     </div>

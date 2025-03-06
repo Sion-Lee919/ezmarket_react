@@ -26,7 +26,7 @@ const SearchResultComponent = () => {
 
     const [filteredItems, setFilteredItems] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
-    const itemsPerPage = 10;
+    const itemsPerPage = 12;
     const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
     useEffect(() => {
@@ -74,7 +74,7 @@ const SearchResultComponent = () => {
     const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
     const cleanTitle = (title) => {
-        return title.split(" - ")[0];  
+        return title ? title.split(" - ")[0] : "상품명 없음";
     };
 
     return (
@@ -83,21 +83,25 @@ const SearchResultComponent = () => {
             <h3>{searchParams.searchKeyword ? `"${searchParams.searchKeyword}" 검색 결과 ${totalCount}개` : `총 검색 결과 ${totalCount}개`}</h3>
 
             <Container>
-                <Row>
-                    {filteredItems.map((item) => (
-                        <Col key={item.product_id} xs={12} sm={6} md={4}>
-                            <Card>
-                                <Link to={`/item/${item.product_id}`}>
-                                    <Image src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`} fluid />
-                                </Link>
-                                <Card.Body>
-                                    <Card.Title>{cleanTitle(item.name)}</Card.Title>
-                                    <Card.Text>{item.price.toLocaleString()}원</Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
+            <Row>
+                {filteredItems.map((item) => (
+                <Col key={item.product_id} xs={12} sm={6} md={4} className="mb-4">
+                    <Card className="h-100 shadow-sm">
+                    <Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`}>
+                        <Image 
+                        src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`} 
+                        fluid 
+                        className="card-img-custom" 
+                        />
+                    </Link>
+                    <Card.Body className="d-flex flex-column justify-content-between">
+                        <Card.Title>{cleanTitle(item.name)}</Card.Title>
+                        <Card.Text>{item.price.toLocaleString()}원</Card.Text>
+                    </Card.Body>
+                    </Card>
+                </Col>
+                ))}
+            </Row>
             </Container>
 
 

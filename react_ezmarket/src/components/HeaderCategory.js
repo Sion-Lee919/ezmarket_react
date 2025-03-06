@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "../styles/HeaderCategory.css";
-
 
 const categoryMapping = {
     "전체": "",
@@ -31,7 +29,8 @@ const HeaderCategory = ({ text }) => {
     const queryParams = new URLSearchParams(location.search);
 
     // 드롭다운 열기/닫기
-    const toggleDropdown = () => setIsOpen(!isOpen);
+    const openDropdown = () => setIsOpen(true);
+    const closeDropdown = () => setIsOpen(false);
 
     // 카테고리 클릭 시 URL 업데이트
     const handleCategoryClick = (category) => {
@@ -48,22 +47,31 @@ const HeaderCategory = ({ text }) => {
     };
 
     return (
-        <div className="header-category" onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
-            <span className="category-text">{text}</span>
-            {isOpen && (
-                <div className="dropdown-menu">
-                    {text === "전통주 종류" && Object.keys(categoryMapping).map((category) => (
-                        <div key={category} className="dropdown-item" onClick={() => handleCategoryClick(category)}>
-                            {category}
-                        </div>
+        <div className="dropdown" onMouseEnter={openDropdown} onMouseLeave={closeDropdown}>
+            {/* 드롭다운 버튼 */}
+            <button className="btn btn-outline-secondary dropdown-toggle" type="button">
+                {text}
+            </button>
+
+            {/* 드롭다운 메뉴 */}
+            <ul className={`dropdown-menu ${isOpen ? "show" : ""}`}>
+                {text === "전통주 종류" &&
+                    Object.keys(categoryMapping).map((category) => (
+                        <li key={category}>
+                            <button className="dropdown-item" onClick={() => handleCategoryClick(category)}>
+                                {category}
+                            </button>
+                        </li>
                     ))}
-                    {text === "지역" && Object.keys(regionMapping).map((region) => (
-                        <div key={region} className="dropdown-item" onClick={() => handleRegionClick(region)}>
-                            {region}
-                        </div>
+                {text === "지역" &&
+                    Object.keys(regionMapping).map((region) => (
+                        <li key={region}>
+                            <button className="dropdown-item" onClick={() => handleRegionClick(region)}>
+                                {region}
+                            </button>
+                        </li>
                     ))}
-                </div>
-            )}
+            </ul>
         </div>
     );
 };

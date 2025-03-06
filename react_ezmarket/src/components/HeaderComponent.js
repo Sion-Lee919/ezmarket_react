@@ -3,70 +3,99 @@ import SearchComponent  from "./SearchComponent";
 import { useState,useEffect } from "react";
 import Cookies from 'js-cookie';
 import BrandPageLink from "./BrandPageLink";
-import "../styles/HeaderComponent.css";
 import HeaderCategory from "./HeaderCategory";
 
-
-const HeaderComponent = ({ }) => {
-
+const HeaderComponent = () => {
     const location = useLocation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
 
-    useEffect(() => {
-        const token = Cookies.get('jwt_token');
-        if (token) {
-          setIsLoggedIn(true);  
-        }
-      }, []);
+  useEffect(() => {
+    const token = Cookies.get("jwt_token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
-      const handleLoginClick = () => {
-        navigate('/login');  
-      };
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
 
-    const handleLogout = () => {
-        Cookies.remove('jwt_token'); 
-        alert('로그아웃 되었습니다.');
-        navigate('/login');
-        window.location.reload();
-      }
+  const handleLogout = () => {
+    Cookies.remove("jwt_token");
+    alert("로그아웃 되었습니다.");
+    navigate("/");
+    window.location.reload();
+  };
 
-    const handleMyPageClick = () => {
-        navigate('/my');  
-    };
+  const handleMyPageClick = () => {
+    navigate("/my");
+  };
 
-    return (
-    <div className="header">
-        <Link to="/">이지마켓</Link>
-        <Link to="/cart">장바구니</Link><br/>
+  const handleSignupClick = () => {
+    navigate("/join");
+  };
 
-        <HeaderCategory text="전통주 종류" />
-        <HeaderCategory text="지역" />
-
-        {!isLoggedIn && (
-        <button onClick={handleLoginClick}>
-          로그인
-        </button>
-        )}
-        {isLoggedIn && (
-        <button onClick={handleLogout}>로그아웃</button>
-        )}
+  const handleCartClick = () => {
+    navigate("/cart");
+  };
 
 
-        <BrandPageLink></BrandPageLink>
+  return (
+    <header className="py-1 border-bottom bg-white">
+      <div className="container-fluid d-flex align-items-center justify-content-between px-4">
 
-        
-        <SearchComponent></SearchComponent>
-        <div>
-      <button onClick={handleMyPageClick}>
-        내 정보
-      </button>
+        <Link to="/" className="col-auto me-2">
+          <img
+            src={`http://localhost:9090/showimage?filename=ezmarketlogo.png&obj=brand`}
+            alt="EzMarket Logo"
+            style={{ height: "70px" }}
+          />
+        </Link>
 
-    </div>
-    </div>
-    
-    )
-}
+        <div className="d-flex gap-1 ms-1">
+          <HeaderCategory text="전통주 종류" />
+          <HeaderCategory text="지역" />
+        </div>
+  
+        <div className="flex-grow-1 d-flex justify-content-center ms-4">
+          <SearchComponent />
+        </div>
+
+        <div className="ms-4">
+          <button className="btn btn-outline-secondary px-3" onClick={handleCartClick}>
+            장바구니
+          </button>
+        </div>
+
+        <div className="d-flex align-items-center ms-4">
+          {isLoggedIn ? (
+            <>
+              <button className="btn btn-outline-danger px-3 me-1" onClick={handleLogout}>
+                로그아웃
+              </button>
+              <button className="btn btn-primary px-3" onClick={handleMyPageClick}>
+                내 정보
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="btn btn-outline-primary px-3 me-1" onClick={handleLoginClick}>
+                로그인
+              </button>
+              <button className="btn btn-primary px-3" onClick={handleSignupClick}>
+                회원가입
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+  
+  
+  
+};
 
 export default HeaderComponent;

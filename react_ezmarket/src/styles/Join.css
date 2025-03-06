@@ -1,0 +1,114 @@
+.join-term-container {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 200px;
+}
+
+.join-term-container .join-flow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.join-term-container .join-flow .join-flow-title {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.join-term-container .join-flow .join-flow-content {
+    font-weight: bold;
+    color: rgb(15, 138, 190);
+    font-size: 20px;
+}
+
+.join-term-container .join-term-agree {
+    text-align: left;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.join-term-container .join-term-content {
+    overflow-y: scroll;
+    height: 300px;
+}
+
+.join-term-container .join-term {
+    margin: auto;
+    padding: 30px 70px;
+}
+
+.join-term-container .essential-terms {
+    display: flex;
+    align-items: left;
+    margin: 5px 0 20px 0;
+}
+
+.join-term-container .essential-terms .required-text{
+    font-weight: bold;
+    color: rgb(15, 138, 190);
+}
+
+.join-term-container .essential-terms .checkbox-join-custom{
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc; 
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.join-term-container .essential-terms .checkbox-join-custom:checked{
+    background-color: rgb(15, 138, 190);
+    border-color: rgb(15, 138, 190);
+}
+
+.join-term-container .essential-terms .checkbox-join-custom::after {
+    content: ''; 
+    position: absolute;
+    top: 3px;
+    left: 6px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+.join-term-container .essential-terms .checkbox-join-custom:hover {
+    border-color: #c7c6c6;
+    background-color: rgb(125, 206, 241);
+}
+
+.prev-join {
+    width: 250px;
+    height: 70px;
+    margin: 10px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 1px solid #c7c6c6;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.prev-join:hover{
+    background-color:rgb(226, 226, 226);
+}
+
+.next-join {
+    width: 250px;
+    height: 70px;
+    margin: 10px;
+    margin-left: 11px;
+    background-color: rgb(24, 159, 219);
+    color: rgb(255, 255, 255);
+    border: 1px solid #ffffff;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.next-join:hover {
+    background-color: rgb(15, 138, 190);
+}

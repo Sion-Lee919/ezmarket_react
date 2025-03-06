@@ -11,6 +11,8 @@ import GoogleLoginButton from './components/GoogleLoginButton';
 import Cart from './components/Cart';
 import HeaderComponent from './components/HeaderComponent';
 import ItemDetail from './components/ItemDetail';
+import OrderComponent from './components/OrderComponent';
+import MyOrder from './components/MyOrder';
 import Login from './pages/member/login/login.js';
 import JoinN from './pages/member/join/joinN';
 import Join from './pages/member/join/join';
@@ -37,6 +39,7 @@ import BrandItem from './components/BrandItem.js';
 import BrandHeader from './components/BrandHeader.js'; 
 
 import SellerModify from './pages/member/seller/sellerModify.js';
+import JoinSuccess from './pages/member/join/joinSuccess.js';
 
 
 function App() {
@@ -50,6 +53,8 @@ function App() {
       <Routes> 
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/item/:itemid' element={<ItemDetail/>}/>
+        <Route path='/order' element={<OrderComponent/>}/>
+        <Route path='/my/order' element={<MyOrder/>}/>
 
         <Route path='/brand/:brandid' element={<BrandPage/>}/>
         <Route path='/brand/:brandid/itemregister/' element={<ItemRegister/>}/>
@@ -60,6 +65,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/joinN" element={<JoinN />} />
+        <Route path="/joinN/success" element={<JoinSuccess/>} />
         <Route path="/login/findId" element={<FindId />} />
         <Route path="/login/findPw" element={<FindPw />} />
         <Route path="/login/findPw/resetPw" element={<ResetPw />} />
@@ -86,7 +92,7 @@ function App() {
 }
 const DynamicHeader = () => {
   const location = useLocation();
-  const isBrandPage = location.pathname.startsWith("/brandItems");
+  const isBrandPage = location.pathname.startsWith("/brandItems") || location.pathname.startsWith("/item/");
   return isBrandPage ? <BrandHeader /> : <HeaderComponent />;
 };
 export default App;
