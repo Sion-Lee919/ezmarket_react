@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../../../styles/FindIdPw.css';
 
 const FindPw = () => {
     const [username, setUsername] = useState('');
@@ -31,15 +32,41 @@ const FindPw = () => {
         });
     };
 
+    const handleLoginClick = () => {
+        navigate('/login');
+      };
+    
+      const handlePasswordFindClick = () => {
+        navigate('/login/findId');
+      };
+
     return (
-        <div>
-            <h2>비밀번호 찾기</h2>
-            <input type="text" placeholder="아이디" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <input type="text" placeholder="이름" value={realname} onChange={(e) => setRealname(e.target.value)} />
-            <input type="email" placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="text" placeholder="전화번호" value={phone} onChange={(e) => setPhone(e.target.value)}/>
-            <button onClick={handleFindPw}>비밀번호 찾기</button>
+        <div className="id-pw-find-container">
+            <div className="find-flow">
+                <div className="find-title">ID/PW찾기</div>
+            </div>
+            <hr></hr>
+            <div className="id-find-title">
+                비밀번호 찾기<hr></hr>
+            </div>
+            <div className="pw-find-container">
+                <input type="text" placeholder="아이디" value={username} onChange={(e) => setUsername(e.target.value)} />
+                <input type="text" placeholder="이름" value={realname} onChange={(e) => setRealname(e.target.value)} />
+                <input type="email" placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="text" placeholder="전화번호" value={phone} onChange={(e) => setPhone(e.target.value)}/>
+                <button className="pw-find-button" onClick={handleFindPw}>비밀번호 찾기</button>
+            </div>
+            <hr></hr>
+            <div>
+                <button className="home-find" onClick={handleLoginClick}>
+                    로그인
+                </button>
+                <button className="home-find" onClick={handlePasswordFindClick}>
+                    아이디 찾기
+                </button>
+            </div>
         </div>
+        
     );
 };
 

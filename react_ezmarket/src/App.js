@@ -37,6 +37,7 @@ import BrandItem from './components/BrandItem.js';
 import BrandHeader from './components/BrandHeader.js'; 
 
 import SellerModify from './pages/member/seller/sellerModify.js';
+import JoinSuccess from './pages/member/join/joinSuccess.js';
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/joinN" element={<JoinN />} />
+        <Route path="/joinN/success" element={<JoinSuccess/>} />
         <Route path="/login/findId" element={<FindId />} />
         <Route path="/login/findPw" element={<FindPw />} />
         <Route path="/login/findPw/resetPw" element={<ResetPw />} />

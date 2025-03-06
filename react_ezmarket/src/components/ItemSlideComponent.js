@@ -15,6 +15,7 @@ function ItemSlideComponent() {
     const [newItems, setNewItems] = useState([]);
 
     useEffect(() => {
+
         axios.get(`${API_BASE_URL}/getitemsforrandom`)
             .then((res) => {
                 setRandomItems(res.data.random || []);
@@ -99,6 +100,7 @@ function ItemSlideComponent() {
                             </Card.Body>
                         </Card>
                     </div>
+
                 ))}
             </Slider>
 

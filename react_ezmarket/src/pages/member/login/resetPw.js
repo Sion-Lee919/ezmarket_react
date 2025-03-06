@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import '../../../styles/FindIdPw.css';
 
 const ResetPw = () => {
     const [username, setUsername] = useState('');
@@ -62,11 +63,18 @@ const ResetPw = () => {
     };
 
     return (
-        <div>
-            <h2>비밀번호 변경</h2>
+        <div className="id-pw-find-container">
+            <div className="find-flow">
+                <div className="find-title">ID/PW찾기</div>
+            </div>
+            <hr></hr>
+            <div className="id-find-title">
+                비밀번호 재설정<hr></hr>
+            </div>
             <input type="password" placeholder="새로 설정할 비밀번호" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} maxLength={100} />
             <input type="password" placeholder="비밀번호 재입력" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} maxLength={100} />
-            <button onClick={handleChangePassword}>비밀번호 변경</button>
+            <hr></hr>
+            <button className="pw-find-button" onClick={handleChangePassword}>비밀번호 변경</button>
         </div>
     );
 };
