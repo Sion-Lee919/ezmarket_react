@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import axios from "axios";
+import "../styles/BrandItem.css";
 
 const API_BASE_URL = "http://localhost:9090";
 
@@ -17,7 +18,7 @@ const BrandItem = () => {
     const [filteredItems, setFilteredItems] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [loading, setLoading] = useState(true);
-    const itemsPerPage = 10;
+    const itemsPerPage = 12;
     const currentPage = parseInt(query.get("page"), 10) || 1;
 
     useEffect(() => {
@@ -72,33 +73,27 @@ const BrandItem = () => {
     return (
         <div>
             <Container>
-                <Row>
-                    {loading ? (
-                        <p>🔄 상품을 불러오는 중...</p>
-                    ) : filteredItems.length > 0 ? (
-                        filteredItems.map((item) => (
-                            <Col key={item.product_id} xs={12} sm={6} md={4}>
-                                <Card>
-                                    <Card.Body>
-                                        <Link to={`/item/${item.product_id}`}>
-                                            <Image
-                                                src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`}
-                                                fluid
-                                            />
-                                        </Link>
-                                        <Card.Title>{cleanTitle(item.name)}</Card.Title>
-                                        <Card.Text>{item.price.toLocaleString()}원</Card.Text>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))
-                    ) : (
-                        <p>⚠️ 해당 브랜드의 상품이 없습니다.</p>
-                    )}
-                </Row>
+            <Row>
+                {filteredItems.map((item) => (
+                <Col key={item.product_id} xs={12} sm={6} md={4} className="mb-4">
+                    <Card className="h-100 shadow-sm">
+                    <Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`}>
+                        <Image 
+                        src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`} 
+                        fluid 
+                        className="card-img-custom" 
+                        />
+                    </Link>
+                    <Card.Body className="d-flex flex-column justify-content-between">
+                        <Card.Title>{cleanTitle(item.name)}</Card.Title>
+                        <Card.Text>{item.price.toLocaleString()}원</Card.Text>
+                    </Card.Body>
+                    </Card>
+                </Col>
+                ))}
+            </Row>
             </Container>
 
-            {/* 페이지네이션 UI */}
             {totalPages > 1 && (
                 <div className="pagination">
                     <button onClick={() => handlePageChange(1)} disabled={currentPage === 1}>

@@ -86,7 +86,7 @@ function App() {
 }
 const DynamicHeader = () => {
   const location = useLocation();
-  const isBrandPage = location.pathname.startsWith("/brandItems");
+  const isBrandPage = location.pathname.startsWith("/brandItems") || location.pathname.startsWith("/item/");
   return isBrandPage ? <BrandHeader /> : <HeaderComponent />;
 };
 export default App;

@@ -3,13 +3,17 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState,useEffect } from "react";
 import Cookies from 'js-cookie';
 import BrandPageLink from "./BrandPageLink";
-import "../styles/HeaderComponent.css";
 
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+};
 
 const BrandHeader = () => {
-   const location = useLocation();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const navigate = useNavigate();
+  const query = useQuery();
+  const brand_id = query.get("brand_id"); 
+  const location = useLocation();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
     useEffect(() => {
         const token = Cookies.get('jwt_token');
@@ -33,28 +37,63 @@ const BrandHeader = () => {
         navigate('/my');  
     };
 
-    return (
-    <div className="header">
-        <Link to="/">이지마켓</Link>
-        <div>브랜드 로고 넣기</div>
-        <Link to="/cart">장바구니</Link><br/>
-        {!isLoggedIn && (
-        <button onClick={handleLoginClick}>
-          로그인
-        </button>
-        )}
-        {isLoggedIn && (
-        <button onClick={handleLogout}>로그아웃</button>
-        )}
-        <BrandPageLink></BrandPageLink>
-        <div>
-      <button onClick={handleMyPageClick}>
-        내 정보
-      </button>
+    const handleSignupClick = () => {
+      navigate("/join");
+    };
 
-    </div>
-    </div>
+    const handleCartClick = () => {
+      navigate("/cart");
+    };
+
+    return (
+      <>
+        <header className="border-bottom bg-white">
+            <div className="container-fluid d-flex align-items-center justify-content-between px-4">
+              <Link to="/" className="col-auto me-2">
+                <img
+                  src={`http://localhost:9090/showimage?filename=ezmarketlogo.png&obj=brand`}
+                  alt="EzMarket Logo"
+                  style={{ height: "70px" }}
+                />
+              </Link>
     
+              <div className="d-flex align-items-center ms-4">
+                  <button className="btn btn-outline-secondary px-3 me-1" onClick={handleCartClick}>
+                    장바구니
+                  </button>
+                {isLoggedIn ? (
+                  <>
+                    <button className="btn btn-outline-danger px-3 me-1" onClick={handleLogout}>
+                      로그아웃
+                    </button>
+                    <button className="btn btn-primary px-3" onClick={handleMyPageClick}>
+                      내 정보
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button className="btn btn-outline-primary px-3 me-1" onClick={handleLoginClick}>
+                      로그인
+                    </button>
+                    <button className="btn btn-primary px-3" onClick={handleSignupClick}>
+                      회원가입
+                    </button>
+                  </>
+                    )}
+                </div>
+            </div>
+        </header>
+        <div className="d-flex justify-content-center border-bottom bg-white">
+          <img 
+            src={`http://localhost:9090/showimage?filename=logo${brand_id}.png&obj=brand`} 
+            alt="Brand Logo" 
+            className="img-fluid"
+            style={{ maxHeight: "120px", cursor: "pointer" }}
+            onClick={() => navigate(`/brandItems?brand_id=${brand_id}`)}
+          />
+        </div>
+
+      </>
     )
 };
 

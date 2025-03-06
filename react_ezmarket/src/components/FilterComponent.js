@@ -21,7 +21,7 @@ const FilterComponent = () => {
     };
 
     const categoryMapping = {
-        "전체" : "",
+        "전통주 전체" : "",
         "막걸리" : "탁주(막걸리)",
         "소주" : "소주",
         "약주/청주" : "약주/청주",
@@ -30,7 +30,7 @@ const FilterComponent = () => {
     };
 
     const regionMapping = {
-        "전체": "",
+        "지역 전체": "",
         "서울": "서울",
         "경기": "경기",
         "인천": "인천",
@@ -42,56 +42,64 @@ const FilterComponent = () => {
     };
 
     const sortMapping = {
-        "최신순": "latest",
-        "낮은 가격순": "lowPrice",
-        "높은 가격순": "highPrice"
+        "최신순" : "latest",
+        "낮은 가격순" : "lowPrice",
+        "높은 가격순" : "highPrice",
+        "인기순" : "popular"
     };
     
     return (
         <div className="filter-container">
-            <h3>필터 검색</h3>
+            <h2 className="filter-title">내 입맛에 맞게 찾기</h2>
 
-            <h4>대분류</h4>
-            {Object.keys(categoryMapping).map((displayCategory) => (
-                <button
-                    key={displayCategory}
-                    className={`filter-button ${filters.bigcategory === categoryMapping[displayCategory] ? "active" : ""}`}
-                    onClick={() => updateQueryParams("bigcategory", categoryMapping[displayCategory])}
+            <div className="filter-row">
+                {/* 대분류 */}
+                <select
+                    className="filter-select"
+                    value={filters.bigcategory}
+                    onChange={(e) => updateQueryParams("bigcategory", e.target.value)}
                 >
-                    {displayCategory}
-                </button>
-            ))}
+                    {Object.keys(categoryMapping).map((displayCategory) => (
+                        <option key={displayCategory} value={categoryMapping[displayCategory]}>
+                            {displayCategory}
+                        </option>
+                    ))}
+                </select>
 
-            <h4>지역</h4>
-            {Object.keys(regionMapping).map((displayRegion) => (
-                <button
-                    key={displayRegion}
-                    className={`filter-button ${filters.regions.includes(regionMapping[displayRegion]) ? "active" : ""}`}
-                    onClick={() => updateQueryParams("regions", regionMapping[displayRegion])}
+                {/* 지역 */}
+                <select
+                    className="filter-select"
+                    value={filters.regions}
+                    onChange={(e) => updateQueryParams("regions", e.target.value)}
                 >
-                    {displayRegion}
-                </button>
-            ))}
+                    {Object.keys(regionMapping).map((displayRegion) => (
+                        <option key={displayRegion} value={regionMapping[displayRegion]}>
+                            {displayRegion}
+                        </option>
+                    ))}
+                </select>
 
-            <h4>신상품</h4>
-            <button
-                className={`filter-button ${filters.newProduct ? "active" : ""}`}
-                onClick={() => updateQueryParams("newProduct", !filters.newProduct)}
-            >
-                {filters.newProduct ? "적용됨" : "적용 안됨"}
-            </button>
-
-            <h4>정렬</h4>
-            {Object.keys(sortMapping).map((displaySort) => (
-                <button
-                    key={displaySort}
-                    className={`filter-button ${filters.sortType === sortMapping[displaySort] ? "active" : ""}`}
-                    onClick={() => updateQueryParams("sortType", sortMapping[displaySort])}
+                {/* 정렬 기준 */}
+                <select
+                    className="filter-select"
+                    value={filters.sortType}
+                    onChange={(e) => updateQueryParams("sortType", e.target.value)}
                 >
-                    {displaySort}
-                </button>
-            ))}
+                    {Object.keys(sortMapping).map((displaySort) => (
+                        <option key={displaySort} value={sortMapping[displaySort]}>
+                            {displaySort}
+                        </option>
+                    ))}
+                </select>
 
+                {/* 신상품 버튼 */}
+                <button
+                    className={`filter-button ${filters.newProduct ? "active" : ""}`}
+                    onClick={() => updateQueryParams("newProduct", !filters.newProduct)}
+                >
+                    {filters.newProduct ? "신상품" : "신상품"}
+                </button>
+            </div>
         </div>
     );
 };
