@@ -1,67 +1,62 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // useNavigate 훅을 import
 
 const KakaomapShopInfoComponent = () => {
-
     const [location, setLocation] = useState({ latitude: null, longitude: null });
     const [error, setError] = useState(null);
-    const [brandAddr, setBrandAddr] = useState([]);
+    const [dtoList, setDtoList] = useState([]); // address + brand_id
+    const navigate = useNavigate(); // navigate 함수 정의
 
     useEffect(() => {
-
         axios({
-            url : `http://localhost:9090/brandaddress`,
-            method : 'GET',
-
+            url: `http://localhost:9090/brandaddress`,
+            method: 'GET',
         })
         .then(function(res){
-            setBrandAddr(res.data);
-        })
+            setDtoList(res.data);
+        });
 
         if (navigator.geolocation) {
-
             const options = {
                 enableHighAccuracy: true,
-
             };
 
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                // 위치가 성공적으로 얻어지면 상태 업데이트
-                setLocation({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                });
+                    // 위치가 성공적으로 얻어지면 상태 업데이트
+                    setLocation({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                    });
                 },
                 (err) => {
-                // 에러가 발생하면 에러 메시지 상태 업데이트
-                setError(err.message);
+                    // 에러가 발생하면 에러 메시지 상태 업데이트
+                    setError(err.message);
                 },
                 options
-          );
+            );
         } else {
-          setError("Geolocation is not supported by this browser.");
+            setError("Geolocation is not supported by this browser.");
         }
-
-      }, []);
+    }, []);
 
     useEffect(() => {
-        if (location){
+        if (location.latitude && location.longitude) {
             kakaomap(location);
-        }        
-    })
+        }
+    }, [location, dtoList]);
 
-    const kakaomap=(location) => {
-
-        console.log("kakaomap 실행중")
+    const kakaomap = (location) => {
+        console.log("kakaomap 실행중");
 
         var infowindow = new window.kakao.maps.InfoWindow({zIndex:1});
 
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
             mapOption = {
-            center: new window.kakao.maps.LatLng(location.latitude, location.longitude), // 지도의 중심좌표
-            level: 10 // 지도의 확대 레벨
-        };   
+                center: new window.kakao.maps.LatLng(location.latitude, location.longitude), // 지도의 중심좌표
+                level: 9 // 지도의 확대 레벨
+            };   
 
         // 지도를 생성합니다    
         var map = new window.kakao.maps.Map(mapContainer, mapOption); 
@@ -70,13 +65,12 @@ const KakaomapShopInfoComponent = () => {
         var gc = new window.kakao.maps.services.Geocoder(map);
 
         // 주소로 좌표를 검색합니다
-        brandAddr.map(addr => (
-            gc.addressSearch(addr,placesSearchCB)
-        ));
+        dtoList.forEach(dto => {
+            gc.addressSearch(dto.address, (data, status) => placesSearchCB(data, status, dto.brand_id));
+        });
 
         // 키워드 검색 완료 시 호출되는 콜백함수 입니다
-        function placesSearchCB (data, status) {
-
+        function placesSearchCB (data, status, brand_id) {
             if (status === window.kakao.maps.services.Status.OK) {
                 const home = {y:location.latitude, x:location.longitude};
                 var circle = new window.kakao.maps.Circle({
@@ -91,12 +85,11 @@ const KakaomapShopInfoComponent = () => {
                 });
                 circle.setMap(map);
                 for (var i=0; i<data.length; i++) {
+                    data[i].brand_id = brand_id; // 각 장소에 brand_id 추가
                     displayMarker(data[i]);
                 }       
             }
         }
-
-
 
         // 지도에 마커를 표시하는 함수입니다
         function displayMarker(place) {   
@@ -106,10 +99,11 @@ const KakaomapShopInfoComponent = () => {
                 position: new window.kakao.maps.LatLng(place?.y, place?.x) 
             });
 
-            // 마커에 클릭이벤트를 등록합니다
+            // 마커에 마우스오버
             window.kakao.maps.event.addListener(marker, 'mouseover', function() {
-                // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-                infowindow.setContent('<div style="width:200px;height:200px;padding:40px;font-size:40px;border-radius:8px">' + place?.address.address_name + '</div>');
+                // 브랜드 로고가 보입니다
+                const logoUrl = `http://localhost:9090/showimage?filename=logo${place?.brand_id}.png&obj=brand`;
+                infowindow.setContent('<div style="width:200px;height:200px;padding:0;border-radius:8px"><img src="' + logoUrl + '" alt="Brand Logo" style="width:100%;height:100%;object-fit:cover;" /></div>');
                 infowindow.open(map, marker);
             });
 
@@ -119,14 +113,14 @@ const KakaomapShopInfoComponent = () => {
             });
 
             window.kakao.maps.event.addListener(marker, 'click', function() {
-                // 마커를 클릭하면 해당 브랜드주소를 가진 곳으로 이동            
+                // 마커를 클릭하면 해당 브랜드주소를 가진 곳으로 이동
+                navigate(`/brandItems?brand_id=${place?.brand_id}`);
             });
         }
-
     }
 
     return (
-            <div id="map" style={{width:'400px',height:'320px',border:'5px solid black'}}></div>
+        <div id="map" style={{width:'400px',height:'320px',border:'5px solid black'}}></div>
     )
 }
 
