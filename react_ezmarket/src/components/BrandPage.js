@@ -83,19 +83,19 @@ function BrandPage() {
                                     <th scope="col" rowSpan="2">번호</th>
                                     <th scope="col" rowSpan="2">이미지</th>
                                     <th scope="col">상품코드</th>
-                                    <th scope="col" colSpan="2"><a href="#">상품명</a></th>
+                                    <th scope="col" colSpan="2">상품명</th>
                                     <th scope="col">최초등록일</th>
                                     <th scope="col" rowSpan="2">재고</th>
                                     <th scope="col" colSpan="2" className="th_bg">가격정보</th>
                                     <th scope="col" rowSpan="2" colSpan="2">관리</th>
                                 </tr>
                                 <tr className="rows">
-                                    <th scope="col"><a href="#">업체코드</a></th>
+                                    <th scope="col">업체코드</th>
                                     <th scope="col">공급사명</th>
                                     <th scope="col">카테고리</th>
-                                    <th scope="col"><a href="#">최근수정일</a></th>
-                                    <th scope="col" className="th_bg"><a href="#">판매가</a></th>
-                                    <th scope="col" className="th_bg"><a href="#">포인트</a></th>
+                                    <th scope="col">최근수정일</th>
+                                    <th scope="col" className="th_bg">판매가</th>
+                                    <th scope="col" className="th_bg">포인트</th>
                                 </tr>
                             </thead>
                             <tbody>
