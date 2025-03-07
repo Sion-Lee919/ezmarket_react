@@ -11,24 +11,24 @@ const OrderComponent = () => {
     const selectedCartItems = location.state?.selectedCartItems || [];
     const navigate = useNavigate();
 
-    // const [shippingMessage, setShippingMessage] = useState("");
-    const [shippingMessage, setShippingMessage] = useState("배송 전에 미리 연락바랍니다");
+    const [shippingMessage, setShippingMessage] = useState("");
+    //const [shippingMessage, setShippingMessage] = useState("배송 전에 미리 연락바랍니다");
     const [paymentMethod, setPaymentMethod] = useState("무통장입금");
     
     // 주소 관련 필드
-    // const [selectedProvince, setSelectedProvince] = useState("");
-    // const [selectedDistrict, setSelectedDistrict] = useState("");
-    // const [detailAddress, setDetailAddress] = useState("");
-    const [selectedProvince, setSelectedProvince] = useState("서울특별시");
-    const [selectedDistrict, setSelectedDistrict] = useState("중구");
-    const [detailAddress, setDetailAddress] = useState("어디어디어디다");
+    const [selectedProvince, setSelectedProvince] = useState("");
+    const [selectedDistrict, setSelectedDistrict] = useState("");
+    const [detailAddress, setDetailAddress] = useState("");
+    //const [selectedProvince, setSelectedProvince] = useState("서울특별시");
+    //const [selectedDistrict, setSelectedDistrict] = useState("중구");
+    //const [detailAddress, setDetailAddress] = useState("어디어디어디다");
 
-    // const [receiverName, setReceiverName] = useState("");
-    // const [receiverPhone, setReceiverPhone] = useState("");
-    // const [receiverEmail, setReceiverEmail] = useState("");
-    const [receiverName, setReceiverName] = useState("송혜린");
-    const [receiverPhone, setReceiverPhone] = useState("010-1234-1234");
-    const [receiverEmail, setReceiverEmail] = useState("test@test.com");
+    const [receiverName, setReceiverName] = useState("");
+    const [receiverPhone, setReceiverPhone] = useState("");
+    const [receiverEmail, setReceiverEmail] = useState("");
+    //const [receiverName, setReceiverName] = useState("송혜린");
+    //const [receiverPhone, setReceiverPhone] = useState("010-1234-1234");
+    //const [receiverEmail, setReceiverEmail] = useState("test@test.com");
     
     // 시/군/구 목록
     const districts = selectedProvince ? addressData[selectedProvince] : [];
