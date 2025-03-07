@@ -18,7 +18,7 @@ const style = {
         color: '#333',
         width: '300px',
         fontSize: '24px',
-        fontWeight: '530', // 글자 굵기 (보통, 두껍게 등)
+        fontWeight: '530',
     }
 
 }
@@ -95,14 +95,13 @@ function ItemDetail(){
 
     const handleQuantityChange = (e) => {
         const value = e.target.value;
-        // 숫자인지 확인하고 양수로만 유지
         if (/^\d+$/.test(value)) {
-            setQuantity(Math.min(dto.stock_quantity, Math.max(1, parseInt(value)))); // 최소값 1로 설정
+            setQuantity(Math.min(dto.stock_quantity, Math.max(1, parseInt(value))));
         }
     };
 
     const handleTabClick = (tab) => {
-        setActiveTab(tab); // 클릭된 버튼에 해당하는 정보를 활성화
+        setActiveTab(tab);
     };
 
     const checkUserState = (user) => {
@@ -135,7 +134,6 @@ function ItemDetail(){
             return;
         }
 
-        // 상품 정보 구성
         const productInfo = {
             productId: parseInt(itemid),
             quantity: quantity,
@@ -145,7 +143,6 @@ function ItemDetail(){
             totalPrice: dto.price * quantity
         };
 
-        // 주문 페이지로 이동
         navigate("/order", { 
             state: { 
                 selectedCartItems: [productInfo] 
@@ -198,9 +195,9 @@ function ItemDetail(){
             display: 'flex', 
             flexDirection: 'row', 
             gap: '20px',
-            maxWidth: '1200px',  // 최대 너비
-            margin: '0 auto',    // 가운데 정렬
-            justifyContent: 'center', // 수평 가운데 정렬
+            maxWidth: '1200px',
+            margin: '0 auto',
+            justifyContent: 'center',
             paddingTop: '10px',
             height: 'auto'
             }}>
@@ -242,7 +239,6 @@ function ItemDetail(){
                     <div>
                         {isLoggedIn? (
                         <>
-                            {/* 구매수량 체크 필요 */}
                             <div style={{ width: '100px',marginTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <strong style={{ marginLeft: '10px',marginRight: '10px',minWidth: '40px'  }}>수량</strong>
                                     <button
@@ -284,13 +280,13 @@ function ItemDetail(){
                 display: 'flex', 
                 flexDirection: 'column', 
                 gap: '20px',
-                maxWidth: '1800px',  // 최대 너비
-                margin: '0 auto',    // 가운데 정렬
-                justifyContent: 'center', // 수평 가운데 정렬
+                maxWidth: '1800px',
+                margin: '0 auto',
+                justifyContent: 'center',
                 paddingTop: '50px',
                 height: 'auto'
             }}>
-                {/* 버튼들 */}
+
                 <div style={{ flexDirection: 'row', gap: '10px' }}>
                     <button style={style.tabButton} onClick={() => handleTabClick('detail')}>상품 상세 정보</button>
                     <button style={style.tabButton} onClick={() => handleTabClick('delivery')}>배송 안내</button>
@@ -299,7 +295,7 @@ function ItemDetail(){
                     <button style={style.tabButton} onClick={() => {checkUserState(user); handleTabClick('inquiry'); }}>상품 문의</button>
                 </div>
                 <></>
-                {/* 각 탭별 내용 표시 */}
+
                 <div style={{ flex: 1, minWidth: '250px', padding: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
                     {activeTab === 'detail' && (
                         <div>
