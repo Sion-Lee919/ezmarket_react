@@ -1,35 +1,35 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
-function BrandPage(){
+import "../styles/BrandPage.css";
 
+function BrandPage() {
     const [items, setItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);  // 현재 페이지
     const [pageSize] = useState(10);  // 페이지당 아이템 수
-    const {brandid} = useParams();
-
+    const { brandid } = useParams();
 
     useEffect(() => {
         axios({
-            url : `http://localhost:9090/getbranditems/${brandid}`,
-            method : 'GET',
+            url: `http://localhost:9090/getbranditems/${brandid}`,
+            method: 'GET',
         })
-        .then(function(res){
+        .then(function(res) {
             setItems(res.data);
-        })
+        });
     }, [brandid]);
 
     const handleDelete = async (product_id) => {
-      if (window.confirm("정말 삭제하시겠습니까?")) {
-          try {
-              await axios.delete(`http://localhost:9090/brand/${brandid}/delete/${product_id}`);
-              alert("상품이 삭제되었습니다.");
-              setItems(items.filter(item => item.product_id !== product_id)); // UI 업데이트
-          } catch (error) {
-              alert("삭제 중 오류가 발생했습니다.");
-          }
-      }
-  };
+        if (window.confirm("정말 삭제하시겠습니까?")) {
+            try {
+                await axios.delete(`http://localhost:9090/brand/${brandid}/delete/${product_id}`);
+                alert("상품이 삭제되었습니다.");
+                setItems(items.filter(item => item.product_id !== product_id)); // UI 업데이트
+            } catch (error) {
+                alert("삭제 중 오류가 발생했습니다.");
+            }
+        }
+    };
 
     // 현재 페이지에 해당하는 아이템만 추출
     const indexOfLastItem = currentPage * pageSize;
@@ -48,68 +48,108 @@ function BrandPage(){
     }
 
     return (
-        <div>
-          <Link to={`/brand/${brandid}/itemregister`} className="register-link">상품등록</Link>
-          <br></br><Link to={`/brand/${brandid}/modify`}>판매자 정보 수정</Link>
-          <div className="brand-items">
-            <table className="item-table">
-              <thead>
-                <tr>
-                  <th>제품이름</th>
-                  <th>도수</th>
-                  <th>가격</th>
-                  <th>수량</th>
-                  <th>수정</th>
-                  <th>삭제</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map(item => (
-                  <tr key={item.product_id}>
-                    <td>
-                      <Link to={`/item/${item.product_id}`} className="item-name-link">
-                        {item.name || '정보없음'}
-                      </Link>
-                    </td>
-                    <td>{item.alcohol || '정보없음'}</td>
-                    <td>{item.price || '정보없음'}</td>
-                    <td>{item.stock_quantity || '정보없음'}</td>
-                    <td>
-                      <Link to={`/brand/${brandid}/modify/${item.product_id}`}>
-                        <button>수정하기</button>
-                      </Link>
-                    </td>
-                    <td>
-                     <button onClick={() => handleDelete(item.product_id)}>삭제하기</button>
-                    </td>
+        <div id="wrapper">
+            <div id="content">
+                <div className="breadcrumb">
+                    <span>HOME</span> <i className="ionicons ion-ios-arrow-right"></i> 상품관리 <i className="ionicons ion-ios-arrow-right"></i> 전체 상품관리
+                </div>
+                <div className="s_wrap">
+                    <h1>전체 상품관리</h1>
+                    <div className="local_frm02">
+                        <Link to={`/brand/${brandid}/itemregister`} className="register-link">상품등록</Link>
+                        <br /><Link to={`/brand/${brandid}/modify`}>판매자 정보 수정</Link>
+                    </div>
+                    <div className="tbl_head02">
+                        <table id="sodr_list" className="tablef">
+                            <colgroup>
+                                <col className="w50" />
+                                <col className="w50" />
+                                <col className="w60" />
+                                <col className="w120" />
+                                <col />
+                                <col />
+                                <col className="w80" />
+                                <col className="w80" />
+                                <col className="w90" />
+                                <col className="w90" />
+                                <col className="w90" />
+                                <col className="w90" />
+                                <col className="w60" />
+                                <col className="w60" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col" rowSpan="2"><input type="checkbox" name="chkall" value="1" /></th>
+                                    <th scope="col" rowSpan="2">번호</th>
+                                    <th scope="col" rowSpan="2">이미지</th>
+                                    <th scope="col">상품코드</th>
+                                    <th scope="col" colSpan="2"><a href="#">상품명</a></th>
+                                    <th scope="col">최초등록일</th>
+                                    <th scope="col" rowSpan="2">재고</th>
+                                    <th scope="col" colSpan="2" className="th_bg">가격정보</th>
+                                    <th scope="col" rowSpan="2" colSpan="2">관리</th>
+                                </tr>
+                                <tr className="rows">
+                                    <th scope="col"><a href="#">업체코드</a></th>
+                                    <th scope="col">공급사명</th>
+                                    <th scope="col">카테고리</th>
+                                    <th scope="col"><a href="#">최근수정일</a></th>
+                                    <th scope="col" className="th_bg"><a href="#">판매가</a></th>
+                                    <th scope="col" className="th_bg"><a href="#">포인트</a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentItems.map((item, index) => (
+                                    <>
+                                    <tr key={item.product_id} className={`list${index % 2}`}>
+                                        <td rowSpan="2">
+                                            <input type="hidden" name={`gs_id[${index}]`} value={item.product_id} />
+                                            <input type="checkbox" name="chk[]" value={index} />
+                                        </td>
+                                        <td rowSpan="2">{index + 1}</td>
+                                        <td rowSpan="2"><Link to={`/item/${item.product_id}`} className="item-name-link">
+                                          <img src={`http://localhost:9090/showimage?filename=${item.image_url}&obj=product`} width="80" height="80" alt={item.name} /></Link></td>
+                                        <td>{item.product_id}</td>
+                                        <td colSpan="2" className="tal">{item.name}</td>
 
+                                        <td>{item.created_at}</td>
+                                        <td rowSpan="2" className="tar">{item.stock_quantity}</td>
+                                        <td rowSpan="2" className="tar">{item.price}</td>
+                                        <td rowSpan="2" className="tar">{item.price * 0.1}</td>
+                                        <td rowSpan="2"><Link to={`/brand/${brandid}/modify/${item.product_id}`} className="btn_small">수정</Link></td>
+                                        <td rowSpan="2"><button onClick={handleDelete} className="btn_small">삭제</button></td>
 
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="pagination">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}  // 첫 페이지일 때 "이전" 버튼 비활성화
-                >
-                    이전
-                </button>
-                <span>{currentPage} / {totalPages}</span>
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}  // 마지막 페이지일 때 "다음" 버튼 비활성화
-                >
-                    다음
-                </button>
+                                    </tr>
+                                    <tr className={`list${index % 2} rows`}>
+                                        <td className="fc_00f">{item.brand_id}</td>
+                                        <td className="tal txt_succeed">{item.brandname}</td>
+                                        <td className="tal txt_succeed">{item.bigcategory}</td>
+                                        <td className="fc_00f">{item.update_date}</td>
+                                    </tr>
+                                    </>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="pagination">
+                        <button
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}  // 첫 페이지일 때 "이전" 버튼 비활성화
+                        >
+                            이전
+                        </button>
+                        <span>{currentPage} / {totalPages}</span>
+                        <button
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}  // 마지막 페이지일 때 "다음" 버튼 비활성화
+                        >
+                            다음
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-      );
-      
-      
-
+    );
 }
 
 export default BrandPage;
