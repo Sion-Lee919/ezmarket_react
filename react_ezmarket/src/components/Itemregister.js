@@ -1,8 +1,10 @@
-import { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-const ItemRegister = () => {
+import '../styles/Itemregister.css';
+
+const ItemRegister = ({ onClose }) => {
     const navigate = useNavigate();
     const [productId, setProductId] = useState(""); // product_id 상태 추가
     const [productName, setProductName] = useState("");
@@ -17,7 +19,7 @@ const ItemRegister = () => {
     const [productIngredient, setProductIngredient] = useState("");
 
     const [imageUrl, setImageUrl] = useState(null);
-    const {brandid} = useParams();
+    const { brandid } = useParams();
 
     useEffect(() => {
         const randomId = Math.floor(Math.random() * 10000000);
@@ -53,7 +55,9 @@ const ItemRegister = () => {
             });
             console.log("상품 등록 성공:", response.data);
             // 성공 시 처리
-            navigate(`/brand/${brandid}`);
+            alert("상품 등록 성공!")
+            onClose(); // 오버레이 닫기
+            window.location.reload(); // 페이지 새로고침
         } catch (error) {
             console.error("상품 등록 실패:", error);
             alert("상품 등록 실패")
@@ -61,12 +65,11 @@ const ItemRegister = () => {
     };
 
     return (
-        <div>
-            <h1>상품등록페이지입니다.</h1>
+        <div className="register_container">
+            <h1>상품등록</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="product_id"></label>
                 <input type="hidden" name="product_id" value={productId} />
-
 
                 <label htmlFor="brand_id"></label>
                 <input type="hidden" name="brand_id" value={brandid} readOnly />
@@ -86,29 +89,29 @@ const ItemRegister = () => {
                     onChange={(e) => setDescription(e.target.value)} 
                 ></textarea><br />
                 
-                <label htmlFor="alcohol">도수</label>
+                <label htmlFor="bigcategory">상위카테고리</label>
                 <input 
-                    type="number"
-                    name="alcohol"
-                    value={alcohol}
-                    onChange={(e) => setAlcohol(e.target.value)} 
-                /><br />
-
-                <label htmlFor="volume">용량</label>
+                    type="text" 
+                    name="bigcategory" 
+                    value={bigCategory} 
+                    onChange={(e) => setBigCategory(e.target.value)} 
+                />
+                
+                <label htmlFor="subcategory">하위카테고리</label>
                 <input 
-                    type="text"
-                    name="volume" 
-                    value={volume}
-                    onChange={(e) => setVolume(e.target.value)} 
+                    type="text" 
+                    name="subcategory" 
+                    value={subCategory} 
+                    onChange={(e) => setSubCategory(e.target.value)} 
                 /><br />
-
+                
                 <label htmlFor="price">가격</label>
                 <input 
                     type="text" 
                     name="price" 
                     value={price} 
                     onChange={(e) => setPrice(e.target.value)} 
-                /><br />
+                />
                 
                 <label htmlFor="stock_quantity">재고</label>
                 <input 
@@ -116,6 +119,22 @@ const ItemRegister = () => {
                     name="stock_quantity" 
                     value={stockQuantity} 
                     onChange={(e) => setStockQuantity(e.target.value)} 
+                /><br />
+                
+                <label htmlFor="alcohol">도수</label>
+                <input 
+                    type="number"
+                    name="alcohol"
+                    value={alcohol}
+                    onChange={(e) => setAlcohol(e.target.value)} 
+                />
+                
+                <label htmlFor="volume">용량</label>
+                <input 
+                    type="text"
+                    name="volume" 
+                    value={volume}
+                    onChange={(e) => setVolume(e.target.value)} 
                 /><br />
 
                 <label htmlFor="product_ingredient">원재료</label>
@@ -134,23 +153,7 @@ const ItemRegister = () => {
                     onChange={(e) => setProductRegion(e.target.value)} 
                 /><br />
 
-                <label htmlFor="bigcategory">상위카테고리</label>
-                <input 
-                    type="text" 
-                    name="bigcategory" 
-                    value={bigCategory} 
-                    onChange={(e) => setBigCategory(e.target.value)} 
-                /><br />
-
-                <label htmlFor="subcategory">하위카테고리</label>
-                <input 
-                    type="text" 
-                    name="subcategory" 
-                    value={subCategory} 
-                    onChange={(e) => setSubCategory(e.target.value)} 
-                /><br />
-                
-                <label htmlFor="image_url">이미지</label>
+                <label htmlFor="image_url">상품 이미지</label>
                 <input 
                     type="file" 
                     name="image_url" 

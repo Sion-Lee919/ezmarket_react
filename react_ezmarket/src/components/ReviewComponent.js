@@ -281,6 +281,7 @@ const ReviewComponent = (props) => {
         setComments(review.comments);
         setRating(review.rating);
         setImageUrl(review.image_url);
+        console.log(review.image_url);
         setPreviewImg(`http://localhost:9090/showimage?filename=${review.image_url}&obj=review`);
 
         // textarea에 포커스를 맞추기

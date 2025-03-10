@@ -1,0 +1,82 @@
+.register_container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    font-size: 20px; /* 글씨 크기 20으로 설정 */
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="file"],
+form textarea {
+    width: 90%; /* 가로 넓이를 절반으로 설정 */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: inline-block; /* 한 줄에 배치 */
+}
+
+form input[type="file"] {
+    width: 100%; /* 파일 입력은 전체 넓이 사용 */
+}
+
+form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto; /* 스크롤 가능하도록 설정 */
+}
+
+.overlay-content {
+    padding: 20px;
+    height: 100%; /* 전체 높이 사용 */
+    box-sizing: border-box; /* 패딩 포함한 높이 계산 */
+}
+
+.close-btn {
+    position: absolute;
+    padding: 5px 10px;
+    top: 25px;
+    right: 25px;
+    background: red;
+    border-radius: 8px;
+    border: none;
+    font-size: 20px; /* 크기 설정 */
+    color: white; /* 빨간색 설정 */
+    cursor: pointer;
+}
