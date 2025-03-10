@@ -97,7 +97,7 @@ const style = {
         borderRadius: '5px',
         cursor: 'pointer',
         width: '120px',
-        fontSize: '21px',
+        fontSize: '19px',
         height: '50px',
     },
 
@@ -398,13 +398,13 @@ const ReviewComponent = (props) => {
 
                     {!isEditing ? 
                         (
-                            <button type="submit" style={style.review_submit_button}>후기 작성</button>
+                            <button type="submit" style={style.review_submit_button}>후기작성</button>
                         )
                          : 
                         (
                             <div style={style.edit_buttons_container}>
-                            <button type="button" onClick={handleCancelEdit} style={style.review_submit_button}>수정 취소</button>
-                            <button type="submit" style={style.review_submit_button}>수정 완료</button>
+                            <button type="button" onClick={handleCancelEdit} style={style.review_submit_button}>수정취소</button>
+                            <button type="submit" style={style.review_submit_button}>수정완료</button>
                             </div>
                         )}
                     </div>
