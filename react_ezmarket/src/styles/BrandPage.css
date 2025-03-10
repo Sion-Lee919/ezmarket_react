@@ -39,6 +39,7 @@
     padding: 5px 10px;
     font-size: 12px;
     background-color: #007bff;
+    text-decoration: none;
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -85,4 +86,18 @@
 .pagination span {
     margin: 0 10px;
     font-size: 14px;
+}
+
+.btn_link {
+    background-color: #bcbcbc;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
 }

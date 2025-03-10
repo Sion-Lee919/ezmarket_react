@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import "../styles/BrandPage.css";
+import ItemRegister from "./Itemregister"; // ItemRegister 컴포넌트 임포트
 
 function BrandPage() {
     const [items, setItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);  // 현재 페이지
     const [pageSize] = useState(10);  // 페이지당 아이템 수
     const { brandid } = useParams();
+    const [showOverlay, setShowOverlay] = useState(false); // 오버레이 상태 추가
 
     useEffect(() => {
         axios({
@@ -50,14 +52,14 @@ function BrandPage() {
     return (
         <div id="wrapper">
             <div id="content">
-                <div className="breadcrumb">
-                    <span>HOME</span> <i className="ionicons ion-ios-arrow-right"></i> 상품관리 <i className="ionicons ion-ios-arrow-right"></i> 전체 상품관리
-                </div>
                 <div className="s_wrap">
-                    <h1>전체 상품관리</h1>
+                    <h1>판매자 페이지</h1>
                     <div className="local_frm02">
-                        <Link to={`/brand/${brandid}/itemregister`} className="register-link">상품등록</Link>
-                        <br /><Link to={`/brand/${brandid}/modify`}>판매자 정보 수정</Link>
+                        <button className="btn_link" onClick={() => setShowOverlay(true)}>상품등록</button>
+                        <br />
+                        <Link to={`/brand/${brandid}/modify`}>
+                            <button className="btn_link">판매자 정보 수정</button>
+                        </Link>
                     </div>
                     <div className="tbl_head02">
                         <table id="sodr_list" className="tablef">
@@ -79,7 +81,6 @@ function BrandPage() {
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th scope="col" rowSpan="2"><input type="checkbox" name="chkall" value="1" /></th>
                                     <th scope="col" rowSpan="2">번호</th>
                                     <th scope="col" rowSpan="2">이미지</th>
                                     <th scope="col">상품코드</th>
@@ -102,10 +103,6 @@ function BrandPage() {
                                 {currentItems.map((item, index) => (
                                     <>
                                     <tr key={item.product_id} className={`list${index % 2}`}>
-                                        <td rowSpan="2">
-                                            <input type="hidden" name={`gs_id[${index}]`} value={item.product_id} />
-                                            <input type="checkbox" name="chk[]" value={index} />
-                                        </td>
                                         <td rowSpan="2">{index + 1}</td>
                                         <td rowSpan="2"><Link to={`/item/${item.product_id}`} className="item-name-link">
                                           <img src={`http://localhost:9090/showimage?filename=${item.image_url}&obj=product`} width="80" height="80" alt={item.name} /></Link></td>
@@ -117,7 +114,7 @@ function BrandPage() {
                                         <td rowSpan="2" className="tar">{item.price}</td>
                                         <td rowSpan="2" className="tar">{item.price * 0.1}</td>
                                         <td rowSpan="2"><Link to={`/brand/${brandid}/modify/${item.product_id}`} className="btn_small">수정</Link></td>
-                                        <td rowSpan="2"><button onClick={handleDelete} className="btn_small">삭제</button></td>
+                                        <td rowSpan="2"><button onClick={() => handleDelete(item.product_id)} className="btn_small">삭제</button></td>
 
                                     </tr>
                                     <tr className={`list${index % 2} rows`}>
@@ -148,6 +145,14 @@ function BrandPage() {
                     </div>
                 </div>
             </div>
+            {showOverlay && (
+                <div className="overlay">
+                    <div className="overlay-content">
+                        <button className="close-btn" onClick={() => setShowOverlay(false)}>X</button>
+                        <ItemRegister onClose={() => setShowOverlay(false)} />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

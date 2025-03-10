@@ -57,8 +57,7 @@ function App() {
         <Route path='/my/order' element={<MyOrder/>}/>
 
         <Route path='/brand/:brandid' element={<BrandPage/>}/>
-        <Route path='/brand/:brandid/itemregister/' element={<ItemRegister/>}/>
-        <Route path='/items' element={<SearchResultComponent/>}/>
+                <Route path='/items' element={<SearchResultComponent/>}/>
         <Route path='/brandItems' element={<BrandItem/>}/>
         
 
