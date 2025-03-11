@@ -28,7 +28,7 @@ function ItemSlideComponent() {
     const sliderSettings = {
         dots: true,
         infinite: true,
-        speed: 500,
+        speed: 800,
         slidesToShow: 6,
         slidesToScroll: 3,
         responsive: [
@@ -61,7 +61,7 @@ function ItemSlideComponent() {
     };
 
     return (
-        <Container className="mt-4">
+        <Container className="mt-4 mb-5">
             <h3 className="text-center mb-3">인기 상품 Top 6</h3>
             <Slider {...sliderSettings}>
                 {popularItems.map((item) => (
