@@ -87,13 +87,14 @@ const SearchComponent = () => {
                         setIsSearching(false);
                     }}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                    style={{ borderWidth: "2px", borderColor: "rgb(24, 159, 219)"}}
                 />
                 {searchTerm && (
-                    <button type="button" className="btn btn-outline-secondary" onClick={clearSearch}>
+                    <button type="button" className="btn custom-outline-primary" onClick={clearSearch}>
                         ×
                     </button>
                 )}
-                <button className="btn btn-outline-secondary" onClick={handleSearch} disabled={!searchTerm.trim()}>
+                <button className="btn custom-outline-primary" onClick={handleSearch} disabled={!searchTerm.trim()}>
                     검색
                 </button>
             </div>

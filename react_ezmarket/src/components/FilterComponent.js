@@ -55,7 +55,7 @@ const FilterComponent = () => {
             <div className="filter-row">
                 {/* 대분류 */}
                 <select
-                    className="filter-select"
+                    className="filter-select custom-select"
                     value={filters.bigcategory}
                     onChange={(e) => updateQueryParams("bigcategory", e.target.value)}
                 >
