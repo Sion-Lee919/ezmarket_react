@@ -64,7 +64,7 @@
     content: "";
 }
 
-/* 페이징 */
+/* 페이징
 .pagination {
     margin: 20px 0;
     text-align: center;
@@ -86,7 +86,7 @@
 .pagination span {
     margin: 0 10px;
     font-size: 14px;
-}
+} */
 
 .btn_link {
     background-color: #bcbcbc;

@@ -201,11 +201,11 @@ function ItemDetail(){
             paddingTop: '10px',
             height: 'auto'
             }}>
-                <div className="product-image" style={{ width: '500px', height: 'auto', border: '2px solid #838383' }}>
+                <div className="product-image" style={{ width: '500px', height: '600px', border: '2px solid #838383'  }}>
                     <img
                     alt="제품 이미지"
                     src={`http://localhost:9090/showimage?filename=${dto.image_url}&obj=product`}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                     />
                 </div>
                 <div className="product-details" style={{ width: '400px', height: 'auto' }}>

@@ -49,12 +49,12 @@ const HeaderCategory = ({ text }) => {
     return (
         <div className="dropdown" onMouseEnter={openDropdown} onMouseLeave={closeDropdown}>
             {/* 드롭다운 버튼 */}
-            <button className="btn btn-outline-secondary dropdown-toggle" type="button">
+            <button className="btn custom-outline-primary dropdown-toggle" type="button">
                 {text}
             </button>
 
             {/* 드롭다운 메뉴 */}
-            <ul className={`dropdown-menu ${isOpen ? "show" : ""}`}>
+            <ul className={`dropdown-menu custom-dropdown ${isOpen ? "show" : ""}`}>
                 {text === "전통주 종류" &&
                     Object.keys(categoryMapping).map((category) => (
                         <li key={category}>

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // useNavigate 훅을 import
+import "../styles/KakaomapShopInfoComponent.css";
 
 const KakaomapShopInfoComponent = () => {
     const [location, setLocation] = useState({ latitude: null, longitude: null });
@@ -8,6 +9,8 @@ const KakaomapShopInfoComponent = () => {
     const [dtoList, setDtoList] = useState([]); // address + brand_id
     const navigate = useNavigate(); // navigate 함수 정의
 
+
+    
     useEffect(() => {
         axios({
             url: `http://localhost:9090/brandaddress`,
