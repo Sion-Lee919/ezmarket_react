@@ -1,0 +1,27 @@
+.custom-outline-primary {
+    border: 1px solid rgb(147, 153, 155);
+    color: rgb(0, 0, 0);
+    background-color: transparent;
+}
+
+.custom-outline-primary:hover {
+    background-color: rgb(24, 159, 219);
+    color: white;
+}
+
+/* 드롭다운 배경색 변경 */
+.custom-dropdown {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(147, 153, 155);
+}
+
+/* 드롭다운 항목 스타일 */
+.custom-dropdown .dropdown-item {
+    color: rgb(0, 0, 0) ; /* 글자색 변경 */
+}
+
+/* 드롭다운 항목 hover 효과 */
+.custom-dropdown .dropdown-item:hover {
+    background-color: rgb(24, 159, 219); 
+    color: white ;
+}

@@ -10,8 +10,8 @@ const Main = () => {
       <MainBannerSlide />
       <ItemSlideComponent></ItemSlideComponent>
       <hr/>
-      <h1>가까운 양조장</h1><KakaomapShopInfoComponent></KakaomapShopInfoComponent>
-      <p>등</p>
+      <h1>가까운 양조장</h1>
+      <KakaomapShopInfoComponent></KakaomapShopInfoComponent>
     </div>
   );
 };

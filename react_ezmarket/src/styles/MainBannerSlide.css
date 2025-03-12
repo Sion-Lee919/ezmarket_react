@@ -1,19 +1,4 @@
 /* 1366 x 768 */
-
-/* .banner-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    overflow: hidden
-}
-
-.banner-img {
-    width: 100%;
-    height: 500px;
-    object-fit: contain;  
-} */
-/*contain, cover*/ 
-
 /* .banner-container {
     width: 100%;
     max-width: 1366px;
@@ -64,13 +49,13 @@
 
 .slick-prev:before, .slick-next:before {
     font-size: 40px;
-    color: #2f00ff;
+    color: rgb(24, 159, 219);
 }
 
-/* 네비게이션 점 크기 키우기 */
+/* 점 */
 .slick-dots li button:before {
     font-size: 14px; 
-    color: #2f00ff;
+    color: rgb(24, 159, 219);
 }
 
 
