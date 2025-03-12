@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import '../../../styles/MyPageSideBar.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 const MyPageSideBar = () => {
     const [user, setUser] = useState({
@@ -22,7 +23,7 @@ const MyPageSideBar = () => {
       const token = Cookies.get('jwt_token'); 
       
       if (token) {
-        axios.get('http://localhost:9090/userinfo', { 
+        axios.get(`${API_BASE_URL}/userinfo`, { 
           headers: { 'Authorization': `Bearer ${token}` }, 
           withCredentials: true
         })

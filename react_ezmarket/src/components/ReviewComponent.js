@@ -6,6 +6,8 @@ import cameraIcon from '../assets/camera.svg';
 import starIcon from '../assets/star.svg';
 import starOnIcon from '../assets/staron.svg';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const style = {
 
     edit_buttons_container: {
@@ -97,7 +99,7 @@ const style = {
         borderRadius: '5px',
         cursor: 'pointer',
         width: '120px',
-        fontSize: '21px',
+        fontSize: '19px',
         height: '50px',
     },
 
@@ -154,31 +156,28 @@ const ReviewComponent = (props) => {
     const textareaRef = useRef(null);  // textareaRef 생성
 
 
-    useEffect(() =>{
-
+    useEffect(() => {
         const randomId = Math.floor(Math.random() * 10000000);
         setReviewId(randomId);
 
         const token = Cookies.get('jwt_token');
         if (token) {
             setIsLoggedIn(true);
-            axios.get('http://localhost:9090/userinfo', { 
+            axios.get(`${API_BASE_URL}/userinfo`, { 
                 headers: { 'Authorization': `Bearer ${token}` },
                 withCredentials: true
-              })
-              .then(response => {
+            }).then(response => {
                 setMemberId(response.data.member_id);
-              })
+            });
         } else {
             setIsLoggedIn(false);
         }
-
-    }, [])
+    }, []);
     
     useEffect(() => {
 
         axios({
-            url : `http://localhost:9090/getreview/${product_id}`,
+            url : `${API_BASE_URL}/getreview/${product_id}`,
             method : 'GET',
         })
         .then(function(res){
@@ -235,7 +234,7 @@ const ReviewComponent = (props) => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:9090/review/registerreview`, formData, {
+            const response = await axios.post(`${API_BASE_URL}/review/registerreview`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -244,7 +243,7 @@ const ReviewComponent = (props) => {
             alert("리뷰등록 성공");
 
             axios({
-                url: `http://localhost:9090/getreview/${product_id}`,
+                url: `${API_BASE_URL}/getreview/${product_id}`,
                 method: 'GET',
             })
             .then(function(res){
@@ -264,7 +263,7 @@ const ReviewComponent = (props) => {
     const handleReviewDelete = async (review) => {
         if (window.confirm("정말 삭제하시겠습니까?")) {
             try {
-                await axios.delete(`http://localhost:9090/review/delete?reviewId=${review}`);
+                await axios.delete(`${API_BASE_URL}/review/delete?reviewId=${review}`);
                 alert("리뷰가 삭제되었습니다.");
                 setReviewList(reviewList.filter(target => target.review_id !== review)); // UI 업데이트
             } catch (error) {
@@ -282,7 +281,7 @@ const ReviewComponent = (props) => {
         setRating(review.rating);
         setImageUrl(review.image_url);
         console.log(review.image_url);
-        setPreviewImg(`http://localhost:9090/showimage?filename=${review.image_url}&obj=review`);
+        setPreviewImg(`${API_BASE_URL}/showimage?filename=${review.image_url}&obj=review`);
 
         // textarea에 포커스를 맞추기
         if (textareaRef.current) {
@@ -306,14 +305,14 @@ const ReviewComponent = (props) => {
         }
 
         try {
-            await axios.put(`http://localhost:9090/review/update?reviewid=${reviewId}`, formData, {
+            await axios.put(`${API_BASE_URL}/review/update?reviewid=${reviewId}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("리뷰 수정 완료!");
 
             // 리뷰 목록 새로 고침
             axios({
-                url: `http://localhost:9090/getreview/${product_id}`,
+                url: `${API_BASE_URL}/getreview/${product_id}`,
                 method: 'GET',
             })
             .then(function(res){
@@ -398,13 +397,13 @@ const ReviewComponent = (props) => {
 
                     {!isEditing ? 
                         (
-                            <button type="submit" style={style.review_submit_button}>후기 작성</button>
+                            <button type="submit" style={style.review_submit_button}>후기작성</button>
                         )
                          : 
                         (
                             <div style={style.edit_buttons_container}>
-                            <button type="button" onClick={handleCancelEdit} style={style.review_submit_button}>수정 취소</button>
-                            <button type="submit" style={style.review_submit_button}>수정 완료</button>
+                            <button type="button" onClick={handleCancelEdit} style={style.review_submit_button}>수정취소</button>
+                            <button type="submit" style={style.review_submit_button}>수정완료</button>
                             </div>
                         )}
                     </div>
@@ -436,7 +435,7 @@ const ReviewComponent = (props) => {
                         </div>
                         <div style={style.review_right}>
                             <p>{review.comments}</p>
-                            {review.image_url && (<img src={`http://localhost:9090/showimage?filename=${review.image_url}&obj=review`} alt="Review" style={style.review_image} />)}
+                            {review.image_url && (<img src={`${API_BASE_URL}/showimage?filename=${review.image_url}&obj=review`} alt="Review" style={style.review_image} />)}
                         </div>
                         </div>
                     ))}

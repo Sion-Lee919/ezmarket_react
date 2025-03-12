@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 import ReviewComponent from "./ReviewComponent";
 import QnAChatComponent from "./QnAChatComponent";
 import QnAChatRoomListComponent from "./QnAChatRoomListComponent";
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 const style = {
     tabButton: {
@@ -20,63 +22,57 @@ const style = {
         fontSize: '24px',
         fontWeight: '530',
     }
-
 }
 
-function ItemDetail(){
-
+function ItemDetail() {
     const [dto, setDto] = useState(null);
-    const {itemid} = useParams();
+    const { itemid } = useParams();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('detail');
     const [user, setUser] = useState(null);
     const [brandid, setBrandid] = useState();
-
     const [reviewList, setReviewList] = useState([]);
-
     const navigate = useNavigate();
 
     useEffect(() => {
         axios({
-            url: `http://localhost:9090/getreview/${itemid}`,
+            url: `${API_BASE_URL}/getreview/${itemid}`,
             method: 'GET',
         })
         .then(function(res){
             setReviewList(res.data);
         });
-          }, [reviewList])
+    }, [reviewList])
 
     useEffect(() => {
         const token = Cookies.get('jwt_token');
-            if (token) {
-              setIsLoggedIn(true);
-              axios.get('http://localhost:9090/userinfo', { 
+        if (token) {
+            setIsLoggedIn(true);
+            axios.get(`${API_BASE_URL}/userinfo`, { 
                 headers: { 'Authorization': `Bearer ${token}` }, 
                 withCredentials: true
-              })
-              .then(response => {
+            })
+            .then(response => {
                 setUser(response.data);
-              })
-              .catch(error => {
+            })
+            .catch(error => {
                 alert(error.response.data.message);
                 Cookies.remove('jwt_token');
                 navigate('/login');
-              });
-            }
-          }, [])
+            });
+        }
+    }, [])
 
     useEffect(() => {
-
         axios({
-            url : `http://localhost:9090/item/${itemid}`,
+            url : `${API_BASE_URL}/item/${itemid}`,
             method : 'GET',
-
         })
         .then(function(res){
             setDto(res.data);
         })
-    }, [itemid])
+    }, [itemid]);
 
     const handleLoginClick = () => {
         navigate('/login');  
@@ -84,7 +80,7 @@ function ItemDetail(){
 
     const handleIncreaseQuantity = () => {
         if (quantity < dto.stock_quantity)
-        setQuantity(prevQuantity => prevQuantity + 1);
+            setQuantity(prevQuantity => prevQuantity + 1);
     };
 
     const handleDecreaseQuantity = () => {
@@ -106,7 +102,7 @@ function ItemDetail(){
 
     const checkUserState = (user) => {
         if (user != null){
-            axios.get(`http://localhost:9090/brandinfo?memberid=${user.member_id}`)
+            axios.get(`${API_BASE_URL}/brandinfo?memberid=${user.member_id}`)
                 .then(response => {
                     if(response.data){
                         setBrandid(response.data.brand_id);
@@ -162,7 +158,7 @@ function ItemDetail(){
 
         try {
             const response = await axios.post(
-                "http://localhost:9090/api/cart/add",
+                `${API_BASE_URL}/api/cart/add`,
                 null,
                 {
                     params: {
@@ -190,22 +186,23 @@ function ItemDetail(){
 
     return (
         <div>
-
             <div className="product-page-top" style={{
-            display: 'flex', 
-            flexDirection: 'row', 
-            gap: '20px',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            justifyContent: 'center',
-            paddingTop: '10px',
-            height: 'auto'
+                display: 'flex', 
+                flexDirection: 'row', 
+                gap: '20px',
+                maxWidth: '1200px',
+                margin: '0 auto',
+                justifyContent: 'center',
+                paddingTop: '10px',
+                height: 'auto'
             }}>
                 <div className="product-image" style={{ width: '500px', height: '600px', border: '2px solid #838383'  }}>
                     <img
-                    alt="제품 이미지"
-                    src={`http://localhost:9090/showimage?filename=${dto.image_url}&obj=product`}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+
+                        alt="제품 이미지"
+                        src={`${API_BASE_URL}/showimage?filename=${dto.image_url}&obj=product`}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+
                     />
                 </div>
                 <div className="product-details" style={{ width: '400px', height: 'auto' }}>
@@ -233,7 +230,6 @@ function ItemDetail(){
                         <td style={{ padding: '8px', minWidth: '60px', borderBottom: '3px solid #333333' }}><strong>양조장</strong></td>
                         <td style={{ padding: '8px', borderBottom: '3px solid #333333' }}>{dto.product_region || '정보없음'}</td>
                         </tr>
-
                     </tbody>
                     </table>
                     <div>
@@ -286,7 +282,6 @@ function ItemDetail(){
                 paddingTop: '50px',
                 height: 'auto'
             }}>
-
                 <div style={{ flexDirection: 'row', gap: '10px' }}>
                     <button style={style.tabButton} onClick={() => handleTabClick('detail')}>상품 상세 정보</button>
                     <button style={style.tabButton} onClick={() => handleTabClick('delivery')}>배송 안내</button>
@@ -295,7 +290,6 @@ function ItemDetail(){
                     <button style={style.tabButton} onClick={() => {checkUserState(user); handleTabClick('inquiry'); }}>상품 문의</button>
                 </div>
                 <></>
-
                 <div style={{ flex: 1, minWidth: '250px', padding: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
                     {activeTab === 'detail' && (
                         <div>
@@ -331,12 +325,8 @@ function ItemDetail(){
                     )}
                 </div>
             </div>
-        
         </div>
-      );
-      
-      
-
+    );
 }
 
 export default ItemDetail;

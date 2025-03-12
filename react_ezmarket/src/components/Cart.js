@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -24,7 +26,7 @@ const Cart = () => {
                 setLoading(false);
                 return;
             }
-            const response = await axios.get("http://localhost:9090/api/cart/me", {
+            const response = await axios.get(`${API_BASE_URL}/api/cart/me`, {
                 headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true
             });
@@ -67,7 +69,7 @@ const Cart = () => {
 
             console.log(`[삭제 요청] cartId: ${cartId}`);
 
-            await axios.delete(`http://localhost:9090/api/cart/remove/${cartId}`, {
+            await axios.delete(`${API_BASE_URL}/api/cart/remove/${cartId}`, {
                 headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true
             });
@@ -115,7 +117,7 @@ const Cart = () => {
                                 }
                             />
                             <img 
-                                src={`http://localhost:9090/showimage?filename=${item.image}&obj=product`} 
+                                src={`${API_BASE_URL}/showimage?filename=${item.image}&obj=product`} 
                                 alt={item.productName} 
                                 className="mx-3 rounded" 
                                 style={{ width: '60px', height: '60px', objectFit: 'cover' }}
@@ -135,25 +137,25 @@ const Cart = () => {
                     <div className="text-end mt-3">
                         <h4>총 가격: {getTotalPrice().toLocaleString()} 원</h4>
                         <button 
-    onClick={() => {
-        const selectedCartItems = cartItems
-            .filter(item => selectedItems.includes(item.cartId))
-            .map(item => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                totalPrice: item.price * item.quantity,
-                productName: item.productName, 
-                price: item.price,
-                image: item.image
-            }));
+                            onClick={() => {
+                                const selectedCartItems = cartItems
+                                    .filter(item => selectedItems.includes(item.cartId))
+                                    .map(item => ({
+                                        productId: item.productId,
+                                        quantity: item.quantity,
+                                        totalPrice: item.price * item.quantity,
+                                        productName: item.productName, 
+                                        price: item.price,
+                                        image: item.image
+                                    }));
 
-        navigate(`/order`, { state: { selectedCartItems } });
-    }}
-    style={{ marginTop: '10px', padding: '10px 20px' }}
-    className="btn btn-info mt-2"
->
-    결제하기
-</button>
+                                navigate(`/order`, { state: { selectedCartItems } });
+                            }}
+                            style={{ marginTop: '10px', padding: '10px 20px' }}
+                            className="btn btn-info mt-2"
+                        >
+                            결제하기
+                        </button>
                     </div>
                 </div>
             )}

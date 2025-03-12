@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/FindIdPw.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const FindPw = () => {
     const [username, setUsername] = useState('');
     const [realname, setRealname] = useState('');
@@ -16,7 +18,7 @@ const FindPw = () => {
             return;
         }
 
-        axios.post('http://localhost:9090/findPw', {
+        axios.post(`${API_BASE_URL}/findPw`, {
             username,
             realname,
             email,

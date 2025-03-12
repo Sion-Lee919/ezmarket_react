@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import '../../../styles/JoinN.css'
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const Modify = () => {
   const [form, setForm] = useState({
     username: "",
@@ -26,7 +28,7 @@ const Modify = () => {
     const token = Cookies.get('jwt_token'); 
     
     if (token) {
-      axios.get('http://localhost:9090/userinfo', { 
+      axios.get(`${API_BASE_URL}/userinfo`, { 
         headers: { 'Authorization': `Bearer ${token}` }, 
         withCredentials: true
       })
@@ -54,7 +56,7 @@ const Modify = () => {
     }      
 
     try {
-      const response = await axios.get('http://localhost:9090/checkNickname', {
+      const response = await axios.get(`${API_BASE_URL}/checkNickname`, {
         params: { nickname: enteredNickname },
       });
 
@@ -79,7 +81,7 @@ const Modify = () => {
     const token = Cookies.get('jwt_token');
 
     try {
-      await axios.post('http://localhost:9090/modify', form, {
+      await axios.post(`${API_BASE_URL}/modify`, form, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
@@ -109,7 +111,7 @@ const Modify = () => {
         return;
       }
 
-      const response = await axios.post('http://localhost:9090/resign', null, {
+      const response = await axios.post(`${API_BASE_URL}/resign`, null, {
         params: { username: form.username },
         headers: { 'Authorization': `Bearer ${token}` },
       });

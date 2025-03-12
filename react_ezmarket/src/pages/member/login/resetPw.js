@@ -11,6 +11,8 @@ const ResetPw = () => {
     const navigate = useNavigate(); 
     const location = useLocation();
 
+    const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
     //접근 시 비밀번호 찾기 유효성 검사 필요
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -49,7 +51,7 @@ const ResetPw = () => {
             return;
         }
         
-        axios.post('http://localhost:9090/resetPw', {
+        axios.post(`${API_BASE_URL}/resetPw`, {
             username,
             newPassword
         })

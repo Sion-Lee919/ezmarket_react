@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const BrandPageLink = () => {
     const [memberid, setMemberid] = useState(useParams());
     const [brandid, setBrandid] = useState();
@@ -11,7 +13,7 @@ const BrandPageLink = () => {
     useEffect(() => {
         const token = Cookies.get('jwt_token');
         if (token) {
-            axios.get('http://localhost:9090/userinfo', { 
+            axios.get(`${API_BASE_URL}/userinfo`, { 
                 headers: { 'Authorization': `Bearer ${token}` }, 
                 withCredentials: true 
             })
@@ -29,7 +31,7 @@ const BrandPageLink = () => {
     const clickLink = () => {
         // memberid가 있을 때만 요청을 보내도록 처리
         if (memberid) {
-            axios.get(`http://localhost:9090/brandinfo?memberid=${memberid}`)
+            axios.get(`${API_BASE_URL}/brandinfo?memberid=${memberid}`)
                 .then(response => {
                     if(response.data){
                         setBrandid(response.data.brand_id);

@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 import '../../../styles/MyPage.css';
 import MyPageSideBar from './myPageSideBar';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const MyPage = () => {
   const [user, setUser] = useState({
     member_id: '',
@@ -23,7 +25,7 @@ const MyPage = () => {
     const token = Cookies.get('jwt_token'); 
     
     if (token) {
-      axios.get('http://localhost:9090/userinfo', { 
+      axios.get(`${API_BASE_URL}/userinfo`, { 
         headers: { 'Authorization': `Bearer ${token}` }, 
         withCredentials: true
       })

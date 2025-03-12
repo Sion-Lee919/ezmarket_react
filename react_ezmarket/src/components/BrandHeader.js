@@ -4,6 +4,11 @@ import Cookies from 'js-cookie';
 import BrandPageLink from "./BrandPageLink";
 import "../styles/BrandHeader.css";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
+
+
+
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
@@ -51,7 +56,7 @@ const BrandHeader = () => {
             <div className="border-bottom container-fluid d-flex align-items-center justify-content-between px-4">
               <Link to="/" className="col-auto me-2">
                 <img
-                  src={`http://localhost:9090/showimage?filename=ezmarketlogo.png&obj=brand`}
+                  src={`${API_BASE_URL}/showimage?filename=ezmarketlogo.png&obj=brand`}
                   alt="EzMarket Logo"
                   style={{ height: "40px" }}
                 />
@@ -85,7 +90,7 @@ const BrandHeader = () => {
         
         <div className={`brand-banner brand-${brand_id} d-flex justify-content-center border-bottom`} >
           <img 
-            src={`http://localhost:9090/showimage?filename=logo${brand_id}.png&obj=brand`} 
+            src={`${API_BASE_URL}/showimage?filename=logo${brand_id}.png&obj=brand`} 
             alt="Brand Logo" 
             className="img-fluid"
             style={{ maxHeight: "80px", cursor: "pointer" }}

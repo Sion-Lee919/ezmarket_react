@@ -4,6 +4,8 @@ import { useParams, Link } from "react-router-dom";
 import "../styles/BrandPage.css";
 import ItemRegister from "./Itemregister"; // ItemRegister 컴포넌트 임포트
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 function BrandPage() {
     const [items, setItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);  // 현재 페이지
@@ -13,7 +15,7 @@ function BrandPage() {
 
     useEffect(() => {
         axios({
-            url: `http://localhost:9090/getbranditems/${brandid}`,
+            url: `${API_BASE_URL}/getbranditems/${brandid}`,
             method: 'GET',
         })
         .then(function(res) {
@@ -24,7 +26,7 @@ function BrandPage() {
     const handleDelete = async (product_id) => {
         if (window.confirm("정말 삭제하시겠습니까?")) {
             try {
-                await axios.delete(`http://localhost:9090/brand/${brandid}/delete/${product_id}`);
+                await axios.delete(`${API_BASE_URL}/brand/${brandid}/delete/${product_id}`);
                 alert("상품이 삭제되었습니다.");
                 setItems(items.filter(item => item.product_id !== product_id)); // UI 업데이트
             } catch (error) {
@@ -105,7 +107,7 @@ function BrandPage() {
                                     <tr key={item.product_id} className={`list${index % 2}`}>
                                         <td rowSpan="2">{index + 1}</td>
                                         <td rowSpan="2"><Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`} className="item-name-link">
-                                          <img src={`http://localhost:9090/showimage?filename=${item.image_url}&obj=product`} width="80" height="80" alt={item.name} /></Link></td>
+                                          <img src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`} width="80" height="80" alt={item.name} /></Link></td>
                                         <td>{item.product_id}</td>
                                         <td colSpan="2" className="tal">{item.name}</td>
 
@@ -149,7 +151,7 @@ function BrandPage() {
                 <div className="overlay">
                     <div className="overlay-content">
                         <button className="close-btn" onClick={() => setShowOverlay(false)}>X</button>
-                        <ItemRegister onClose={() => setShowOverlay(false)} />
+                        <ItemRegister />
                     </div>
                 </div>
             )}

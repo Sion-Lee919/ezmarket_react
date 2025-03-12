@@ -4,8 +4,9 @@ import axios from "axios";
 
 import '../styles/Itemregister.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const ItemRegister = ({ onClose }) => {
-    const navigate = useNavigate();
     const [productId, setProductId] = useState(""); // product_id 상태 추가
     const [productName, setProductName] = useState("");
     const [description, setDescription] = useState("");
@@ -48,7 +49,7 @@ const ItemRegister = ({ onClose }) => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:9090/brand/id/registeritem`, formData, {
+            const response = await axios.post(`${API_BASE_URL}/brand/id/registeritem`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
