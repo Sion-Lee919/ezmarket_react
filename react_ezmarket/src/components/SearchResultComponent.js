@@ -80,7 +80,10 @@ const SearchResultComponent = () => {
     return (
         <div>
             <FilterComponent />
-            <h3>{searchParams.searchKeyword ? `"${searchParams.searchKeyword}" 검색 결과 ${totalCount}개` : `총 검색 결과 ${totalCount}개`}</h3>
+            <h3 className="text-center my-3 pb-2 custom-underline">
+                {searchParams.searchKeyword ? `"${searchParams.searchKeyword}" 검색 결과 ${totalCount}개` : `총 검색 결과 ${totalCount}개`}
+            </h3>
+
 
             <Container>
             <Row>
