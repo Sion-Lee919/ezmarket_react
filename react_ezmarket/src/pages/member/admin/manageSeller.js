@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';  
 import Cookies from 'js-cookie'
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const ManageSeller = () => {
   const [allBrands, setAllBrands] = useState([]);
   const [user, setUser] = useState(null);
@@ -13,7 +15,7 @@ const ManageSeller = () => {
     const token = Cookies.get('jwt_token');  
 
     if (token) {
-        axios.get('http://localhost:9090/userinfo', { 
+        axios.get(`${API_BASE_URL}/userinfo`, { 
             headers: { 'Authorization': `Bearer ${token}` }, 
             withCredentials: true
         })
@@ -37,7 +39,7 @@ const ManageSeller = () => {
   // 판매자 목록 가져오기
   useEffect(() => {
     axios
-      .get("http://localhost:9090/getAllBrands") 
+      .get(`${API_BASE_URL}/getAllBrands`) 
       .then((response) => {
         const sortedBrands = response.data;
         
@@ -56,7 +58,7 @@ const ManageSeller = () => {
   const handleAccept = (brand_id) => {
     if (window.confirm("정말 판매자의 신청을 승인하시겠습니까?")) {
     axios
-      .post("http://localhost:9090/sellAccept", null, {
+      .post(`${API_BASE_URL}/sellAccept`, null, {
         params: { brand_id },
       })
       .then(() => {
@@ -77,7 +79,7 @@ const ManageSeller = () => {
       if (!comment) return;
 
       axios
-        .post("http://localhost:9090/sellRefuse", null, {
+        .post(`${API_BASE_URL}/sellRefuse`, null, {
           params: { brand_id, brand_refusal_comment: comment },
         })
         .then(() => {
@@ -98,7 +100,7 @@ const ManageSeller = () => {
       if (!comment) return;
 
       axios
-        .post("http://localhost:9090/sellRefuse", null, {
+        .post(`${API_BASE_URL}/sellRefuse`, null, {
           params: { brand_id, brand_refusal_comment: comment },
         })
         .then(() => {

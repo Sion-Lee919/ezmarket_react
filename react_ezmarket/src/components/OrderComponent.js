@@ -4,6 +4,8 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { addressData } from "../values/address.value";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const provinces = Object.keys(addressData);
 
 const OrderComponent = () => {
@@ -97,7 +99,7 @@ const OrderComponent = () => {
         try {
             console.log("API 호출 전");
             const response = await axios.post(
-                "http://localhost:9090/buy/orderid", 
+                `${API_BASE_URL}/buy/orderid`, 
                 orderData,
                 {
                     headers: {
@@ -180,7 +182,7 @@ const OrderComponent = () => {
                                         <tr key={index}>
                                             <td>
                                                 <img 
-                                                    src={`http://localhost:9090/showimage?filename=${item.image}&obj=product`} 
+                                                    src={`${API_BASE_URL}/showimage?filename=${item.image}&obj=product`} 
                                                     alt={item.productName || '상품 이미지'} 
                                                     className="rounded" 
                                                     style={{ width: '50px', height: '50px', objectFit: 'cover' }}

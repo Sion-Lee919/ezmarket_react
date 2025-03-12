@@ -3,6 +3,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'; 
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const SellerApplication = () => {
   const [form, setForm] = useState({
     brand_id: '',
@@ -38,7 +40,7 @@ const SellerApplication = () => {
     const token = Cookies.get('jwt_token'); 
     
     if (token) {
-      axios.get('http://localhost:9090/userinfo', { 
+      axios.get(`${API_BASE_URL}/userinfo`, { 
         headers: { 'Authorization': `Bearer ${token}` }, 
         withCredentials: true
       })
@@ -82,7 +84,7 @@ const SellerApplication = () => {
     }
 
     try {
-      const response = await axios.get('http://localhost:9090/checkBrandNumber', {
+      const response = await axios.get(`${API_BASE_URL}/checkBrandNumber`, {
         params: { brand_number: enteredBrandNumber },
       });
 
@@ -115,7 +117,7 @@ const SellerApplication = () => {
     formData.append('brandlicense_url', brandLicenseFile); 
 
     try {
-      const response = await axios.post('http://localhost:9090/sellApplication', formData, {
+      const response = await axios.post(`${API_BASE_URL}/sellApplication`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

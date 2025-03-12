@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { debounce } from "lodash"; 
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const SearchComponent = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -15,7 +17,7 @@ const SearchComponent = () => {
     const fetchSuggestions = debounce(async (query) => {
         if (query.length > 1 && !isSearching) {
             try {
-                const res = await axios.get("http://localhost:9090/searchitems", {
+                const res = await axios.get(`${API_BASE_URL}/searchitems`, {
                     params: { searchKeyword: query }
                 });
                 if (Array.isArray(res.data)) {

@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/ItemSlideComponent.css"; // 스타일 적용
 
-const API_BASE_URL = "http://localhost:9090";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 function ItemSlideComponent() {
     const [randomItems, setRandomItems] = useState([]);

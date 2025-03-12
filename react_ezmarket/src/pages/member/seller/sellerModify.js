@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const SellerModify = () => {
   const [form, setForm] = useState({
     brand_id: "",
@@ -20,7 +22,7 @@ const SellerModify = () => {
     const token = Cookies.get('jwt_token'); 
     
     if (token) {
-      axios.get('http://localhost:9090/userinfo', { 
+      axios.get(`${API_BASE_URL}/userinfo`, { 
         headers: { 'Authorization': `Bearer ${token}` }, 
         withCredentials: true
       })
@@ -53,7 +55,7 @@ const SellerModify = () => {
     }
 
     try {
-      await axios.post('http://localhost:9090/sellModify', formData, {
+      await axios.post(`${API_BASE_URL}/sellModify`, formData, {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

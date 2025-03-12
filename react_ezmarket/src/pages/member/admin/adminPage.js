@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'
 import axios from 'axios';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const AdminPage = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -12,7 +14,7 @@ const AdminPage = () => {
         const token = Cookies.get('jwt_token');  
 
         if (token) {
-            axios.get('http://localhost:9090/userinfo', { 
+            axios.get(`${API_BASE_URL}/userinfo`, { 
                 headers: { 'Authorization': `Bearer ${token}` }, 
                 withCredentials: true
             })

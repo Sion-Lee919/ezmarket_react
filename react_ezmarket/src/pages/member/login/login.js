@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 import '../../../styles/Login.css';
 import { Placeholder } from 'react-bootstrap';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -27,7 +29,7 @@ const Login = () => {
           password: password,
       };
 
-      axios.post('http://localhost:9090/login', JSON.stringify(data), {
+      axios.post(`${API_BASE_URL}/login`, JSON.stringify(data), {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true, 
       })
@@ -60,19 +62,19 @@ const Login = () => {
   };
 
   const handleNaverLogin = () => {
-    window.location.href = 'http://localhost:9090/oauth2/authorization/naver';
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/naver`;
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:9090/oauth2/authorization/google';
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
   };
 
   const handleKakaoLogin = () => {
-    window.location.href = 'http://localhost:9090/oauth2/authorization/kakao';
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/kakao`;
   };
 
   const handleGithubLogin = () => {
-    window.location.href = 'http://localhost:9090/oauth2/authorization/github';
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/github`;
   };
 
   return (
