@@ -212,7 +212,7 @@ function ItemDetail() {
                     <tbody>
                         <tr>
                         <td style={{ padding: '8px', borderTop: '3px solid #333333', minWidth: '60px' }}><strong>판매가</strong></td>
-                        <td style={{ padding: '8px', borderTop: '3px solid #333333' }}>{dto.price ? `${dto.price}원` : '정보없음'}</td>
+                        <td style={{ padding: '8px', borderTop: '3px solid #333333' }}>{dto.price ? `${Number(dto.price).toLocaleString()}원` : '정보없음'}</td>
                         </tr>
                         <tr>
                         <td style={{ padding: '8px', minWidth: '60px'}}><strong style={{}}>구매혜택</strong></td>
@@ -295,6 +295,8 @@ function ItemDetail() {
                         <div>
                             <h4>상품 상세 정보</h4>
                             <p style={{fontSize : '20px'}}>{dto.description}</p>
+                            <h4>원재료</h4>
+                            <p style={{fontSize : '20px'}}>{dto.product_ingredient}</p>
                         </div>
                     )}
                     {activeTab === 'delivery' && (

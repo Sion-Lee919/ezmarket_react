@@ -3,12 +3,12 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    gap: 5px;
+    gap: 13px;
 }
 
 .pagination button {
     padding: 10px 15px;
-    font-size: 16px;
+    font-size: 20px;
     border: 1px solid rgb(145, 149, 151);
     background-color: rgb(255, 255, 255);
     cursor: pointer;
@@ -33,8 +33,6 @@
     cursor: not-allowed;
 }
 
-
-
 .card-img-custom {
     height: 250px; 
     object-fit: contain; 
@@ -47,3 +45,4 @@
     transform: scale(1.05); 
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
+

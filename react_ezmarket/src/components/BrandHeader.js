@@ -3,6 +3,7 @@ import { useState,useEffect } from "react";
 import Cookies from 'js-cookie';
 import BrandPageLink from "./BrandPageLink";
 import "../styles/BrandHeader.css";
+import SearchComponent from "./SearchComponent";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
@@ -61,26 +62,30 @@ const BrandHeader = () => {
                   style={{ height: "40px" }}
                 />
               </Link>
+                <div className="flex-grow-1 d-flex justify-content-center ms-4" style={{ maxWidth: "1000px" }}>
+                <SearchComponent/>
+                </div>
+             
     
               <div className="d-flex align-items-center ms-4">
-                  <button className="btn btn-outline-secondary px-3 me-1" onClick={handleCartClick}>
+                  <button className="btn custom-outline-primary px-3 me-1" onClick={handleCartClick}>
                     장바구니
                   </button>
                 {isLoggedIn ? (
                   <>
-                    <button className="btn btn-outline-danger px-3 me-1" onClick={handleLogout}>
+                    <button className="btn custom-outline-primary px-3 me-1" onClick={handleLogout}>
                       로그아웃
                     </button>
-                    <button className="btn btn-primary px-3" onClick={handleMyPageClick}>
+                    <button className="btn custom-outline-primary px-3" onClick={handleMyPageClick}>
                       내 정보
                     </button>
                   </>
                 ) : (
                   <>
-                    <button className="btn btn-outline-primary px-3 me-1" onClick={handleLoginClick}>
+                    <button className="btn custom-outline-primary px-3 me-1" onClick={handleLoginClick}>
                       로그인
                     </button>
-                    <button className="btn btn-primary px-3" onClick={handleSignupClick}>
+                    <button className="btn custom-outline-primary px-3" onClick={handleSignupClick}>
                       회원가입
                     </button>
                   </>
