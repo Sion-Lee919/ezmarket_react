@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 import '../../../styles/MyPage.css';
 import MyPageSideBar from './myPageSideBar';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const MyPage = () => {
   const [user, setUser] = useState({
     member_id: '',
@@ -16,6 +18,21 @@ const MyPage = () => {
     address: ''
   });
 
+  const [orderCounts, setOrderCounts] = useState({
+    pay: 0,
+    preparing: 0,
+    shipping: 0,
+    shipped: 0
+  });
+
+  // 쿠키에서 최근 본 상품 목록 가져오기
+  const [recently_viewed, setRecently_viewed] = useState([]);
+
+  useEffect(() => {
+    const viewed_items = JSON.parse(Cookies.get('recently_viewed'));
+    setRecently_viewed(viewed_items); 
+}, []);
+  
   const navigate = useNavigate();
 
   //로그인 안했을 때 내정보 접근시 리디렉트
@@ -23,7 +40,7 @@ const MyPage = () => {
     const token = Cookies.get('jwt_token'); 
     
     if (token) {
-      axios.get('http://localhost:9090/userinfo', { 
+      axios.get(`${API_BASE_URL}/userinfo`, { 
         headers: { 'Authorization': `Bearer ${token}` }, 
         withCredentials: true
       })
@@ -39,6 +56,17 @@ const MyPage = () => {
       navigate('/login');
     }
   }, [navigate]);
+
+  //주문 상황 가져오기
+  useEffect(() => {
+    axios.get(`${API_BASE_URL}/orderFlowCount`)
+      .then((response) => {
+        setOrderCounts(response.data);
+      })
+      .catch((error) => {
+        console.error('주문 상황 가져오기 실패:', error);
+      });
+  }, []);
 
   const handleAdminPageClick = () => {
     navigate(`/my/admin`);
@@ -59,7 +87,7 @@ const MyPage = () => {
           {user.userauthor === 2 && (
           <button className="seller-page-button" onClick={handleSellerPageClick}>판매자 페이지</button>
           )}
-          {user.realname}님은 <br></br> {user.userauthor === 0 ? "관리자" : user.userauthor === 2 ? "판매자" : "일반회원"}입니다<br></br>
+          <div style={{ fontSize : "18px" , fontWeight: "bold" }}>{user.realname}님은 <br></br> {user.userauthor === 0 ? <span style ={{ color: "red" }}>"관리자"</span> : user.userauthor === 2 ? <span style = {{ color: "blue" }}>"판매자"</span> : <span style = {{ color: "green" }}>"일반회원"</span>}입니다</div>
         </div>
         <div className="mypage-box-info">
           <img src="/images/tempo1.png" alt="임시 이미지1" className="point-image"></img>
@@ -73,74 +101,81 @@ const MyPage = () => {
         </div>
 
         <div className="mypage-box-order-flow">
-          {user.username}의 주문 내역 진행 상황을 보여줄 계획
           <div className="order-flow-detail">
               <div>
                 <div>결제 완료</div>
                 <div className="order-flow-box">
-                  숫자
+                  <img src="/images/pay.jpg" alt="결제 완료"></img>
                 </div>
+                <div className="order-flow-count">{orderCounts.pay}</div>
               </div>
               <div>
                 <div>상품 준비중</div>
                 <div className="order-flow-box">
-                  숫자
+                  <img src="/images/preparing.jpg" alt="상품 준비중"></img>
                 </div>
+                <div className="order-flow-count">{orderCounts.preparing}</div>
               </div>
               <div>
                 <div>배송중</div>
                 <div className="order-flow-box">
-                  숫자
+                 <img src="/images/delivering.jpg" alt="배송중"></img>
                 </div>
+                <div className="order-flow-count">{orderCounts.shipping}</div>
               </div>
               <div>
                 <div>배송 완료</div>
                 <div className="order-flow-box">
-                  숫자
+                  <img src="/images/delivered.jpg" alt="배송 완료"></img>
                 </div>
+                <div className="order-flow-count">{orderCounts.shipped}</div>
               </div>
           </div> 
         </div>
         <div className="mypage-box-order-image">
-          {user.username}의 최근 주문 내역을 이미지로 5개 보여주고, 누르면 상품페이지로 이동할 계획
           <div className="order-image-detail">
             <div>
-              <div>상품1</div>
+              <div>{recently_viewed[0] ? recently_viewed[0].name : '　'}</div>
               <div className="order-image-box">
-                <a href="localhost:3000/item/brand-url">
-                  <img src="brand-image-url" alt="최근 1번"></img>
+                <a href={`/item/${recently_viewed[0] ? recently_viewed[0].product_id : '#'}`}
+                style={recently_viewed[0] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
+                  <img src={recently_viewed[0] ? recently_viewed[0].image_url : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`1번`}/>
                 </a>
               </div>
             </div>
             <div>
-              <div>상품2</div>
+              <div>{recently_viewed[1] ? recently_viewed[1].name : '　'}</div>
               <div className="order-image-box">
-                <a href="localhost:3000/item/brand-url">
-                  <img src="brand-image-url" alt="최근 2번"></img>
+                <a href={`/item/${recently_viewed[1] ? recently_viewed[1].product_id : '#'}`}
+                style={recently_viewed[1] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
+                  <img src={recently_viewed[1] ? recently_viewed[1].image_url : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`2번`}/>
                 </a>
               </div>
             </div>
             <div>
-              <div>상품3</div>
+              <div>{recently_viewed[2] ? recently_viewed[2].name : '　'}</div>
               <div className="order-image-box">
-                <a href="localhost:3000/item/brand-url">
-                  <img src="brand-image-url" alt="최근 3번"></img>
+                <a href={`/item/${recently_viewed[2] ? recently_viewed[2].product_id : '#'}`}
+                style={recently_viewed[2] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
+                  <img src={recently_viewed[2] ? recently_viewed[2].image_url : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`3번`}/>
                 </a>
               </div>
             </div>
             <div>
-              <div>상품4</div>
+              <div>{recently_viewed[3] ? recently_viewed[3].name : '　'}</div>
               <div className="order-image-box">
-                <a href="localhost:3000/item/brand-url">
-                  <img src="brand-image-url" alt="최근 4번"></img>
+                <a href={`/item/${recently_viewed[3] ? recently_viewed[3].product_id : '#'}`}
+                style={recently_viewed[3] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
+                 <img src={recently_viewed[3] ? recently_viewed[3].image_url : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`4번`}/>
                 </a>
               </div>
             </div>
             <div>
-              <div>상품5</div>
+              <div>{recently_viewed[4] ? recently_viewed[4].name : '　'}</div>
               <div className="order-image-box">
-                <a href="localhost:3000/item/brand-url">
-                  <img src="brand-image-url" alt="최근 5번"></img>
+                <a href={`/item/${recently_viewed[4] ? recently_viewed[4].product_id : '#'}`}
+                style={recently_viewed[4] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
+                  <img src={recently_viewed[4] ? recently_viewed[4].image_url : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`5번`} />
                 </a>
               </div>
             </div>

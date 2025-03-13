@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';  
-import { useNavigate } from 'react-router-dom';  
+import { useLocation, useNavigate } from 'react-router-dom';  
 import Cookies from 'js-cookie';
 import '../../../styles/MyPageSideBar.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 const MyPageSideBar = () => {
     const [user, setUser] = useState({
@@ -17,12 +18,28 @@ const MyPageSideBar = () => {
     });
   
     const navigate = useNavigate();
+    const location = useLocation();
+    const [sideBarTitle, setSideBarTitle] = useState('내 정보');
+
+    useEffect(() => {
+      if (location.pathname === '/my/order') {
+        setSideBarTitle('주문 목록');
+      } else if (location.pathname === '/my/qna') {
+        setSideBarTitle('상품 문의 내역');
+      } else if (location.pathname === '/my/1-1qna') {
+        setSideBarTitle('1:1 문의 내역');
+      } else if (location.pathname === '/my/review') {
+        setSideBarTitle('상품 후기 내역');
+      } else {
+        setSideBarTitle('내 정보');
+      }
+    }, [location.pathname]);
   
     useEffect(() => {
       const token = Cookies.get('jwt_token'); 
       
       if (token) {
-        axios.get('http://localhost:9090/userinfo', { 
+        axios.get(`${API_BASE_URL}/userinfo`, { 
           headers: { 'Authorization': `Bearer ${token}` }, 
           withCredentials: true
         })
@@ -42,20 +59,24 @@ const MyPageSideBar = () => {
     const handleModify = () => {
       navigate(`/my/modify?username=${user.username}`);
     }
-  
+
+    const handleMyReview = () => {
+      navigate(`/my/review`);
+    }
+
+    const handleOrder = () => {
+      navigate(`/my/order`);
+    }
 
 return(
     <div className="side-bar">
 
       <div className="side-bar-title">
-        내 정보
+        {sideBarTitle}
       </div>
       <hr></hr>
       <div>
-        <button>주문 목록</button>
-      </div>
-      <div>
-        <button>찜 목록</button>
+        <button onClick={handleOrder}>주문 목록</button>
       </div>
       <hr style={{ width: "75px" }}></hr>
       <div>
@@ -63,6 +84,9 @@ return(
       </div>
       <div>
         <button>1:1  문의 내역</button>
+      </div>
+      <div>
+        <button onClick={handleMyReview}>상품 후기 내역</button>
       </div>
       <hr style={{ width: "75px" }}></hr>
       <div>

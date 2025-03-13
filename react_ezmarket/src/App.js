@@ -40,6 +40,7 @@ import BrandHeader from './components/BrandHeader.js';
 
 import SellerModify from './pages/member/seller/sellerModify.js';
 import JoinSuccess from './pages/member/join/joinSuccess.js';
+import MyReview from './pages/member/my/myReview.js';
 
 
 function App() {
@@ -57,8 +58,7 @@ function App() {
         <Route path='/my/order' element={<MyOrder/>}/>
 
         <Route path='/brand/:brandid' element={<BrandPage/>}/>
-        <Route path='/brand/:brandid/itemregister/' element={<ItemRegister/>}/>
-        <Route path='/items' element={<SearchResultComponent/>}/>
+                <Route path='/items' element={<SearchResultComponent/>}/>
         <Route path='/brandItems' element={<BrandItem/>}/>
         
 
@@ -71,6 +71,8 @@ function App() {
         <Route path="/login/findPw/resetPw" element={<ResetPw />} />
         <Route path="/my/modify" element={<Modify />} />
         <Route path="/my" element={<MyPage />} />
+        <Route path="/my/order" element={<MyOrder />} />
+        <Route path="/my/review" element={<MyReview />} />
         <Route path="/" element={<Main />} />
         <Route path="/commerce" element={<SellerApplication />} />
         <Route path="/my/admin" element={<AdminPage/>} />
