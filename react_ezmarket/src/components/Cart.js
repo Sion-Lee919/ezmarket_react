@@ -137,25 +137,27 @@ const Cart = () => {
                     <div className="text-end mt-3">
                         <h4>총 가격: {getTotalPrice().toLocaleString()} 원</h4>
                         <button 
-                            onClick={() => {
-                                const selectedCartItems = cartItems
-                                    .filter(item => selectedItems.includes(item.cartId))
-                                    .map(item => ({
-                                        productId: item.productId,
-                                        quantity: item.quantity,
-                                        totalPrice: item.price * item.quantity,
-                                        productName: item.productName, 
-                                        price: item.price,
-                                        image: item.image
-                                    }));
 
-                                navigate(`/order`, { state: { selectedCartItems } });
-                            }}
-                            style={{ marginTop: '10px', padding: '10px 20px' }}
-                            className="btn btn-info mt-2"
-                        >
-                            결제하기
-                        </button>
+    onClick={() => {
+        const selectedCartItems = cartItems
+            .filter(item => selectedItems.includes(item.cartId))
+            .map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                totalPrice: item.price * item.quantity,
+                productName: item.productName, 
+                price: item.price,
+                image: item.image
+            }));
+
+        navigate(`/buy/orderid`, { state: { selectedCartItems } });
+    }}
+    style={{ marginTop: '10px', padding: '10px 20px' }}
+    className="btn btn-info mt-2"
+>
+    결제하기
+</button>
+
                     </div>
                 </div>
             )}
