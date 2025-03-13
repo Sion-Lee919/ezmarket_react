@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';  
 import Cookies from 'js-cookie';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const ManageUser = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [user, setUser] = useState(null);
@@ -13,7 +15,7 @@ const ManageUser = () => {
     const token = Cookies.get('jwt_token');  
 
     if (token) {
-        axios.get('http://localhost:9090/userinfo', { 
+        axios.get(`${API_BASE_URL}/userinfo`, { 
             headers: { 'Authorization': `Bearer ${token}` }, 
             withCredentials: true
         })
@@ -37,7 +39,7 @@ const ManageUser = () => {
   // 유저 목록 가져오기
   useEffect(() => {
     axios
-      .get("http://localhost:9090/getAllUsers") 
+      .get(`${API_BASE_URL}/getAllUsers`) 
       .then((response) => {
         setAllUsers(response.data);
       })
@@ -53,7 +55,7 @@ const ManageUser = () => {
       if (!comment) return;
 
       axios
-        .post("http://localhost:9090/kick", null, {
+        .post(`${API_BASE_URL}/kick`, null, {
           params: { member_id, member_kick_comment: comment },
         })
         .then(() => {
@@ -72,7 +74,7 @@ const ManageUser = () => {
     if (window.confirm(`정말 ${member_id}의 정보를 복구 하시겠습니까?`)) {
 
       axios
-        .post("http://localhost:9090/restore", null, {
+        .post(`${API_BASE_URL}/restore`, null, {
           params: { member_id, member_kick_comment: '공백처리' },
         })
         .then(() => {

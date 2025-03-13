@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // useNavigate 훅을 import
+import "../styles/KakaomapShopInfoComponent.css";
+
+const API_BASE_URL = "http://localhost:9090";
 
 const KakaomapShopInfoComponent = () => {
     const [location, setLocation] = useState({ latitude: null, longitude: null });
@@ -8,9 +11,11 @@ const KakaomapShopInfoComponent = () => {
     const [dtoList, setDtoList] = useState([]); // address + brand_id
     const navigate = useNavigate(); // navigate 함수 정의
 
+
+    
     useEffect(() => {
         axios({
-            url: `http://localhost:9090/brandaddress`,
+            url: `${API_BASE_URL}/brandaddress`,
             method: 'GET',
         })
         .then(function(res){
@@ -102,7 +107,7 @@ const KakaomapShopInfoComponent = () => {
             // 마커에 마우스오버
             window.kakao.maps.event.addListener(marker, 'mouseover', function() {
                 // 브랜드 로고가 보입니다
-                const logoUrl = `http://localhost:9090/showimage?filename=logo${place?.brand_id}.png&obj=brand`;
+                const logoUrl = `${API_BASE_URL}/showimage?filename=logo${place?.brand_id}.png&obj=brand`;
                 infowindow.setContent('<div style="width:200px;height:200px;padding:0;border-radius:8px"><img src="' + logoUrl + '" alt="Brand Logo" style="width:100%;height:100%;object-fit:cover;" /></div>');
                 infowindow.open(map, marker);
             });

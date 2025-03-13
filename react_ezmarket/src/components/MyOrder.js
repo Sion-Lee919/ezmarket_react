@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cookies from 'js-cookie';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const MyOrder = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ const MyOrder = () => {
 
     const fetchProductDetails = async (productId) => {
         try {
-            const response = await axios.get(`http://localhost:9090/item/${productId}`);
+            const response = await axios.get(`${API_BASE_URL}/item/${productId}`);
             return response.data;
         } catch (error) {
             console.error(`상품 ID ${productId} 정보 조회 실패:`, error);
@@ -37,7 +39,7 @@ const MyOrder = () => {
             try {
                 console.log("주문 목록 API 호출 시도..."); 
                 const response = await axios.get(
-                    "http://localhost:9090/buy/my/order", 
+                    `${API_BASE_URL}/buy/my/order`, 
                     {
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -181,7 +183,7 @@ const MyOrder = () => {
                                                     <td className="d-flex align-items-center">
                                                         {productDetail.image_url && (
                                                             <img 
-                                                                src={`http://localhost:9090/showimage?filename=${productDetail.image_url}&obj=product`} 
+                                                                src={`${API_BASE_URL}/showimage?filename=${productDetail.image_url}&obj=product`} 
                                                                 alt={productDetail.name || `상품 ${product.productId}`} 
                                                                 className="me-3 rounded" 
                                                                 style={{ width: '60px', height: '60px', objectFit: 'cover' }}

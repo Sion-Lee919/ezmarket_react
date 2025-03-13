@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+
+import { useParams, useNavigate } from "react-router-dom";
+
 import Cookies from 'js-cookie';
 
 import ReviewComponent from "./ReviewComponent";
 import QnAChatComponent from "./QnAChatComponent";
 import QnAChatRoomListComponent from "./QnAChatRoomListComponent";
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 const style = {
     tabButton: {
@@ -30,26 +35,28 @@ function ItemDetail() {
     const [activeTab, setActiveTab] = useState('detail');
     const [user, setUser] = useState(null);
     const [brandid, setBrandid] = useState();
-
     const [reviewList, setReviewList] = useState([]);
-
     const navigate = useNavigate();
 
     useEffect(() => {
         axios({
-            url: `http://localhost:9090/getreview/${itemid}`,
+            url: `${API_BASE_URL}/getreview/${itemid}`,
             method: 'GET',
         })
         .then(function(res) {
             setReviewList(res.data);
         });
-    }, [reviewList]);
+
+    }, [reviewList])
+
 
     useEffect(() => {
         const token = Cookies.get('jwt_token');
         if (token) {
             setIsLoggedIn(true);
-            axios.get('http://localhost:9090/userinfo', { 
+
+            axios.get(`${API_BASE_URL}/userinfo`, { 
+
                 headers: { 'Authorization': `Bearer ${token}` }, 
                 withCredentials: true
             })
@@ -62,16 +69,20 @@ function ItemDetail() {
                 navigate('/login');
             });
         }
-    }, []);
+
+    }, [])
 
     useEffect(() => {
         axios({
-            url: `http://localhost:9090/item/${itemid}`,
-            method: 'GET',
+            url : `${API_BASE_URL}/item/${itemid}`,
+            method : 'GET',
+
         })
         .then(function(res) {
             setDto(res.data);
-        });
+
+        })
+
     }, [itemid]);
 
     const handleLoginClick = () => {
@@ -101,8 +112,10 @@ function ItemDetail() {
     };
 
     const checkUserState = (user) => {
-        if (user != null) {
-            axios.get(`http://localhost:9090/brandinfo?memberid=${user.member_id}`)
+
+        if (user != null){
+            axios.get(`${API_BASE_URL}/brandinfo?memberid=${user.member_id}`)
+
                 .then(response => {
                     if (response.data) {
                         setBrandid(response.data.brand_id);
@@ -158,7 +171,7 @@ function ItemDetail() {
 
         try {
             const response = await axios.post(
-                "http://localhost:9090/api/cart/add",
+                `${API_BASE_URL}/api/cart/add`,
                 null,
                 {
                     params: {
@@ -196,39 +209,45 @@ function ItemDetail() {
                 paddingTop: '10px',
                 height: 'auto'
             }}>
-                <div className="product-image" style={{ width: '500px', height: 'auto', border: '2px solid #838383' }}>
+                <div className="product-image" style={{ width: '500px', height: '600px', border: '2px solid #838383'  }}>
                     <img
+
+
                         alt="제품 이미지"
-                        src={`http://localhost:9090/showimage?filename=${dto.image_url}&obj=product`}
+                        src={`${API_BASE_URL}/showimage?filename=${dto.image_url}&obj=product`}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+
+
                     />
                 </div>
                 <div className="product-details" style={{ width: '400px', height: 'auto' }}>
                     <h3 className="product-title">{dto.name || '정보없음'}</h3>
         
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                        <tbody>
-                            <tr>
-                                <td style={{ padding: '8px', borderTop: '3px solid #333333', minWidth: '60px' }}><strong>판매가</strong></td>
-                                <td style={{ padding: '8px', borderTop: '3px solid #333333' }}>{dto.price ? `${dto.price}원` : '정보없음'}</td>
-                            </tr>
-                            <tr>
-                                <td style={{ padding: '8px', minWidth: '60px'}}><strong style={{}}>구매혜택</strong></td>
-                                <td style={{ padding: '8px'}}>적립 포인트 : {(dto.price * 0.05) || '정보없음'}이지</td>
-                            </tr>
-                            <tr>
-                                <td style={{ padding: '8px', minWidth: '60px'}}><strong>판매자</strong></td>
-                                <td style={{ padding: '8px'}}>{dto.brandname || '정보없음'}</td>
-                            </tr>
-                            <tr>
-                                <td style={{ padding: '8px', minWidth: '60px'}}><strong>구매제한</strong></td>
-                                <td style={{ padding: '8px'}}>{dto.stock_quantity || '정보없음'}</td>
-                            </tr>
-                            <tr>
-                                <td style={{ padding: '8px', minWidth: '60px', borderBottom: '3px solid #333333' }}><strong>양조장</strong></td>
-                                <td style={{ padding: '8px', borderBottom: '3px solid #333333' }}>{dto.product_region || '정보없음'}</td>
-                            </tr>
-                        </tbody>
+
+                    <tbody>
+                        <tr>
+                        <td style={{ padding: '8px', borderTop: '3px solid #333333', minWidth: '60px' }}><strong>판매가</strong></td>
+                        <td style={{ padding: '8px', borderTop: '3px solid #333333' }}>{dto.price ? `${Number(dto.price).toLocaleString()}원` : '정보없음'}</td>
+                        </tr>
+                        <tr>
+                        <td style={{ padding: '8px', minWidth: '60px'}}><strong style={{}}>구매혜택</strong></td>
+                        <td style={{ padding: '8px'}}>적립 포인트 : {(dto.price * 0.05) || '정보없음'}이지</td>
+                        </tr>
+                        <tr>
+                        <td style={{ padding: '8px', minWidth: '60px'}}><strong>판매자</strong></td>
+                        <td style={{ padding: '8px'}}>{dto.brandname || '정보없음'}</td>
+                        </tr>
+                        <tr>
+                        <td style={{ padding: '8px', minWidth: '60px'}}><strong>구매제한</strong></td>
+                        <td style={{ padding: '8px'}}>{dto.stock_quantity || '정보없음'}</td>
+                        </tr>
+                        <tr>
+                        <td style={{ padding: '8px', minWidth: '60px', borderBottom: '3px solid #333333' }}><strong>양조장</strong></td>
+                        <td style={{ padding: '8px', borderBottom: '3px solid #333333' }}>{dto.product_region || '정보없음'}</td>
+                        </tr>
+                    </tbody>
+
                     </table>
                     <div>
                         {isLoggedIn ? (
@@ -292,7 +311,11 @@ function ItemDetail() {
                     {activeTab === 'detail' && (
                         <div>
                             <h4>상품 상세 정보</h4>
-                            <p style={{fontSize: '20px'}}>{dto.description}</p>
+
+                            <p style={{fontSize : '20px'}}>{dto.description}</p>
+                            <h4>원재료</h4>
+                            <p style={{fontSize : '20px'}}>{dto.product_ingredient}</p>
+
                         </div>
                     )}
                     {activeTab === 'delivery' && (
