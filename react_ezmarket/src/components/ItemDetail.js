@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useParams,useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 import ReviewComponent from "./ReviewComponent";
@@ -20,13 +20,11 @@ const style = {
         fontSize: '24px',
         fontWeight: '530',
     }
-
 }
 
-function ItemDetail(){
-
+function ItemDetail() {
     const [dto, setDto] = useState(null);
-    const {itemid} = useParams();
+    const { itemid } = useParams();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('detail');
@@ -42,41 +40,39 @@ function ItemDetail(){
             url: `http://localhost:9090/getreview/${itemid}`,
             method: 'GET',
         })
-        .then(function(res){
+        .then(function(res) {
             setReviewList(res.data);
         });
-          }, [reviewList])
+    }, [reviewList]);
 
     useEffect(() => {
         const token = Cookies.get('jwt_token');
-            if (token) {
-              setIsLoggedIn(true);
-              axios.get('http://localhost:9090/userinfo', { 
+        if (token) {
+            setIsLoggedIn(true);
+            axios.get('http://localhost:9090/userinfo', { 
                 headers: { 'Authorization': `Bearer ${token}` }, 
                 withCredentials: true
-              })
-              .then(response => {
+            })
+            .then(response => {
                 setUser(response.data);
-              })
-              .catch(error => {
+            })
+            .catch(error => {
                 alert(error.response.data.message);
                 Cookies.remove('jwt_token');
                 navigate('/login');
-              });
-            }
-          }, [])
+            });
+        }
+    }, []);
 
     useEffect(() => {
-
         axios({
-            url : `http://localhost:9090/item/${itemid}`,
-            method : 'GET',
-
+            url: `http://localhost:9090/item/${itemid}`,
+            method: 'GET',
         })
-        .then(function(res){
+        .then(function(res) {
             setDto(res.data);
-        })
-    }, [itemid])
+        });
+    }, [itemid]);
 
     const handleLoginClick = () => {
         navigate('/login');  
@@ -84,7 +80,7 @@ function ItemDetail(){
 
     const handleIncreaseQuantity = () => {
         if (quantity < dto.stock_quantity)
-        setQuantity(prevQuantity => prevQuantity + 1);
+            setQuantity(prevQuantity => prevQuantity + 1);
     };
 
     const handleDecreaseQuantity = () => {
@@ -105,10 +101,10 @@ function ItemDetail(){
     };
 
     const checkUserState = (user) => {
-        if (user != null){
+        if (user != null) {
             axios.get(`http://localhost:9090/brandinfo?memberid=${user.member_id}`)
                 .then(response => {
-                    if(response.data){
+                    if (response.data) {
                         setBrandid(response.data.brand_id);
                     } else {
                         setBrandid(null);
@@ -121,7 +117,7 @@ function ItemDetail(){
             alert("로그인 후 가능한 기능입니다");
             navigate('/login');
         }
-    }
+    };
 
     const getTokenFromCookie = () => {
         return Cookies.get("jwt_token") || null;
@@ -190,57 +186,55 @@ function ItemDetail(){
 
     return (
         <div>
-
             <div className="product-page-top" style={{
-            display: 'flex', 
-            flexDirection: 'row', 
-            gap: '20px',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            justifyContent: 'center',
-            paddingTop: '10px',
-            height: 'auto'
+                display: 'flex', 
+                flexDirection: 'row', 
+                gap: '20px',
+                maxWidth: '1200px',
+                margin: '0 auto',
+                justifyContent: 'center',
+                paddingTop: '10px',
+                height: 'auto'
             }}>
                 <div className="product-image" style={{ width: '500px', height: 'auto', border: '2px solid #838383' }}>
                     <img
-                    alt="제품 이미지"
-                    src={`http://localhost:9090/showimage?filename=${dto.image_url}&obj=product`}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        alt="제품 이미지"
+                        src={`http://localhost:9090/showimage?filename=${dto.image_url}&obj=product`}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                 </div>
                 <div className="product-details" style={{ width: '400px', height: 'auto' }}>
                     <h3 className="product-title">{dto.name || '정보없음'}</h3>
         
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <tbody>
-                        <tr>
-                        <td style={{ padding: '8px', borderTop: '3px solid #333333', minWidth: '60px' }}><strong>판매가</strong></td>
-                        <td style={{ padding: '8px', borderTop: '3px solid #333333' }}>{dto.price ? `${dto.price}원` : '정보없음'}</td>
-                        </tr>
-                        <tr>
-                        <td style={{ padding: '8px', minWidth: '60px'}}><strong style={{}}>구매혜택</strong></td>
-                        <td style={{ padding: '8px'}}>적립 포인트 : {(dto.price * 0.05) || '정보없음'}이지</td>
-                        </tr>
-                        <tr>
-                        <td style={{ padding: '8px', minWidth: '60px'}}><strong>판매자</strong></td>
-                        <td style={{ padding: '8px'}}>{dto.brandname || '정보없음'}</td>
-                        </tr>
-                        <tr>
-                        <td style={{ padding: '8px', minWidth: '60px'}}><strong>구매제한</strong></td>
-                        <td style={{ padding: '8px'}}>{dto.stock_quantity || '정보없음'}</td>
-                        </tr>
-                        <tr>
-                        <td style={{ padding: '8px', minWidth: '60px', borderBottom: '3px solid #333333' }}><strong>양조장</strong></td>
-                        <td style={{ padding: '8px', borderBottom: '3px solid #333333' }}>{dto.product_region || '정보없음'}</td>
-                        </tr>
-
-                    </tbody>
+                        <tbody>
+                            <tr>
+                                <td style={{ padding: '8px', borderTop: '3px solid #333333', minWidth: '60px' }}><strong>판매가</strong></td>
+                                <td style={{ padding: '8px', borderTop: '3px solid #333333' }}>{dto.price ? `${dto.price}원` : '정보없음'}</td>
+                            </tr>
+                            <tr>
+                                <td style={{ padding: '8px', minWidth: '60px'}}><strong style={{}}>구매혜택</strong></td>
+                                <td style={{ padding: '8px'}}>적립 포인트 : {(dto.price * 0.05) || '정보없음'}이지</td>
+                            </tr>
+                            <tr>
+                                <td style={{ padding: '8px', minWidth: '60px'}}><strong>판매자</strong></td>
+                                <td style={{ padding: '8px'}}>{dto.brandname || '정보없음'}</td>
+                            </tr>
+                            <tr>
+                                <td style={{ padding: '8px', minWidth: '60px'}}><strong>구매제한</strong></td>
+                                <td style={{ padding: '8px'}}>{dto.stock_quantity || '정보없음'}</td>
+                            </tr>
+                            <tr>
+                                <td style={{ padding: '8px', minWidth: '60px', borderBottom: '3px solid #333333' }}><strong>양조장</strong></td>
+                                <td style={{ padding: '8px', borderBottom: '3px solid #333333' }}>{dto.product_region || '정보없음'}</td>
+                            </tr>
+                        </tbody>
                     </table>
                     <div>
-                        {isLoggedIn? (
-                        <>
-                            <div style={{ width: '100px',marginTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <strong style={{ marginLeft: '10px',marginRight: '10px',minWidth: '40px'  }}>수량</strong>
+                        {isLoggedIn ? (
+                            <>
+                                <div style={{ width: '100px', marginTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <strong style={{ marginLeft: '10px', marginRight: '10px', minWidth: '40px' }}>수량</strong>
                                     <button
                                         onClick={handleDecreaseQuantity}
                                         style={{ padding: '5px 10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc' }}
@@ -248,29 +242,29 @@ function ItemDetail(){
                                         -
                                     </button>
                                     <input
-                                    type="text"
-                                    value={quantity}
-                                    onChange={handleQuantityChange}
-                                    style={{
-                                        width: '50px',
-                                        textAlign: 'center',
-                                        padding: '5px',
-                                        border: '1px solid #ccc',
-                                        borderRadius: '4px'
-                                    }}
-                                />
+                                        type="text"
+                                        value={quantity}
+                                        onChange={handleQuantityChange}
+                                        style={{
+                                            width: '50px',
+                                            textAlign: 'center',
+                                            padding: '5px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px'
+                                        }}
+                                    />
                                     <button
                                         onClick={handleIncreaseQuantity}
                                         style={{ padding: '5px 8px', backgroundColor: '#f0f0f0', border: '1px solid #ccc' }}
                                     >
                                         +
                                     </button>
-                            </div>
-                            <button className="add-to-cart" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={() => handleAddToCart(itemid,quantity)}>장바구니에 추가</button>
-                            <button className="buy-now" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleBuyNow}>즉시 구매</button>
-                        </>
+                                </div>
+                                <button className="add-to-cart" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={() => handleAddToCart(itemid, quantity)}>장바구니에 추가</button>
+                                <button className="buy-now" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleBuyNow}>즉시 구매</button>
+                            </>
                         ) : (
-                        <button className="sign-up-to-buy" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleLoginClick}>회원가입 후 구매</button>
+                            <button className="sign-up-to-buy" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleLoginClick}>회원가입 후 구매</button>
                         )}
                     </div>
                 </div>
@@ -286,7 +280,6 @@ function ItemDetail(){
                 paddingTop: '50px',
                 height: 'auto'
             }}>
-
                 <div style={{ flexDirection: 'row', gap: '10px' }}>
                     <button style={style.tabButton} onClick={() => handleTabClick('detail')}>상품 상세 정보</button>
                     <button style={style.tabButton} onClick={() => handleTabClick('delivery')}>배송 안내</button>
@@ -295,12 +288,11 @@ function ItemDetail(){
                     <button style={style.tabButton} onClick={() => {checkUserState(user); handleTabClick('inquiry'); }}>상품 문의</button>
                 </div>
                 <></>
-
                 <div style={{ flex: 1, minWidth: '250px', padding: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
                     {activeTab === 'detail' && (
                         <div>
                             <h4>상품 상세 정보</h4>
-                            <p style={{fontSize : '20px'}}>{dto.description}</p>
+                            <p style={{fontSize: '20px'}}>{dto.description}</p>
                         </div>
                     )}
                     {activeTab === 'delivery' && (
@@ -316,27 +308,23 @@ function ItemDetail(){
                         </div>
                     )}
                     {activeTab === 'review' && (
-                        <ReviewComponent product={ dto }></ReviewComponent>
+                        <ReviewComponent product={dto}></ReviewComponent>
                     )}
                     {activeTab === 'inquiry' && (
                         brandid === dto.brand_id ? (
                             <div>
-                                <QnAChatRoomListComponent product={dto} isSeller = {true}/>
+                                <QnAChatRoomListComponent product={dto} isSeller={true}/>
                             </div>
                         ) : (
                             <div>
-                                <QnAChatComponent product={dto} isSeller = {false}/>
+                                <QnAChatComponent product={dto} isSeller={false}/>
                             </div>
                         )
                     )}
                 </div>
             </div>
-        
         </div>
-      );
-      
-      
-
+    );
 }
 
 export default ItemDetail;

@@ -147,7 +147,7 @@ const Cart = () => {
                 image: item.image
             }));
 
-        navigate(`/order`, { state: { selectedCartItems } });
+        navigate(`/buy/orderid`, { state: { selectedCartItems } });
     }}
     style={{ marginTop: '10px', padding: '10px 20px' }}
     className="btn btn-info mt-2"
