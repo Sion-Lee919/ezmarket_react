@@ -45,7 +45,7 @@ const FilterComponent = () => {
         "최신순" : "latest",
         "낮은 가격순" : "lowPrice",
         "높은 가격순" : "highPrice",
-        "인기순" : "popular"
+        "인기순" : "popular",
     };
     
     return (
@@ -55,7 +55,7 @@ const FilterComponent = () => {
             <div className="filter-row">
                 {/* 대분류 */}
                 <select
-                    className="filter-select"
+                    className="filter-select custom-select"
                     value={filters.bigcategory}
                     onChange={(e) => updateQueryParams("bigcategory", e.target.value)}
                 >
@@ -92,13 +92,13 @@ const FilterComponent = () => {
                     ))}
                 </select>
 
-                {/* 신상품 버튼 */}
+                {/* 신상품 버튼
                 <button
                     className={`filter-button ${filters.newProduct ? "active" : ""}`}
                     onClick={() => updateQueryParams("newProduct", !filters.newProduct)}
                 >
                     {filters.newProduct ? "신상품" : "신상품"}
-                </button>
+                </button> */}
             </div>
         </div>
     );

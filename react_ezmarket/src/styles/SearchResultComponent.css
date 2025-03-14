@@ -3,37 +3,35 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    gap: 5px;
+    gap: 13px;
 }
 
 .pagination button {
     padding: 10px 15px;
-    font-size: 16px;
-    border: 1px solid black;
-    background-color: white;
+    font-size: 20px;
+    border: 1px solid rgb(145, 149, 151);
+    background-color: rgb(255, 255, 255);
     cursor: pointer;
     border-radius: 5px;
 }
 
 .pagination button:hover {
-    background-color: yellow;
-    color: red;
+    background-color: rgb(24, 159, 219);
+    color: white;
 }
 
 .pagination button.active {
-    background-color: blue; 
+    background-color: rgb(0, 81, 255); 
     color: white;
     font-weight: bold;
-    border-color: blue;
+    border-color: rgb(0, 81, 255);
 }
 
 .pagination button:disabled {
-    background-color: gray;
-    color: black;
+    background-color: rgb(134, 131, 131);
+    color: white;
     cursor: not-allowed;
 }
-
-
 
 .card-img-custom {
     height: 250px; 
@@ -47,3 +45,4 @@
     transform: scale(1.05); 
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
+

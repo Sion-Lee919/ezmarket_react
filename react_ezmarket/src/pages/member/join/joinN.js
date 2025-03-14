@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/JoinN.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const JoinN = () => {
   const [form, setForm] = useState({
     member_id: '',
@@ -32,18 +34,18 @@ const JoinN = () => {
   const navigate = useNavigate();
 
   //접근 시 회원가입 약간 동의 필요
-      useEffect(() => {
-          const isJoinValid = sessionStorage.getItem('joinValid');
-  
-          if (!isJoinValid) {
-              alert('잘못된 접근입니다. 회원가입 약관 동의를 먼저 진행해주세요.');
-              navigate('/join');
-              sessionStorage.removeItem('joinValid');
-          }
+  useEffect(() => {
+    const isJoinValid = sessionStorage.getItem('joinValid');
 
-          sessionStorage.removeItem('joinValid');
+    if (!isJoinValid) {
+      alert('잘못된 접근입니다. 회원가입 약관 동의를 먼저 진행해주세요.');
+      navigate('/join');
+      sessionStorage.removeItem('joinValid');
+    }
 
-      }, [navigate]);
+    sessionStorage.removeItem('joinValid');
+
+  }, [navigate]);
 
   //member_id 생성
   const generateUniqueId = () => {
@@ -69,7 +71,7 @@ const JoinN = () => {
     }
 
     try {
-      const response = await axios.get('http://localhost:9090/checkId', {
+      const response = await axios.get(`${API_BASE_URL}/checkId`, {
         params: { username: enteredId },
       });
 
@@ -90,7 +92,7 @@ const JoinN = () => {
     }
 
     try {
-      const response = await axios.get('http://localhost:9090/checkNickname', {
+      const response = await axios.get(`${API_BASE_URL}/checkNickname`, {
         params: { nickname: enteredNickname },
       });
 
@@ -116,7 +118,7 @@ const JoinN = () => {
     const { phone_first, phone_second, phone_third } = form;
     const merge_phone = `${phone_first}-${phone_second}-${phone_third}`;
 
-  setForm((prevForm) => ({
+    setForm((prevForm) => ({
       ...prevForm,
       email: merge_email,
       phone: merge_phone,
@@ -127,7 +129,6 @@ const JoinN = () => {
 
   }, [form.email_name, form.email_domain, form.email_extension, form.phone_first, form.phone_second, form.phone_third]);
 
-
   const checkEmail = async (fullEmail) => {
     if (fullEmail.length === 0) {
       setEmailCheckResult('');
@@ -135,7 +136,7 @@ const JoinN = () => {
     }
 
     try {
-      const response = await axios.get('http://localhost:9090/checkEmail', {
+      const response = await axios.get(`${API_BASE_URL}/checkEmail`, {
         params: { email: fullEmail },
       });
 
@@ -153,7 +154,7 @@ const JoinN = () => {
     }
 
     try {
-      const response = await axios.get('http://localhost:9090/checkPhone', {
+      const response = await axios.get(`${API_BASE_URL}/checkPhone`, {
         params: { phone: fullPhone },
       });
 
@@ -163,23 +164,23 @@ const JoinN = () => {
       console.error('전화번호 중복 확인 오류', error);
     }
   };
-  
+
   useEffect(() => {
     checkRegisterDisabled(idCheckResult, nicknameCheckResult, emailCheckResult, phoneCheckResult, passwordCheckResult);
   }, [idCheckResult, nicknameCheckResult, emailCheckResult, phoneCheckResult, passwordCheckResult]);
 
   const checkRegisterDisabled = (idResult, nicknameResult, emailResult, phoneResult, passwordCheckResult) => {
-	  if (
-	  idResult.includes('중복된 아이디') ||
-	  nicknameResult.includes('중복된 닉네임') ||
-	  emailResult.includes('중복된 이메일') ||
-	  phoneResult.includes('중복된 전화번호') ||
-    passwordCheckResult.includes('비밀번호가 틀립니다.')
-	  ) {
-		setIsRegisterDisabled(true);
-	  } else {
-		setIsRegisterDisabled(false);  
-	  }
+    if (
+      idResult.includes('중복된 아이디') ||
+      nicknameResult.includes('중복된 닉네임') ||
+      emailResult.includes('중복된 이메일') ||
+      phoneResult.includes('중복된 전화번호') ||
+      passwordCheckResult.includes('비밀번호가 틀립니다.')
+    ) {
+      setIsRegisterDisabled(true);
+    } else {
+      setIsRegisterDisabled(false);  
+    }
   }
 
   //비밀번호 확인
@@ -208,7 +209,7 @@ const JoinN = () => {
     e.preventDefault();
 
     try {
-      await axios.post('http://localhost:9090/joinN', form, {
+      await axios.post(`${API_BASE_URL}/joinN`, form, {
         headers: { "Content-Type": "application/json" } //리액트 json, 스프링 @RequestBody로 받기
       });
       alert('회원가입 성공!');

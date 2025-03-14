@@ -54,7 +54,7 @@ function App() {
       <Routes> 
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/item/:itemid' element={<ItemDetail/>}/>
-        <Route path='/order' element={<OrderComponent/>}/>
+        <Route path='/buy/orderid' element={<OrderComponent/>}/>
         <Route path='/my/order' element={<MyOrder/>}/>
 
         <Route path='/brand/:brandid' element={<BrandPage/>}/>

@@ -3,6 +3,9 @@ import * as StompJs from '@stomp/stompjs';
 import axios from "axios";
 import Cookies from 'js-cookie';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+const WEBSOCKET_BASE_URL = process.env.REACT_APP_WEBSOCKET_URL || "ws://localhost:9090";
+
 const style = {
   container: {
     display: 'flex',
@@ -97,7 +100,7 @@ const QnAChatComponent = (props) => {
 
   const fetchChatHistory = async (channelId) => {
     try {
-      const response = await axios.get(`http://localhost:9090/chat/records`, {
+      const response = await axios.get(`${API_BASE_URL}/chat/records`, {
         params: { channelId },
       });
       setChatList(response.data);  // DB에서 가져온 채팅 기록을 상태에 저장
@@ -108,7 +111,7 @@ const QnAChatComponent = (props) => {
 
   const connect = () => {
     client.current = new StompJs.Client({
-      brokerURL: 'ws://localhost:9090/ws',
+      brokerURL: `${WEBSOCKET_BASE_URL}/ws`,
       onConnect: () => {
         subscribe();
       },
@@ -167,7 +170,7 @@ const QnAChatComponent = (props) => {
     const token = Cookies.get('jwt_token');
     if (token) {
       setIsLoggedIn(true);
-      axios.get('http://localhost:9090/userinfo', {
+      axios.get(`${API_BASE_URL}/userinfo`, {
         headers: { 'Authorization': `Bearer ${token}` },
         withCredentials: true,
       }).then(response => {

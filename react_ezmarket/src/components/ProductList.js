@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -14,7 +16,7 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get("http://localhost:9090/getallitemsforsearch");
+            const response = await axios.get(`${API_BASE_URL}/getallitemsforsearch`);
             setProducts(response.data);
             setLoading(false);
         } catch (error) {
@@ -34,7 +36,7 @@ const ProductList = () => {
                     <div key={product.product_id} className="col-md-4 mb-4">
                         <div className="card">
                             <Link to={`/item/${product.product_id}`} className="text-decoration-none text-dark">
-                                <img src={`http://localhost:9090/showimage?filename=${product.image_url}`} className="card-img-top" alt={product.name} />
+                                <img src={`${API_BASE_URL}/showimage?filename=${product.image_url}`} className="card-img-top" alt={product.name} />
                                 <div className="card-body">
                                     <h5 className="card-title">{product.name}</h5>
                                     <p className="card-text">{product.price.toLocaleString()}원</p>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 const Modifyitem = () => {
     const { brandid, productid } = useParams(); // URL에서 브랜드 ID와 상품 ID 가져오기
@@ -18,7 +19,7 @@ const Modifyitem = () => {
     const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:9090/item/${productid}`).then((res) => {
+        axios.get(`${API_BASE_URL}/item/${productid}`).then((res) => {
             setProduct(res.data);
         });
     }, [productid]);
@@ -52,7 +53,7 @@ const Modifyitem = () => {
         }
 
         try {
-            await axios.post("http://localhost:9090/brand/id/updateitem", formData, {
+            await axios.post(`${API_BASE_URL}/brand/id/updateitem`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -95,11 +96,10 @@ const Modifyitem = () => {
                 <label>하위 카테고리:</label>
                 <input type="text" name="subcategory" value={product.subcategory} onChange={handleChange} />
 
-
                 <label>현재 이미지:</label>
                 {product.image_url ? (
                 <img
-                    src={`http://localhost:9090/showimage?filename=${product.image_url}&obj=product`}
+                    src={`${API_BASE_URL}/showimage?filename=${product.image_url}&obj=product`}
                     alt="Product"
                     style={{ maxWidth: '20%', height: '20%' }}
                     

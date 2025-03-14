@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/ItemSlideComponent.css"; // 스타일 적용
 
-const API_BASE_URL = "http://localhost:9090";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 function ItemSlideComponent() {
     const [randomItems, setRandomItems] = useState([]);
@@ -28,7 +28,7 @@ function ItemSlideComponent() {
     const sliderSettings = {
         dots: true,
         infinite: true,
-        speed: 500,
+        speed: 800,
         slidesToShow: 6,
         slidesToScroll: 3,
         responsive: [
@@ -61,7 +61,7 @@ function ItemSlideComponent() {
     };
 
     return (
-        <Container className="mt-4">
+        <Container className="mt-4 mb-5">
             <h3 className="text-center mb-3">인기 상품 Top 6</h3>
             <Slider {...sliderSettings}>
                 {popularItems.map((item) => (
