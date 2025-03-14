@@ -6,8 +6,6 @@ import MyPageSideBar from '../my/myPageSideBar';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
-
 const ManageUser = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [user, setUser] = useState(null);

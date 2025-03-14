@@ -7,8 +7,6 @@ import MyPageSideBar from './myPageSideBar';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
-
 const Modify = () => {
   const [form, setForm] = useState({
     username: "",
