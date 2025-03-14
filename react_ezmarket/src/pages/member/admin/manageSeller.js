@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';  
 import { useNavigate } from 'react-router-dom';  
 import Cookies from 'js-cookie'
+import MyPageSideBar from '../my/myPageSideBar';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
@@ -115,56 +118,60 @@ const ManageSeller = () => {
   };
 
   return (
-    <div>
-      <h2>판매자 관리</h2>
-        <table border="1">
-          <thead>
-            <tr>
-              <th>판매자 신청 날짜</th>
-              <th>정보 수정 날짜</th>
-              <th>상호명</th>
-              <th>사업자 번호</th>
-              <th>브랜드 로고</th>
-              <th>사업자 등록증</th>
-              <th>아이디</th>
-              <th>이름</th>
-              <th>판매자 사이트</th>
-              <th>신청 상태</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {allBrands.map((brand) => (
-              <tr key={brand.brand_number}>
-                <td>{brand.brand_join_date}</td>
-                <td>{brand.brand_update_date}</td>
-                <td>{brand.brandname}</td>
-                <td>{brand.brand_number}</td>
-                <td><img src={brand.brandlogo_url} alt="브랜드 로고" /></td>
-                <td><img src={brand.brandlicense_url} alt="사업자 등록증" /></td>
-                {/* 미리보기는 aws 배포 후 */}
-                <td>{brand.username}</td>
-                <td>{brand.realname}</td>
-                <td><a href={`../../brand/${brand.brand_id}`}>이동</a></td>
-                <td>{brand.brand_status}</td>
-                <td>
-                  {brand.brand_status === "검토 중" && (
-                    <>
-                      <button onClick={() => handleAccept(brand.brand_id)}>승인</button>
-                      <button onClick={() => handleRefuse(brand.brand_id)}>거절</button>
-                    </>
-                  )}
-                  {brand.brand_status == "승인" && (
-                      <button onClick={() => handleCancel(brand.brand_id)}>승인 취소</button>
-                  )}
-                  {brand.brand_status == "거절" && (
-                      <button onClick={() => handleAccept(brand.brand_id)}>승인</button>
-                  )}
-                </td>
+    <div className="mypage-form">
+      <MyPageSideBar></MyPageSideBar>
+      <div className="mypage-info">
+        <div className="manage-table">
+          <table border="1" style={{ borderCollapse: 'collapse', tableLayout: 'fixed', width: '100%', border: '1px solid rgb(209, 198, 198)'}}>
+            <thead>
+              <tr>
+                <th style={{width:'10%'}}>신청 날짜</th>
+                <th style={{width:'10%'}}>수정 날짜</th>
+                <th style={{width:'8%'}}>상호명</th>
+                <th style={{width:'10%'}}>사업자<br></br>번호</th>
+                <th style={{width:'10%'}}>브랜드<br></br>로고</th>
+                <th style={{width:'10%'}}>사업자<br></br>등록증</th>
+                <th style={{width:'8%'}}>아이디</th>
+                <th style={{width:'8%'}}>이름</th>
+                <th style={{width:'5%'}}>판매자<br></br>사이트</th>
+                <th style={{width:'5%'}}>신청<br></br>상태</th>
+                <th style={{width:'5%'}}></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody style={{height: '350px'}}>
+              {allBrands.map((brand) => (
+                <tr key={brand.brand_number}>
+                  <td>{brand.brand_join_date}</td>
+                  <td>{brand.brand_update_date}</td>
+                  <td>{brand.brandname}</td>
+                  <td>{brand.brand_number}</td>
+                  <td><img src={brand.brandlogo_url} alt="브랜드 로고" /></td>
+                  <td><img src={brand.brandlicense_url} alt="사업자 등록증" /></td>
+                  {/* 미리보기는 aws 배포 후 */}
+                  <td style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em', whiteSpace: 'nowrap'}}>{brand.username}</td>
+                  <td>{brand.realname}</td>
+                  <td><a href={`../../brand/${brand.brand_id}`}>이동</a></td>
+                  <td>{brand.brand_status}</td>
+                  <td>
+                    {brand.brand_status === "검토 중" && (
+                      <>
+                        <button className="positive-button" onClick={() => handleAccept(brand.brand_id)}>승인</button>
+                        <button className="negative-button" onClick={() => handleRefuse(brand.brand_id)}>거절</button>
+                      </>
+                    )}
+                    {brand.brand_status == "승인" && (
+                        <button className="negative-button" onClick={() => handleCancel(brand.brand_id)}>승인취소</button>
+                    )}
+                    {brand.brand_status == "거절" && (
+                        <button className="positive-button" onClick={() => handleAccept(brand.brand_id)}>승인</button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          </div>
+      </div>
     </div>
   );
 };

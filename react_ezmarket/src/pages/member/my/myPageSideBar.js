@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';  
-import { useNavigate } from 'react-router-dom';  
+import { useLocation, useNavigate } from 'react-router-dom';  
 import Cookies from 'js-cookie';
 import '../../../styles/MyPageSideBar.css';
 
@@ -18,6 +18,30 @@ const MyPageSideBar = () => {
     });
   
     const navigate = useNavigate();
+    const location = useLocation();
+    const [sideBarTitle, setSideBarTitle] = useState('내 정보');
+
+    useEffect(() => {
+      if (location.pathname === '/my/order') {
+        setSideBarTitle('주문 목록');
+      } else if (location.pathname === '/my/qna') {
+        setSideBarTitle('상품 문의 내역');
+      } else if (location.pathname === '/my/1-1qna') {
+        setSideBarTitle('1:1 문의 내역');
+      } else if (location.pathname === '/my/review') {
+        setSideBarTitle('후기 내역');
+      } else if (location.pathname === '/my/modify') {
+        setSideBarTitle('회원 정보 수정');
+      } else if (location.pathname === ('/my/admin')) {
+        setSideBarTitle('관리자 페이지');
+      } else if (location.pathname === ('/my/admin/user')) {
+        setSideBarTitle('회원 관리');
+      } else if (location.pathname === ('/my/admin/seller')) {
+        setSideBarTitle('판매자 관리');
+      } else {
+        setSideBarTitle('내 정보');
+      }
+    }, [location.pathname]);
   
     useEffect(() => {
       const token = Cookies.get('jwt_token'); 
@@ -43,28 +67,34 @@ const MyPageSideBar = () => {
     const handleModify = () => {
       navigate(`/my/modify?username=${user.username}`);
     }
-  
+
+    const handleMyReview = () => {
+      navigate(`/my/review`);
+    }
+
+    const handleOrder = () => {
+      navigate(`/my/order`);
+    }
+
+    const handleCart= () => {
+      navigate(`/cart`);
+    }
 
 return(
     <div className="side-bar">
 
       <div className="side-bar-title">
-        내 정보
+        {sideBarTitle}
       </div>
       <hr></hr>
       <div>
-        <button>주문 목록</button>
+        <button onClick={handleOrder}>주문 내역</button>
       </div>
       <div>
-        <button>찜 목록</button>
+        <button onClick={handleMyReview}>후기 내역</button>
       </div>
       <hr style={{ width: "75px" }}></hr>
-      <div>
-        <button>상품 문의 내역</button>
-      </div>
-      <div>
-        <button>1:1  문의 내역</button>
-      </div>
+      <button onClick={handleCart}>장바구니</button>
       <hr style={{ width: "75px" }}></hr>
       <div>
         <button onClick={handleModify}>회원 정보 수정</button>

@@ -57,6 +57,7 @@ function ItemDetail() {
 
             axios.get(`${API_BASE_URL}/userinfo`, { 
 
+
                 headers: { 'Authorization': `Bearer ${token}` }, 
                 withCredentials: true
             })
@@ -70,17 +71,35 @@ function ItemDetail() {
             });
         }
 
+
     }, [])
+
 
     useEffect(() => {
         axios({
             url : `${API_BASE_URL}/item/${itemid}`,
             method : 'GET',
-
         })
         .then(function(res) {
             setDto(res.data);
 
+            
+            const product = {
+                product_id: itemid,
+                image_url: res.data.image_url,
+                name: res.data.name
+            };
+
+            let recently_viewed = JSON.parse(Cookies.get('recently_viewed') || '[]');
+
+            if (!recently_viewed.some(item => item.product_id === itemid)) {
+                if (recently_viewed.length >= 5) {
+                    recently_viewed.shift(); 
+                }
+                recently_viewed.push(product); 
+                
+                Cookies.set('recently_viewed', JSON.stringify(recently_viewed), { expires: 3 });
+        }
         })
 
     }, [itemid]);
@@ -212,11 +231,9 @@ function ItemDetail() {
                 <div className="product-image" style={{ width: '500px', height: '600px', border: '2px solid #838383'  }}>
                     <img
 
-
                         alt="제품 이미지"
                         src={`${API_BASE_URL}/showimage?filename=${dto.image_url}&obj=product`}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-
 
                     />
                 </div>

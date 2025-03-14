@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import '../../../styles/JoinN.css'
+import MyPageSideBar from './myPageSideBar';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
@@ -151,17 +154,10 @@ const Modify = () => {
   }, [form.password, form.confirmPassword]);
 
   return (
-    <div className="join-form-container">
-      <div className="join-flow">
-        <div className="join-flow-title">회원 정보</div>
-      </div>
-      <hr></hr>
-
-      <form className="join-form" onSubmit={handleSubmit}>
-        <div className="join-form-title">
-            회원 정보 수정<hr></hr>
-        </div>
-
+    <div className="mypage-form">
+    <MyPageSideBar></MyPageSideBar>
+    <div className="join-form-container" style={{ paddingTop: '0px', paddingBottom: '0px', paddingLeft: '169px'}}>
+      <form className="join-form" onSubmit={handleSubmit} style={{ paddingTop: '0px', paddingBottom: '0px' }}>
         <div>
           <input type="hidden" name="member_id" value={Number(form.member_id)} />
         </div>
@@ -175,7 +171,7 @@ const Modify = () => {
         </div>
 
         <div>
-          <input type="password" name="confirmPassword" className="join-password" value={form.confirmPassword} onChange={handlePasswordConfirm} maxLength={100} required placeholder="비밀번호 확인"/>
+          <input type="password" name="confirmPassword" className="join-password" value={form.confirmPassword} onChange={handlePasswordConfirm} maxLength={100} disabled={form.social == 1} required placeholder="비밀번호 확인"/>
           <div className="check">{passwordCheckResult}</div>
         </div>
 
@@ -208,6 +204,7 @@ const Modify = () => {
           <button type="button" className="resign-modify" onClick={handleResign}>회원 탈퇴 요청</button>
         </div>
       </form>
+    </div>
     </div>
   );
 };
