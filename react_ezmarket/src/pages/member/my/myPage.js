@@ -84,6 +84,9 @@ const MyPage = () => {
           {user.userauthor === 0 && (
           <button className="admin-page-button" onClick={handleAdminPageClick}>관리자 페이지</button>
           )}
+          {user.userauthor === 1 && (
+          <button className="admin-page-button" onClick={handleAdminPageClick} style = {{ pointerEvents: 'none' }}>총 구매 회수는 {orderCounts.pay+orderCounts.preparing+orderCounts.shipping+orderCounts.shipped}회 입니다.</button>
+          )}
           {user.userauthor === 2 && (
           <button className="seller-page-button" onClick={handleSellerPageClick}>판매자 페이지</button>
           )}
@@ -133,6 +136,7 @@ const MyPage = () => {
           </div> 
         </div>
         <div className="mypage-box-order-image">
+          <div style={{ fontSize : "18px" , fontWeight: "bold", marginBottom: "10px" }}>최근 본 게시물</div>
           <div className="order-image-detail">
             <div>
               <div>{recently_viewed[0] ? recently_viewed[0].name : '　'}</div>

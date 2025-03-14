@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import '../../../styles/JoinN.css'
+import MyPageSideBar from './myPageSideBar';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
 const Modify = () => {
   const [form, setForm] = useState({
@@ -26,7 +29,7 @@ const Modify = () => {
     const token = Cookies.get('jwt_token'); 
     
     if (token) {
-      axios.get('http://localhost:9090/userinfo', { 
+      axios.get(`${API_BASE_URL}/userinfo`, { 
         headers: { 'Authorization': `Bearer ${token}` }, 
         withCredentials: true
       })
@@ -54,7 +57,7 @@ const Modify = () => {
     }      
 
     try {
-      const response = await axios.get('http://localhost:9090/checkNickname', {
+      const response = await axios.get(`${API_BASE_URL}/checkNickname`, {
         params: { nickname: enteredNickname },
       });
 
@@ -79,7 +82,7 @@ const Modify = () => {
     const token = Cookies.get('jwt_token');
 
     try {
-      await axios.post('http://localhost:9090/modify', form, {
+      await axios.post(`${API_BASE_URL}/modify`, form, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
@@ -109,7 +112,7 @@ const Modify = () => {
         return;
       }
 
-      const response = await axios.post('http://localhost:9090/resign', null, {
+      const response = await axios.post(`${API_BASE_URL}/resign`, null, {
         params: { username: form.username },
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -149,17 +152,10 @@ const Modify = () => {
   }, [form.password, form.confirmPassword]);
 
   return (
-    <div className="join-form-container">
-      <div className="join-flow">
-        <div className="join-flow-title">회원 정보</div>
-      </div>
-      <hr></hr>
-
-      <form className="join-form" onSubmit={handleSubmit}>
-        <div className="join-form-title">
-            회원 정보 수정<hr></hr>
-        </div>
-
+    <div className="mypage-form">
+    <MyPageSideBar></MyPageSideBar>
+    <div className="join-form-container" style={{ paddingTop: '0px', paddingBottom: '0px', paddingLeft: '169px'}}>
+      <form className="join-form" onSubmit={handleSubmit} style={{ paddingTop: '0px', paddingBottom: '0px' }}>
         <div>
           <input type="hidden" name="member_id" value={Number(form.member_id)} />
         </div>
@@ -173,7 +169,7 @@ const Modify = () => {
         </div>
 
         <div>
-          <input type="password" name="confirmPassword" className="join-password" value={form.confirmPassword} onChange={handlePasswordConfirm} maxLength={100} required placeholder="비밀번호 확인"/>
+          <input type="password" name="confirmPassword" className="join-password" value={form.confirmPassword} onChange={handlePasswordConfirm} maxLength={100} disabled={form.social == 1} required placeholder="비밀번호 확인"/>
           <div className="check">{passwordCheckResult}</div>
         </div>
 
@@ -206,6 +202,7 @@ const Modify = () => {
           <button type="button" className="resign-modify" onClick={handleResign}>회원 탈퇴 요청</button>
         </div>
       </form>
+    </div>
     </div>
   );
 };

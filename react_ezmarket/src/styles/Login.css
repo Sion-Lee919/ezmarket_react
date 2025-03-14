@@ -67,10 +67,11 @@
     width: 100px;
     background-color: white;
     margin: 20px 40px 0 40px;
+    transition: transform 0.3s ease;
 }
 
 .login-form .social-login button:hover {
-    width: 100px;
-    border: 1px solid;
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
 }
 

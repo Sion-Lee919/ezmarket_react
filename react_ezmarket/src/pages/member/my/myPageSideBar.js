@@ -29,7 +29,15 @@ const MyPageSideBar = () => {
       } else if (location.pathname === '/my/1-1qna') {
         setSideBarTitle('1:1 문의 내역');
       } else if (location.pathname === '/my/review') {
-        setSideBarTitle('상품 후기 내역');
+        setSideBarTitle('후기 내역');
+      } else if (location.pathname === '/my/modify') {
+        setSideBarTitle('회원 정보 수정');
+      } else if (location.pathname === ('/my/admin')) {
+        setSideBarTitle('관리자 페이지');
+      } else if (location.pathname === ('/my/admin/user')) {
+        setSideBarTitle('회원 관리');
+      } else if (location.pathname === ('/my/admin/seller')) {
+        setSideBarTitle('판매자 관리');
       } else {
         setSideBarTitle('내 정보');
       }
@@ -68,6 +76,10 @@ const MyPageSideBar = () => {
       navigate(`/my/order`);
     }
 
+    const handleCart= () => {
+      navigate(`/cart`);
+    }
+
 return(
     <div className="side-bar">
 
@@ -76,18 +88,13 @@ return(
       </div>
       <hr></hr>
       <div>
-        <button onClick={handleOrder}>주문 목록</button>
+        <button onClick={handleOrder}>주문 내역</button>
+      </div>
+      <div>
+        <button onClick={handleMyReview}>후기 내역</button>
       </div>
       <hr style={{ width: "75px" }}></hr>
-      <div>
-        <button>상품 문의 내역</button>
-      </div>
-      <div>
-        <button>1:1  문의 내역</button>
-      </div>
-      <div>
-        <button onClick={handleMyReview}>상품 후기 내역</button>
-      </div>
+      <button onClick={handleCart}>장바구니</button>
       <hr style={{ width: "75px" }}></hr>
       <div>
         <button onClick={handleModify}>회원 정보 수정</button>
