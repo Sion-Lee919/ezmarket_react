@@ -82,7 +82,7 @@ const SearchComponent = () => {
                 <input
                     type="text"
                     className="form-control"
-                    placeholder="마시고 싶은 술을 검색해보세요!"
+                    placeholder="관심있는 전통주를 검색해보세요!"
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);

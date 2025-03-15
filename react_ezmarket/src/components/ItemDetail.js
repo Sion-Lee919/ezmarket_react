@@ -231,8 +231,7 @@ function ItemDetail() {
 
                         alt="제품 이미지"
                         src={`${API_BASE_URL}/showimage?filename=${dto.image_url}&obj=product`}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                     />
                 </div>
                 <div className="product-details" style={{ width: '400px', height: 'auto' }}>
@@ -300,6 +299,8 @@ function ItemDetail() {
                         ) : (
                             <button className="sign-up-to-buy" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleLoginClick}>회원가입 후 구매</button>
                         )}
+                        <h3 style={{ marginTop: "20px" }}>이 전통주가 취향에 맞으셨다면?</h3>
+                        <button className="brand-link" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={() => navigate(`/brandItems?brand_id=${dto.brand_id}`)}>이 브랜드의 다른 제품도 만나보세요</button>
                     </div>
                 </div>
             </div>
