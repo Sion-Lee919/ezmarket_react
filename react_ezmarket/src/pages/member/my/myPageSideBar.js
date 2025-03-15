@@ -25,9 +25,7 @@ const MyPageSideBar = () => {
       if (location.pathname === '/my/order') {
         setSideBarTitle('주문 목록');
       } else if (location.pathname === '/my/qna') {
-        setSideBarTitle('상품 문의 내역');
-      } else if (location.pathname === '/my/1-1qna') {
-        setSideBarTitle('1:1 문의 내역');
+        setSideBarTitle('문의 내역');
       } else if (location.pathname === '/my/review') {
         setSideBarTitle('후기 내역');
       } else if (location.pathname === '/my/modify') {
@@ -80,6 +78,10 @@ const MyPageSideBar = () => {
       navigate(`/cart`);
     }
 
+    const handleMyQna= () => {
+      navigate(`/my/qna`);
+    }
+
 return(
     <div className="side-bar">
 
@@ -89,6 +91,9 @@ return(
       <hr></hr>
       <div>
         <button onClick={handleOrder}>주문 내역</button>
+      </div>
+      <div>
+        <button onClick={handleMyQna}>문의 내역</button>
       </div>
       <div>
         <button onClick={handleMyReview}>후기 내역</button>
