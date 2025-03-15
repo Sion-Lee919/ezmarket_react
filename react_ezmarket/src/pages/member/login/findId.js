@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/FindIdPw.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+
 const FindId = () => {
   const [emailOrPhone, setEmailOrPhone] = useState('')
   const [foundId, setFoundId] = useState('');
@@ -16,7 +18,7 @@ const FindId = () => {
         return;
     }
 
-    axios.post('http://localhost:9090/findId', {
+    axios.post(`${API_BASE_URL}/findId`, {
         emailOrPhone: emailOrPhone
     })
     .then(response => {
