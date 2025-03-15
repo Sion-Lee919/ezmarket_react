@@ -80,7 +80,7 @@ function ItemDetail() {
     }, [itemid]);
 
     const handleLoginClick = () => {
-        navigate(`/login?redirect=/item/${itemid}`);  
+        navigate(`/login?redirect=/item/${itemid}?brand_id=${dto.brand_id}`);  
     };
 
     const handleIncreaseQuantity = () => {
