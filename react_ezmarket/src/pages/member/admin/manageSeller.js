@@ -144,7 +144,11 @@ const ManageSeller = () => {
                   <td>{brand.brandname}</td>
                   <td>{brand.brand_number}</td>
                   <td><img src={brand.brandlogo_url} alt="브랜드 로고" /></td>
-                  <td><img src={brand.brandlicense_url} alt="사업자 등록증" /></td>
+                  <td  style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em', whiteSpace: 'nowrap'}}>
+                    <a href={brand.brandlicense_url} target="_blank" rel="noopener noreferrer">
+                      {brand.brandlicense_url.split('/').pop()}
+                    </a>
+                  </td>
                   {/* 미리보기는 aws 배포 후 */}
                   <td style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em', whiteSpace: 'nowrap'}}>{brand.username}</td>
                   <td>{brand.realname}</td>

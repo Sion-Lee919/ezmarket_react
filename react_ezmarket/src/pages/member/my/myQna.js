@@ -53,7 +53,7 @@ const MyQna = () => {
         setQnaList(Object.values(groupedQna));
       })
       .catch((error) => {
-        console.log("리뷰를 가져오는 데 문제가 발생했습니다.");
+        console.log("문의를 가져오는 데 오류가 발생했습니다.");
       });
 
     } else {
@@ -112,7 +112,7 @@ const MyQna = () => {
             </div>
             {selectedQna === index && (
               <div className="chat-box" style={{ position: 'relative', zIndex: 1 }}>
-                <QnAChatComponent chatList={qna.chat} /> 
+                <QnAChatComponent channel_id={qna.channel_id} /> 
               </div>
             )}
           </div> 

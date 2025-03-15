@@ -29,7 +29,7 @@ const MyPage = () => {
   const [recently_viewed, setRecently_viewed] = useState([]);
 
   useEffect(() => {
-    const viewed_items = JSON.parse(Cookies.get('recently_viewed'));
+    const viewed_items = JSON.parse(Cookies.get('recently_viewed') || '[]');
     setRecently_viewed(viewed_items); 
 }, []);
   
@@ -59,7 +59,7 @@ const MyPage = () => {
 
   //주문 상황 가져오기
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/orderFlowCount`)
+    axios.get(`${API_BASE_URL}/buy/orderFlowCount`)
       .then((response) => {
         setOrderCounts(response.data);
       })
@@ -139,7 +139,7 @@ const MyPage = () => {
           <div style={{ fontSize : "18px" , fontWeight: "bold", marginBottom: "10px" }}>최근 본 게시물</div>
           <div className="order-image-detail">
             <div>
-              <div>{recently_viewed[0] ? recently_viewed[0].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[0] ? recently_viewed[0].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[0] ? recently_viewed[0].product_id : '#'}`}
                 style={recently_viewed[0] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
@@ -148,7 +148,7 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div>{recently_viewed[1] ? recently_viewed[1].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[1] ? recently_viewed[1].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[1] ? recently_viewed[1].product_id : '#'}`}
                 style={recently_viewed[1] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
@@ -157,7 +157,7 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div>{recently_viewed[2] ? recently_viewed[2].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[2] ? recently_viewed[2].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[2] ? recently_viewed[2].product_id : '#'}`}
                 style={recently_viewed[2] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
@@ -166,7 +166,7 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div>{recently_viewed[3] ? recently_viewed[3].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[3] ? recently_viewed[3].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[3] ? recently_viewed[3].product_id : '#'}`}
                 style={recently_viewed[3] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
@@ -175,7 +175,7 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div>{recently_viewed[4] ? recently_viewed[4].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[4] ? recently_viewed[4].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[4] ? recently_viewed[4].product_id : '#'}`}
                 style={recently_viewed[4] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
