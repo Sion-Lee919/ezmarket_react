@@ -55,7 +55,6 @@ function BrandPage() {
         <div id="wrapper">
             <div id="content">
                 <div className="s_wrap">
-                    <h1>판매자 페이지</h1>
                     <div className="local_frm02">
                         <button className="btn_link" onClick={() => setShowOverlay(true)}>상품등록</button>
                         <br />

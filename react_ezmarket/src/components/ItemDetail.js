@@ -1,29 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-
 import Cookies from 'js-cookie';
+import '../styles/ItemDetail.css'; // CSS 파일을 import
 
 import ReviewComponent from "./ReviewComponent";
 import QnAChatComponent from "./QnAChatComponent";
 import QnAChatRoomListComponent from "./QnAChatRoomListComponent";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
-
-const style = {
-    tabButton: {
-        backgroundColor: 'transparent',
-        border: '1px #ccc',
-        padding: '10px 20px',
-        cursor: 'pointer',
-        borderRadius: '4px',
-        transition: 'background-color 0.3s ease, color 0.3s ease',
-        color: '#333',
-        width: '300px',
-        fontSize: '24px',
-        fontWeight: '530',
-    }
-}
 
 function ItemDetail() {
     const [dto, setDto] = useState(null);
@@ -47,15 +32,12 @@ function ItemDetail() {
 
     }, [reviewList])
 
-
     useEffect(() => {
         const token = Cookies.get('jwt_token');
         if (token) {
             setIsLoggedIn(true);
 
             axios.get(`${API_BASE_URL}/userinfo`, { 
-
-
                 headers: { 'Authorization': `Bearer ${token}` }, 
                 withCredentials: true
             })
@@ -68,10 +50,7 @@ function ItemDetail() {
                 navigate('/login');
             });
         }
-
-
     }, [])
-
 
     useEffect(() => {
         axios({
@@ -81,7 +60,6 @@ function ItemDetail() {
         .then(function(res) {
             setDto(res.data);
 
-            
             const product = {
                 product_id: itemid,
                 image_url: res.data.image_url,
@@ -97,13 +75,12 @@ function ItemDetail() {
                 recently_viewed.push(product); 
                 
                 Cookies.set('recently_viewed', JSON.stringify(recently_viewed), { expires: 3 });
-        }
+            }
         })
-
     }, [itemid]);
 
     const handleLoginClick = () => {
-        navigate('/login');  
+        navigate(`/login?redirect=/item/${itemid}?brand_id=${dto.brand_id}`);  
     };
 
     const handleIncreaseQuantity = () => {
@@ -129,10 +106,8 @@ function ItemDetail() {
     };
 
     const checkUserState = (user) => {
-
         if (user != null){
             axios.get(`${API_BASE_URL}/brandinfo?memberid=${user.member_id}`)
-
                 .then(response => {
                     if (response.data) {
                         setBrandid(response.data.brand_id);
@@ -228,7 +203,6 @@ function ItemDetail() {
             }}>
                 <div className="product-image" style={{ width: '500px', height: '600px', border: '2px solid #838383'  }}>
                     <img
-
                         alt="제품 이미지"
                         src={`${API_BASE_URL}/showimage?filename=${dto.image_url}&obj=product`}
                         style={{ width: '100%', height: '100%', objectFit: 'contain' }}
@@ -238,7 +212,6 @@ function ItemDetail() {
                     <h3 className="product-title">{dto.name || '정보없음'}</h3>
         
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-
                     <tbody>
                         <tr>
                         <td style={{ padding: '8px', borderTop: '3px solid #333333', minWidth: '60px' }}><strong>판매가</strong></td>
@@ -261,7 +234,6 @@ function ItemDetail() {
                         <td style={{ padding: '8px', borderBottom: '3px solid #333333' }}>{dto.product_region || '정보없음'}</td>
                         </tr>
                     </tbody>
-
                     </table>
                     <div>
                         {isLoggedIn ? (
@@ -293,14 +265,14 @@ function ItemDetail() {
                                         +
                                     </button>
                                 </div>
-                                <button className="add-to-cart" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={() => handleAddToCart(itemid, quantity)}>장바구니에 추가</button>
-                                <button className="buy-now" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleBuyNow}>즉시 구매</button>
+                                <button className="product-handle-button" onClick={() => handleAddToCart(itemid, quantity)}>장바구니에 추가</button>
+                                <button className="product-handle-button" onClick={handleBuyNow}>즉시 구매</button>
                             </>
                         ) : (
-                            <button className="sign-up-to-buy" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleLoginClick}>회원가입 후 구매</button>
+                            <button className="product-handle-button" onClick={handleLoginClick}>회원가입 후 구매</button>
                         )}
                         <h3 style={{ marginTop: "20px" }}>이 전통주가 취향에 맞으셨다면?</h3>
-                        <button className="brand-link" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={() => navigate(`/brandItems?brand_id=${dto.brand_id}`)}>이 브랜드의 다른 제품도 만나보세요</button>
+                        <button className="product-handle-button" onClick={() => navigate(`/brandItems?brand_id=${dto.brand_id}`)}>브랜드의 다른 제품도 만나보세요</button>
                     </div>
                 </div>
             </div>
@@ -316,22 +288,20 @@ function ItemDetail() {
                 height: 'auto'
             }}>
                 <div style={{ flexDirection: 'row', gap: '10px' }}>
-                    <button style={style.tabButton} onClick={() => handleTabClick('detail')}>상품 상세 정보</button>
-                    <button style={style.tabButton} onClick={() => handleTabClick('delivery')}>배송 안내</button>
-                    <button style={style.tabButton} onClick={() => handleTabClick('return')}>교환 및 반품 안내</button>
-                    <button style={style.tabButton} onClick={() => handleTabClick('review')}>상품 후기 ({reviewList.length})</button>
-                    <button style={style.tabButton} onClick={() => {checkUserState(user); handleTabClick('inquiry'); }}>상품 문의</button>
+                    <button className="tab-button" onClick={() => handleTabClick('detail')}>상품 상세 정보</button>
+                    <button className="tab-button" onClick={() => handleTabClick('delivery')}>배송 안내</button>
+                    <button className="tab-button" onClick={() => handleTabClick('return')}>교환 및 반품 안내</button>
+                    <button className="tab-button" onClick={() => handleTabClick('review')}>상품 후기 ({reviewList.length})</button>
+                    <button className="tab-button" onClick={() => {checkUserState(user); handleTabClick('inquiry'); }}>상품 문의</button>
                 </div>
                 <></>
                 <div style={{ flex: 1, minWidth: '250px', padding: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
                     {activeTab === 'detail' && (
                         <div>
                             <h4>상품 상세 정보</h4>
-
                             <p style={{fontSize : '20px'}}>{dto.description}</p>
                             <h4>원재료</h4>
                             <p style={{fontSize : '20px'}}>{dto.product_ingredient}</p>
-
                         </div>
                     )}
                     {activeTab === 'delivery' && (

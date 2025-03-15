@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import '../../../styles/Login.css';
 import { Placeholder } from 'react-bootstrap';
@@ -11,6 +11,8 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate(); 
+    const location = useLocation();
+    const redirectUrl = new URLSearchParams(location.search).get('redirect') || '/';
 
     //토큰 있을 때 로그인 접근시 내 정보로 이동
     useEffect(() => {
@@ -40,12 +42,12 @@ const Login = () => {
             localStorage.setItem('token', token);
             if (response.status === 200) {
                 alert(response.data.message);
-                navigate('/');  
+                navigate(redirectUrl);
             } 
             window.location.reload();
         })
         .catch(error => {
-            alert(error.response.data.message); 
+            alert(error.response.data.message);
         });
     };
 
