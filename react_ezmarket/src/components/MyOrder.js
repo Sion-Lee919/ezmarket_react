@@ -27,6 +27,35 @@ const MyOrder = () => {
         }
     };
 
+    const handleReturnOrder = async (orderId) => {
+        const token = getTokenFromCookie();
+        if (!token) {
+            setError("로그인이 필요합니다.");
+            return;
+        }
+        
+        try {
+            await axios.post(`${API_BASE_URL}/buy/return/${orderId}`, {}, {
+                headers: { 'Authorization': `Bearer ${token}` },
+                withCredentials: true
+            });
+            
+            alert("반품 처리중입니다.");
+            
+            const updatedOrders = orders.map(order => {
+                if (order.orderId === orderId) {
+                    return { ...order, status: '반품중' };
+                }
+                return order;
+            });
+            
+            setOrders(updatedOrders);
+        } catch (error) {
+            console.error("주문 반품 처리 실패:", error);
+            alert("반품 처리 중 오류가 발생했습니다: " + (error.response?.data?.message || error.message));
+        }
+    };
+
     useEffect(() => {
         const fetchOrders = async () => {
             const token = getTokenFromCookie();
@@ -57,7 +86,6 @@ const MyOrder = () => {
                     return;
                 }
                 
-                // 주문 데이터 처리
                 const processedOrders = response.data.map(order => {
                     try {
                         if (order.productInfo && typeof order.productInfo === 'string') {
@@ -90,7 +118,6 @@ const MyOrder = () => {
                     }
                 });
                 
-                // 각 상품의 상세 정보 가져오기
                 const productInfoMap = {};
                 for (const productId of allProductIds) {
                     const productDetail = await fetchProductDetails(productId);
@@ -147,91 +174,115 @@ const MyOrder = () => {
         <div className="container mt-5">
             <h2 className="mb-4">나의 주문 목록</h2>
             
-            {orders.map((order, orderIndex) => (
-                <div key={orderIndex} className="card mb-4">
-                    <div className="card-header d-flex justify-content-between align-items-center">
-                        <span>주문번호: {order.orderId || "정보 없음"}</span>
-                        <span className={`badge ${
-                            order.status === '처리 중' ? 'bg-warning' : 
-                            order.status === '배송 중' ? 'bg-info' : 
-                            order.status === '배송 완료' ? 'bg-success' : 'bg-secondary'
-                        }`}>
-                            {order.status || "상태 정보 없음"}
-                        </span>
-                    </div>
-                    <div className="card-body">
-                        <div className="mb-3">
-                            <strong>주문일:</strong> {order.orderDate ? new Date(order.orderDate).toLocaleString('ko-KR') : '정보 없음'}
+            {orders.map((order, orderIndex) => {
+                const productAmount = order.productInfo.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+                const finalAmount = order.totalAmount - (order.usedPoints || 0);
+
+                return (
+                    <div key={orderIndex} className="card mb-4">
+                        <div className="card-header d-flex justify-content-between align-items-center">
+                            <span>주문번호: {order.orderId || "정보 없음"}</span>
+                            <span className={`badge ${
+                                order.status === '처리 중' ? 'bg-warning' : 
+                                order.status === '배송 중' ? 'bg-info' : 
+                                order.status === '배송 완료' ? 'bg-success' : 
+                                order.status === '반품중' ? 'bg-info' : 'bg-secondary'
+                            }`}>
+                                {order.status || "상태 정보 없음"}
+                            </span>
                         </div>
-                        
-                        <div className="table-responsive mb-3">
-                            <table className="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>상품 정보</th>
-                                        <th>수량</th>
-                                        <th>가격</th>
-                                        <th>합계</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {Array.isArray(order.productInfo) && order.productInfo.length > 0 ? (
-                                        order.productInfo.map((product, index) => {
-                                            const productDetail = productsInfo[product.productId] || {};
-                                            return (
-                                                <tr key={index}>
-                                                    <td className="d-flex align-items-center">
-                                                        {productDetail.image_url && (
-                                                            <img 
-                                                                src={`${API_BASE_URL}/showimage?filename=${productDetail.image_url}&obj=product`} 
-                                                                alt={productDetail.name || `상품 ${product.productId}`} 
-                                                                className="me-3 rounded" 
-                                                                style={{ width: '60px', height: '60px', objectFit: 'cover' }}
-                                                            />
-                                                        )}
-                                                        <div>
-                                                            <div>{productDetail.name || `상품 ID: ${product.productId}`}</div>
-                                                            {productDetail.brandname && <small className="text-muted">브랜드: {productDetail.brandname}</small>}
-                                                        </div>
-                                                    </td>
-                                                    <td>{product.quantity}</td>
-                                                    <td>{product.price ? `${product.price.toLocaleString()}원` : '-'}</td>
-                                                    <td>{product.price && product.quantity ? `${(product.price * product.quantity).toLocaleString()}원` : '-'}</td>
-                                                </tr>
-                                            );
-                                        })
-                                    ) : (
+                        <div className="card-body">
+                            <div className="mb-3">
+                                <strong>주문일:</strong> {order.orderDate ? new Date(order.orderDate).toLocaleString('ko-KR') : '정보 없음'}
+                            </div>
+                            
+                            <div className="table-responsive mb-3">
+                                <table className="table table-bordered">
+                                    <thead>
                                         <tr>
-                                            <td colSpan="4" className="text-center">상품 정보가 없습니다</td>
+                                            <th>상품 정보</th>
+                                            <th>수량</th>
+                                            <th>가격</th>
+                                            <th>합계</th>
                                         </tr>
-                                    )}
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colSpan="3" className="text-end"><strong>총 결제금액</strong></td>
-                                        <td><strong>{order.totalAmount ? `${order.totalAmount.toLocaleString()}원` : '0원'}</strong></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        
-                        <div className="row">
-                            <div className="col-md-6">
-                                <h5>배송 정보</h5>
-                                <p><strong>받는 사람:</strong> {order.receiverName || '정보 없음'}</p>
-                                <p><strong>연락처:</strong> {order.receiverPhone || '정보 없음'}</p>
-                                <p><strong>배송지:</strong> {order.shippingAddress || '정보 없음'}</p>
-                                <p><strong>배송 메시지:</strong> {order.shippingMessage || '정보 없음'}</p>
+                                    </thead>
+                                    <tbody>
+                                        {Array.isArray(order.productInfo) && order.productInfo.length > 0 ? (
+                                            order.productInfo.map((product, index) => {
+                                                const productDetail = productsInfo[product.productId] || {};
+                                                return (
+                                                    <tr key={index}>
+                                                        <td className="d-flex align-items-center">
+                                                            {productDetail.image_url && (
+                                                                <img 
+                                                                    src={`${API_BASE_URL}/showimage?filename=${productDetail.image_url}&obj=product`} 
+                                                                    alt={productDetail.name || `상품 ${product.productId}`} 
+                                                                    className="me-3 rounded" 
+                                                                    style={{ width: '60px', height: '60px', objectFit: 'cover' }}
+                                                                />
+                                                            )}
+                                                            <div>
+                                                                <div>{productDetail.name || `상품 ID: ${product.productId}`}</div>
+                                                                {productDetail.brandname && <small className="text-muted">브랜드: {productDetail.brandname}</small>}
+                                                            </div>
+                                                        </td>
+                                                        <td>{product.quantity}</td>
+                                                        <td>{product.price ? `${product.price.toLocaleString()}원` : '-'}</td>
+                                                        <td>{product.price && product.quantity ? `${(product.price * product.quantity).toLocaleString()}원` : '-'}</td>
+                                                    </tr>
+                                                );
+                                            })
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="4" className="text-center">상품 정보가 없습니다</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colSpan="3" className="text-end"><strong>상품 금액</strong></td>
+                                            <td>{productAmount.toLocaleString()}원</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="3" className="text-end"><strong>사용한 적립금</strong></td>
+                                            <td>{(order.usedPoints || 0).toLocaleString()}원</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="3" className="text-end"><strong>총 결제 금액</strong></td>
+                                            <td><strong>{finalAmount.toLocaleString()}원</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
-                            <div className="col-md-6">
-                                <h5>결제 정보</h5>
-                                <p><strong>결제 방법:</strong> {order.paymentMethod || '정보 없음'}</p>
-                                <p><strong>결제 금액:</strong> {order.totalAmount ? `${order.totalAmount.toLocaleString()}원` : '0원'}</p>
+                            
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <h5>배송 정보</h5>
+                                    <p><strong>받는 사람:</strong> {order.receiverName || '정보 없음'}</p>
+                                    <p><strong>연락처:</strong> {order.receiverPhone || '정보 없음'}</p>
+                                    <p><strong>이메일:</strong> {order.receiverEmail || '정보 없음'}</p>
+                                    <p><strong>배송지:</strong> {order.shippingAddress || '정보 없음'}</p>
+                                    <p><strong>배송 메시지:</strong> {order.shippingMessage || '정보 없음'}</p>
+                                </div>
+                                <div className="col-md-6">
+                                    <h5>결제 정보</h5>
+                                    <p><strong>결제 방법:</strong> {order.paymentMethod || '정보 없음'}</p>
+                                    <div className="d-flex justify-content-end mt-3">
+                                        {order.status === '처리 중' && (
+                                            <button 
+                                                className="btn btn-danger"
+                                                onClick={() => handleReturnOrder(order.orderId)}
+                                            >
+                                                반품 신청
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                );
+            })}
             
             <button className="btn btn-primary mt-3" onClick={() => navigate("/")}>
                 쇼핑 계속하기
