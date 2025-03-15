@@ -19,10 +19,10 @@ const MyPage = () => {
   });
 
   const [orderCounts, setOrderCounts] = useState({
-    pay: 0,
     preparing: 0,
     shipping: 0,
-    shipped: 0
+    shipped: 0,
+    return: 0
   });
 
   // 쿠키에서 최근 본 상품 목록 가져오기
@@ -59,14 +59,20 @@ const MyPage = () => {
 
   //주문 상황 가져오기
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/buy/orderFlowCount`)
-      .then((response) => {
-        setOrderCounts(response.data);
+    const token = Cookies.get('jwt_token'); 
+        
+    if (token) {
+      axios.get(`${API_BASE_URL}/buy/orderFlowCount`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        withCredentials: true
       })
-      .catch((error) => {
-        console.error('주문 상황 가져오기 실패:', error);
-      });
-  }, []);
+        .then((response) => {
+          setOrderCounts(response.data);
+        })
+        .catch((error) => {
+          console.error('주문 상황 가져오기 실패:', error);
+        });
+    }}, []);  
 
   const handleAdminPageClick = () => {
     navigate(`/my/admin`);
@@ -106,16 +112,9 @@ const MyPage = () => {
         <div className="mypage-box-order-flow">
           <div className="order-flow-detail">
               <div>
-                <div>결제 완료</div>
-                <div className="order-flow-box">
-                  <img src="/images/pay.jpg" alt="결제 완료"></img>
-                </div>
-                <div className="order-flow-count">{orderCounts.pay}</div>
-              </div>
-              <div>
                 <div>상품 준비중</div>
                 <div className="order-flow-box">
-                  <img src="/images/preparing.jpg" alt="상품 준비중"></img>
+                  <img src="/images/preparing.jpg" alt="결제 확인"></img>
                 </div>
                 <div className="order-flow-count">{orderCounts.preparing}</div>
               </div>
@@ -132,6 +131,13 @@ const MyPage = () => {
                   <img src="/images/delivered.jpg" alt="배송 완료"></img>
                 </div>
                 <div className="order-flow-count">{orderCounts.shipped}</div>
+              </div>
+              <div>
+                <div>반품</div>
+                <div className="order-flow-box">
+                  <img src="/images/pay.jpg" alt="반품"></img>
+                </div>
+                <div className="order-flow-count">{orderCounts.return}</div>
               </div>
           </div> 
         </div>
