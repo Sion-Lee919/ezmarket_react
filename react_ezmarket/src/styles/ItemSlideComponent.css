@@ -1,38 +1,109 @@
-.slide-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.custom-slide-item {
     padding: 10px;
+    transition: transform 0.3s ease-in-out;
 }
 
-.card-fixed {
-    width: 200px;
-    min-height: 365px;  
-    height: auto;      
-    display: flex;
-    flex-direction: column;
-}
-
-
-.card-img-custom {
-    width: 100%;
-    max-height: 250px;
-    object-fit: contain;
-}
-
-
-.card-body-custom {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-
-.card-hover {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.card-hover:hover {
+.custom-slide-item:hover {
     transform: scale(1.05);
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.custom-card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    min-height: 380px;
+}
+
+.custom-card-hover:hover {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.custom-section-title {
+    text-align: left;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #222;
+}
+
+
+.custom-card-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.custom-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.custom-card-title {
+    flex-grow: 1; 
+}
+
+.custom-card-price {
+    font-size: 1rem;
+    color: #666;
+    text-align: right;
+    margin-top: auto; 
+}
+
+.custom-card-body h5 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.custom-card-body p {
+    font-size: 1rem;
+    color: #000000;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .custom-card-img {
+        aspect-ratio: 4 / 5;
+    }
+
+    .custom-card-body h5 {
+        font-size: 1rem;
+    }
+
+    .custom-card-body p {
+        font-size: 0.9rem;
+    }
+
+    .custom-section-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-card-img {
+        aspect-ratio: 4 / 5;
+    }
+
+    .custom-card-body {
+        padding: 10px;
+    }
+
+    .custom-card-body h5 {
+        font-size: 0.9rem;
+    }
+
+    .custom-card-body p {
+        font-size: 0.85rem;
+    }
+
+    .custom-section-title {
+        font-size: 1.3rem;
+    }
 }

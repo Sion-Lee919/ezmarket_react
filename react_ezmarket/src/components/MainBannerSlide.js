@@ -53,18 +53,21 @@ function MainBannerSlide() {
     };
 
     return (
-        <div className="banner-container">
-            <Slider {...settings}>
-                {bannerImages.map((banner) => (
-                    <div key={banner.id} className="banner-slide">
-                        <a href={banner.link} className="banner-link">
-                            <img src={banner.imageUrl} alt={`Banner ${banner.id}`} className="banner-img" />
-                            <div className="banner-text">{banner.text}</div>
-                        </a>
-                    </div>
-                ))}
-            </Slider>
+        <div className="banner-wrapper">
+            <div className="banner-container">
+                <Slider {...settings}>
+                    {bannerImages.map((banner) => (
+                        <div key={banner.id} className="banner-slide">
+                            <a href={banner.link} className="banner-link">
+                                <img src={banner.imageUrl} alt={`Banner ${banner.id}`} className="banner-img" />
+                                <div className="banner-text">{banner.text}</div>
+                            </a>
+                        </div>
+                    ))}
+                </Slider>
+            </div>
         </div>
+
     );
 }
 

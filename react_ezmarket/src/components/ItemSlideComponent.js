@@ -15,7 +15,6 @@ function ItemSlideComponent() {
     const [newItems, setNewItems] = useState([]);
 
     useEffect(() => {
-
         axios.get(`${API_BASE_URL}/getitemsforrandom`)
             .then((res) => {
                 setRandomItems(res.data.random || []);
@@ -24,13 +23,13 @@ function ItemSlideComponent() {
             });
     }, []);
 
-    // react-slick 슬라이더
+    // react-slick 슬라이더 설정
     const sliderSettings = {
         dots: false,
         infinite: true,
         speed: 800,
-        slidesToShow: 6,
-        slidesToScroll: 3,
+        slidesToShow: 4,
+        slidesToScroll: 4,
         responsive: [
             {
                 breakpoint: 1200,
@@ -62,62 +61,60 @@ function ItemSlideComponent() {
 
     return (
         <Container className="mt-4 mb-5">
-            <h3 className="text-center mb-3">인기 상품 Top 6</h3>
+            <h3 className="text mb-3 custom-section-title">인기 상품</h3>
             <Slider {...sliderSettings}>
                 {popularItems.map((item) => (
-                    <div key={item.product_id} className="slide-item ">
-                        <Card className="shadow-sm card-fixed card-hover">
+                    <div key={item.product_id} className="custom-slide-item">
+                        <Card className="shadow-sm custom-card custom-card-hover">
                             <Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`}>
                                 <Image
                                     src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`}
-                                    className="card-img-custom"
+                                    className="custom-card-img"
                                 />
                             </Link>
-                            <Card.Body className="card-body-custom ">
-                                <Card.Title>{cleanTitle(item.name)}</Card.Title>
-                                <Card.Text>{item.price.toLocaleString()}원</Card.Text>
+                            <Card.Body className="custom-card-body">
+                                <Card.Title className="custom-card-title">{cleanTitle(item.name)}</Card.Title>
+                                <Card.Text className="custom-card-price">{item.price.toLocaleString()}원</Card.Text>
                             </Card.Body>
                         </Card>
                     </div>
                 ))}
             </Slider>
 
-     
-            <h3 className="text-center mt-4 mb-3"> 신상품 Top 6</h3>
+            <h3 className="text mt-4 mb-3 custom-section-title">신상품</h3>
             <Slider {...sliderSettings}>
                 {newItems.map((item) => (
-                    <div key={item.product_id} className="slide-item">
-                        <Card className="shadow-sm card-fixed card-hover">
+                    <div key={item.product_id} className="custom-slide-item">
+                        <Card className="shadow-sm custom-card custom-card-hover">
                             <Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`}>
                                 <Image
                                     src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`}
-                                    className="card-img-custom"
+                                    className="custom-card-img"
                                 />
                             </Link>
-                            <Card.Body className="card-body-custom">
-                                <Card.Title>{cleanTitle(item.name)}</Card.Title>
-                                <Card.Text>{item.price.toLocaleString()}원</Card.Text>
+                            <Card.Body className="custom-card-body">
+                                <Card.Title className="custom-card-title">{cleanTitle(item.name)}</Card.Title>
+                                <Card.Text className="custom-card-price">{item.price.toLocaleString()}원</Card.Text>
                             </Card.Body>
                         </Card>
                     </div>
-
                 ))}
             </Slider>
 
-            <h3 className="text-center mt-4 mb-3">이지 마켓의 추천 상품</h3>
+            <h3 className="text mt-4 mb-3 custom-section-title">전통주 장인의 추천 상품</h3>
             <Slider {...sliderSettings}>
                 {randomItems.map((item) => (
-                    <div key={item.product_id} className="slide-item">
-                        <Card className="shadow-sm card-fixed card-hover">
+                    <div key={item.product_id} className="custom-slide-item">
+                        <Card className="shadow-sm custom-card custom-card-hover">
                             <Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`}>
                                 <Image
                                     src={`${API_BASE_URL}/showimage?filename=${item.image_url}&obj=product`}
-                                    className="card-img-custom"
+                                    className="custom-card-img"
                                 />
                             </Link>
-                            <Card.Body className="card-body-custom">
-                                <Card.Title>{cleanTitle(item.name)}</Card.Title>
-                                <Card.Text>{item.price.toLocaleString()}원</Card.Text>
+                            <Card.Body className="custom-card-body">
+                                <Card.Title className="custom-card-title">{cleanTitle(item.name)}</Card.Title>
+                                <Card.Text className="custom-card-price">{item.price.toLocaleString()}원</Card.Text>
                             </Card.Body>
                         </Card>
                     </div>
@@ -126,7 +123,11 @@ function ItemSlideComponent() {
         </Container>
     );
 }
+
 export default ItemSlideComponent;
+
+
+
 
 
 
