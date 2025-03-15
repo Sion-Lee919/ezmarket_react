@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'
 import axios from 'axios';
+import MyPageSideBar from '../my/myPageSideBar';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
@@ -44,9 +45,14 @@ const AdminPage = () => {
     };
 
     return (
-        <div>
-            <button onClick={handleUserManageClick}>회원 관리</button>
-            <button onClick={handleSellerManageClick}>판매자 관리</button>
+        <div className="mypage-form">
+            <MyPageSideBar></MyPageSideBar>
+            <div className="mypage-info">
+                <div className="admin-select">
+                    <button className="admin-select-button" onClick={handleUserManageClick}>회원 관리</button>
+                    <button className="admin-select-button" onClick={handleSellerManageClick}>판매자 관리</button>
+                </div>
+            </div>
         </div>
     );
 };

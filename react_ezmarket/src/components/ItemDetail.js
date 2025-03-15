@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-//import { useParams, useNavigate } from "react-router-dom";
-
 import Cookies from 'js-cookie';
 
 import ReviewComponent from "./ReviewComponent";
@@ -57,6 +55,7 @@ function ItemDetail() {
 
             axios.get(`${API_BASE_URL}/userinfo`, { 
 
+
                 headers: { 'Authorization': `Bearer ${token}` }, 
                 withCredentials: true
             })
@@ -70,17 +69,35 @@ function ItemDetail() {
             });
         }
 
+
     }, [])
+
 
     useEffect(() => {
         axios({
             url : `${API_BASE_URL}/item/${itemid}`,
             method : 'GET',
-
         })
         .then(function(res) {
             setDto(res.data);
 
+            
+            const product = {
+                product_id: itemid,
+                image_url: res.data.image_url,
+                name: res.data.name
+            };
+
+            let recently_viewed = JSON.parse(Cookies.get('recently_viewed') || '[]');
+
+            if (!recently_viewed.some(item => item.product_id === itemid)) {
+                if (recently_viewed.length >= 5) {
+                    recently_viewed.shift(); 
+                }
+                recently_viewed.push(product); 
+                
+                Cookies.set('recently_viewed', JSON.stringify(recently_viewed), { expires: 3 });
+        }
         })
 
     }, [itemid]);
@@ -212,12 +229,9 @@ function ItemDetail() {
                 <div className="product-image" style={{ width: '500px', height: '600px', border: '2px solid #838383'  }}>
                     <img
 
-
                         alt="제품 이미지"
                         src={`${API_BASE_URL}/showimage?filename=${dto.image_url}&obj=product`}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-
-
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                     />
                 </div>
                 <div className="product-details" style={{ width: '400px', height: 'auto' }}>
@@ -285,6 +299,8 @@ function ItemDetail() {
                         ) : (
                             <button className="sign-up-to-buy" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={handleLoginClick}>회원가입 후 구매</button>
                         )}
+                        <h3 style={{ marginTop: "20px" }}>이 전통주가 취향에 맞으셨다면?</h3>
+                        <button className="brand-link" style={{ width: '100%', padding: '10px', marginTop: '10px' }} onClick={() => navigate(`/brandItems?brand_id=${dto.brand_id}`)}>이 브랜드의 다른 제품도 만나보세요</button>
                     </div>
                 </div>
             </div>

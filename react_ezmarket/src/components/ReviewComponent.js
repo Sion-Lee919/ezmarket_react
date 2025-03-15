@@ -70,6 +70,7 @@ const style = {
     },
     review_image_input: {
         display: 'none',
+        
     },
     button_container: {
         display: 'flex',
@@ -127,10 +128,11 @@ const style = {
         color: '#888',
     },
     review_image: {
-        marginTop: '10px',
-        maxWidth: '100%',
-        height: 'auto',
+        width: "300px", 
+        height: "400px", 
+        objectFit: "contain", 
     },
+    
     review_even: {
         backgroundColor: '#f9f9f9', // 짝수 번째 항목에 회색 배경
     }
@@ -374,11 +376,36 @@ const ReviewComponent = (props) => {
                             onChange={(e) => setComments(e.target.value)}
                             style={style.review_textarea}
                         ></textarea>
-                        <img
-                            src={previewImg ? previewImg : null}
-                            alt="" 
-                            onChange={setPreviewImg}
-                        />
+                        {previewImg && (
+                            <div style={{ position: "relative", display: "inline-block" }}>
+                                <img
+                                    src={previewImg}
+                                    alt="이미지 미리보기"
+                                    style={{ width: "200px", height: "200px", objectFit: "cover", borderRadius: "8px" }}
+                                />
+                                <button 
+                                    onClick={() => {setImageUrl(null);setPreviewImg(null)}} 
+                                    style={{
+                                        position: "absolute",
+                                        top: "5px",
+                                        right: "5px",
+                                        background: "rgba(0, 0, 0, 0.7)",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "50%",
+                                        width: "24px",
+                                        height: "24px",
+                                        fontSize: "16px",
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center"
+                                    }}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <div style={style.button_container}>

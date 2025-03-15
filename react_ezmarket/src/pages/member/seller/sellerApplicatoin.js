@@ -149,33 +149,45 @@ const SellerApplication = () => {
   };
 
   return (
-    <div>
-      <h2>판매자 신청</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="join-form-container">
+      <div className="join-flow">
+        <div className="join-flow-title">판매자 정보</div>
+      </div>
+      <hr></hr>
+
+      <form className="join-form" onSubmit={handleSubmit}>
+        <div className="join-form-title">
+            판매자 신청<hr></hr>
+        </div>
+
         <div>
           <input type="hidden" name="brand_id" value={form.brand_id} />
           <input type="hidden" name="member_id" value={form.member_id} />
         </div>
 
         <div>
-          <label htmlFor="brandName">상호명: </label>
-          <input type="text" id="brandName" value={form.brandname} onChange={(e) => setForm({ ...form, brandname: e.target.value })} maxLength={100} required />
+          <input type="text" id="brandName" value={form.brandname} onChange={(e) => setForm({ ...form, brandname: e.target.value })} maxLength={100} required placeholder="상호명 입력"/>
         </div>
+        <div>
+          <input type="text" id="brandNumber" value={form.brand_number} onChange={checkBrandNumber} placeholder="'-'를 제외한 사업자 번호 10자리를 적어주세요." pattern="\d{10}" title="'-'를 제외한 사업자 번호 10자리를 적어주세요." maxLength={10} required />
+          {form.brand_number.length === 10 && <div>{BrandNumberCheckResult}</div>}
+        </div>
+        <br></br>
         <div>
           <label htmlFor="brandLicenseFile">상호 로고: </label>
-          {brandLogoPreview && <img src={brandLogoPreview} alt="상호 로고 미리보기"/>}
+          <div>
+          {brandLogoPreview && <img src={brandLogoPreview} style = {{ width: '200px' , height: '200px'}} alt="상호 로고 미리보기"/>}
+          </div>
           <input type="file" id="brandLogoFile" accept="image/*" onChange={handleBrandLogoChange} required />
         </div>
-        <div>
-          <label htmlFor="brandNumber">사업자 번호: </label>
-          <input type="text" id="brandNumber" value={form.brand_number} onChange={checkBrandNumber} placeholder="'-'를 제외한 사업자 번호 10자리를 적어주세요." pattern="\d{10}" title="'-'를 제외한 사업자 번호 10자리를 적어주세요." maxLength={10} required />
-          {form.brand_number.length === 10 && <span>{BrandNumberCheckResult}</span>}
-        </div>
+        <br></br>
         <div>
           <label htmlFor="brandLicenseFile">사업자 등록증: </label>
           <input type="file" id="brandLicenseFile" accept="application/pdf" onChange={(e) => setBrandLicenseFile(e.target.files[0])} required />
         </div>
-        <button type="submit" disabled={isSubmitDisabled}>판매자 신청</button>
+        <div className="join-button-form">
+          <button type="submit" className="join-join" disabled={isSubmitDisabled}>판매자 신청</button>
+        </div>
       </form>
     </div>
   );

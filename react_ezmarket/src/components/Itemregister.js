@@ -18,6 +18,11 @@ const ItemRegister = ({ onClose }) => {
     const [bigCategory, setBigCategory] = useState("");
     const [subCategory, setSubCategory] = useState("");
     const [productIngredient, setProductIngredient] = useState("");
+    const [sweetness, setsweetness] = useState("");
+    const [sourness, setsourness] = useState("");
+    const [carbonation, setcarbonation] = useState("");
+    const [body, setbody] = useState("");
+
 
     const [imageUrl, setImageUrl] = useState(null);
     const { brandid } = useParams();
@@ -43,6 +48,10 @@ const ItemRegister = ({ onClose }) => {
         formData.append("product_region", productRegion);
         formData.append("bigcategory", bigCategory);
         formData.append("subcategory", subCategory);
+        formData.append("sweetness", sweetness);
+        formData.append("sourness", sourness);
+        formData.append("carbonation", carbonation);
+        formData.append("body", body);
 
         if (imageUrl) {
             formData.append("image", imageUrl);
@@ -136,6 +145,38 @@ const ItemRegister = ({ onClose }) => {
                     name="volume" 
                     value={volume}
                     onChange={(e) => setVolume(e.target.value)} 
+                /><br />
+
+                <label htmlFor="sweetness">단맛</label>
+                <input 
+                    type="text"
+                    name="sweetness" 
+                    value={sweetness}
+                    onChange={(e) => setsweetness(e.target.value)} 
+                /><br />
+
+                <label htmlFor="sourness">신맛</label>
+                <input 
+                    type="text"
+                    name="sourness" 
+                    value={sourness}
+                    onChange={(e) => setsourness(e.target.value)} 
+                /><br />
+
+                <label htmlFor="carbonation">탄산감</label>
+                <input 
+                    type="text"
+                    name="carbonation" 
+                    value={carbonation}
+                    onChange={(e) => setcarbonation(e.target.value)} 
+                /><br />
+
+                <label htmlFor="body">바디감</label>
+                <input 
+                    type="text"
+                    name="body" 
+                    value={body}
+                    onChange={(e) => setbody(e.target.value)} 
                 /><br />
 
                 <label htmlFor="product_ingredient">원재료</label>

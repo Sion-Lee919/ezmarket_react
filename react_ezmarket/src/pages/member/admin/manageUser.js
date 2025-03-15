@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';  
 import { useNavigate } from 'react-router-dom';  
 import Cookies from 'js-cookie';
+import MyPageSideBar from '../my/myPageSideBar';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
@@ -90,49 +91,55 @@ const ManageUser = () => {
 
 
   return (
-    <div>
-      <h2>유저 관리</h2>
-        <table border="1">
-          <thead>
-            <tr>
-              <th>가입 날짜</th>
-              <th>정보 수정 날짜</th>
-              <th>ID</th>
-              <th>이름</th>
-              <th>닉네임</th>
-              <th>이메일</th>
-              <th>전화번호</th>
-              <th>주소</th>
-              <th>회원 상태</th>
-              <th>강퇴/탈퇴 사유</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {allUsers.map((user) => (
-              <tr key={user.member_id}>
-                <td>{user.join_date}</td>
-                <td>{user.update_date}</td>
-                <td>{user.username}</td>
-                <td>{user.realname}</td>
-                <td>{user.nickname}</td>
-                <td>{user.email}</td>
-                <td>{user.phone}</td>
-                <td>{user.address}</td>
-                <td>{user.member_status}</td>
-                <td>{user.member_kick_comment}</td>
-                <td>
-                    {user.member_status !== "정상" && (
-                      <button onClick={() => handleRestore(user.member_id)}>복구</button>
-                    )}
-                    {user.member_status === "정상" && (
-                      <button onClick={() => handleKick(user.member_id)}>강퇴</button>
-                    )}
-                </td>
+    <div className="mypage-form">
+      <MyPageSideBar></MyPageSideBar>
+      <div className="mypage-info"> 
+        <div className="manage-table">
+          <table border="1" style={{ borderCollapse: 'collapse', tableLayout: 'fixed', width: '100%', border: '1px solid rgb(209, 198, 198)'}}>
+            <thead>
+              <tr>
+                <th style={{width:'6%'}}>권한</th>
+                <th style={{width:'10%'}}>가입 날짜</th>
+                <th style={{width:'10%'}}>수정 날짜</th>
+                <th style={{width:'8%'}}>ID</th>
+                <th style={{width:'8%'}}>이름</th>
+                <th style={{width:'8%'}}>닉네임</th>
+                <th style={{width:'10%'}}>이메일</th>
+                <th style={{width:'9%'}}>전화번호</th>
+                <th style={{width:'10%'}}>주소</th>
+                <th style={{width:'5%'}}>회원 상태</th>
+                <th style={{width:'10%'}}>강/탈퇴 사유</th>
+                <th style={{width:'6%'}}></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody style={{height: '350px'}}>
+              {allUsers.map((user) => (
+                <tr key={user.member_id}>
+                  <td>{user.userauthor === 0 ? '관리자' : user.userauthor === 2 ? '판매자' : '구매자'}</td>
+                  <td>{user.join_date}</td>
+                  <td>{user.update_date}</td>
+                  <td style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em', whiteSpace: 'nowrap'}}>{user.username}</td>
+                  <td>{user.realname}</td>
+                  <td style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em'}}>{user.nickname}</td>
+                  <td style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em'}}>{user.email}</td>
+                  <td>{user.phone}</td>
+                  <td style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em'}}>{user.address}</td>
+                  <td>{user.member_status}</td>
+                  <td style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em'}}>{user.member_kick_comment}</td>
+                  <td>
+                      {user.member_status !== "정상" && (
+                        <button className="positive-button" onClick={() => handleRestore(user.member_id)}>복구</button>
+                      )}
+                      {user.member_status === "정상" && (
+                        <button className="negative-button" onClick={() => handleKick(user.member_id)}>강퇴</button>
+                      )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

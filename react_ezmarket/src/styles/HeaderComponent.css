@@ -9,19 +9,41 @@
     color: white;
 }
 
-/* 드롭다운 배경색 변경 */
 .custom-dropdown {
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(147, 153, 155);
 }
 
-/* 드롭다운 항목 스타일 */
 .custom-dropdown .dropdown-item {
-    color: rgb(0, 0, 0) ; /* 글자색 변경 */
+    color: rgb(0, 0, 0) ;
 }
 
-/* 드롭다운 항목 hover 효과 */
 .custom-dropdown .dropdown-item:hover {
     background-color: rgb(24, 159, 219); 
     color: white ;
+}
+
+/* 추천 태그 영역 - 헤더 아래 두 번째 줄 */
+.recommend-tags-container {
+    padding: 8px 0;
+    background-color: #ffffff; /* 연한 배경색 */
+}
+
+/* 추천 태그 스타일 */
+.recommend-tag {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 5px 12px;
+    font-size: 16px;
+    color: #003cff;
+    background-color: #eef4ff;
+    border-radius: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.recommend-tag:hover {
+    background-color: #d6e4ff;
+    color: #0056b3;
 }
