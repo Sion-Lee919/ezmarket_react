@@ -48,6 +48,10 @@ const Modifyitem = () => {
         formData.append("product_region", product.product_region);
         formData.append("bigcategory", product.bigcategory);
         formData.append("subcategory", product.subcategory);
+        formData.append("sweetness", product.sweetness);
+        formData.append("sourness", product.sourness);
+        formData.append("carbonation", product.carbonation);
+        formData.append("body", product.body);
         if (selectedFile) {
             formData.append("image", selectedFile);
         }
@@ -83,6 +87,18 @@ const Modifyitem = () => {
 
                 <label>도수:</label>
                 <input type="number" name="alcohol" value={product.alcohol} onChange={handleChange} />
+
+                <label>단맛:</label>
+                <input type="number" name="sweetness" value={product.sweetness} onChange={handleChange} />
+
+                <label>신맛:</label>
+                <input type="number" name="sourness" value={product.sourness} onChange={handleChange} />
+
+                <label>탄산감:</label>
+                <input type="number" name="carbonation" value={product.carbonation} onChange={handleChange} />
+
+                <label>바디감:</label>
+                <input type="number" name="body" value={product.body} onChange={handleChange} />
 
                 <label>재고:</label>
                 <input type="number" name="stock_quantity" value={product.stock_quantity} onChange={handleChange} />

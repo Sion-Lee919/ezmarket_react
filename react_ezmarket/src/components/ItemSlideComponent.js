@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { Card, Image, Container } from "react-bootstrap";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "../styles/ItemSlideComponent.css"; // 스타일 적용
+import "../styles/ItemSlideComponent.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
@@ -26,7 +26,7 @@ function ItemSlideComponent() {
 
     // react-slick 슬라이더
     const sliderSettings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 800,
         slidesToShow: 6,
@@ -65,7 +65,7 @@ function ItemSlideComponent() {
             <h3 className="text-center mb-3">인기 상품 Top 6</h3>
             <Slider {...sliderSettings}>
                 {popularItems.map((item) => (
-                    <div key={item.product_id} className="slide-item">
+                    <div key={item.product_id} className="slide-item ">
                         <Card className="shadow-sm card-fixed card-hover">
                             <Link to={`/item/${item.product_id}?brand_id=${item.brand_id}`}>
                                 <Image
@@ -73,7 +73,7 @@ function ItemSlideComponent() {
                                     className="card-img-custom"
                                 />
                             </Link>
-                            <Card.Body className="card-body-custom">
+                            <Card.Body className="card-body-custom ">
                                 <Card.Title>{cleanTitle(item.name)}</Card.Title>
                                 <Card.Text>{item.price.toLocaleString()}원</Card.Text>
                             </Card.Body>
