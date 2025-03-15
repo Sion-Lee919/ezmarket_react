@@ -2,12 +2,163 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { addressData } from "../values/address.value";
 import Cookies from 'js-cookie';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
-const provinces = Object.keys(addressData);
+const styles = {
+  container: {
+    maxWidth: '900px',
+    margin: '20px auto', 
+    backgroundColor: '#fff',
+    fontFamily: 'Arial, sans-serif'
+  },
+  heading: {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    margin: '30px 0',
+    borderBottom: '1px solid #eee',
+    paddingBottom: '15px'
+  },
+  sectionTitle: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    backgroundColor: '#f8f9fa',
+    padding: '10px 15px',
+    borderBottom: '1px solid #ddd',
+    marginBottom: '15px'
+  },
+  card: {
+    marginBottom: '25px',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    overflow: 'hidden'
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse'
+  },
+  tableHeader: {
+    textAlign: 'left',
+    padding: '10px',
+    borderBottom: '1px solid #ddd',
+    backgroundColor: '#f8f9fa'
+  },
+  tableCell: {
+    padding: '10px',
+    borderBottom: '1px solid #eee'
+  },
+  productImage: {
+    width: '60px',
+    height: '60px',
+    objectFit: 'cover',
+    borderRadius: '4px'
+  },
+  formRow: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '15px'
+  },
+  label: {
+    width: '150px',
+    textAlign: 'left',
+    fontSize: '14px',
+    color: '#333',
+    padding: '0 15px 0 0'
+  },
+  formField: {
+    flex: 1,
+    border: '1px solid #ddd',
+    padding: '8px 12px',
+    borderRadius: '4px',
+    fontSize: '14px'
+  },
+  select: {
+    border: '1px solid #ddd',
+    padding: '8px 12px',
+    borderRadius: '4px',
+    fontSize: '14px',
+    width: '100%',
+    backgroundColor: '#fff'
+  },
+  submitBtn: {
+    backgroundColor: '#0088cc',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    padding: '10px 20px',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+  },
+  backBtn: {
+    backgroundColor: '#6c757d',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    padding: '10px 20px',
+    fontSize: '16px',
+    cursor: 'pointer',
+  },
+  radioContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '20px'
+  },
+  radioLabel: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    fontSize: '14px'
+  },
+  radioInput: {
+    marginRight: '8px'
+  },
+  summaryBox: {
+    backgroundColor: '#f8f9fa',
+    padding: '15px',
+    marginTop: '15px',
+    borderRadius: '4px',
+    border: '1px solid #ddd'
+  },
+  priceRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: '10px 0'
+  },
+  priceLabel: {
+    fontSize: '15px'
+  },
+  priceValue: {
+    fontSize: '15px',
+    fontWeight: 'bold'
+  },
+  totalRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: '10px 0',
+    borderTop: '1px solid #ddd',
+    paddingTop: '10px'
+  },
+  totalLabel: {
+    fontSize: '16px',
+    fontWeight: 'bold'
+  },
+  totalValue: {
+    fontSize: '20px',
+    fontWeight: 'bold',
+    color: '#0066cc'
+  },
+  mileageInfo: {
+    fontSize: '12px',
+    color: '#666',
+    textAlign: 'right',
+    marginTop: '5px'
+  }
+};
 
 const OrderComponent = () => {
     const location = useLocation();
@@ -16,9 +167,7 @@ const OrderComponent = () => {
 
     const [shippingMessage, setShippingMessage] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("무통장입금");
-    const [selectedProvince, setSelectedProvince] = useState("");
-    const [selectedDistrict, setSelectedDistrict] = useState("");
-    const [detailAddress, setDetailAddress] = useState("");
+    const [address, setAddress] = useState("");
     const [receiverName, setReceiverName] = useState("");
     const [receiverPhone, setReceiverPhone] = useState("");
     const [receiverEmail, setReceiverEmail] = useState("");
@@ -26,13 +175,6 @@ const OrderComponent = () => {
     const [usedPoints, setUsedPoints] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
     const [userInfo, setUserInfo] = useState(null);
-
-    const districts = selectedProvince ? addressData[selectedProvince] : [];
-
-    const handleProvinceChange = (e) => {
-        setSelectedProvince(e.target.value);
-        setSelectedDistrict("");
-    };
 
     const getTokenFromCookie = () => {
         return Cookies.get('jwt_token') || null;
@@ -51,7 +193,6 @@ const OrderComponent = () => {
                     setUserInfo(response.data);
                     setMemberPoints(Number(response.data.points) || 0);
                     
-                    // Pre-fill shipping information from user data
                     if (response.data.realname) {
                         setReceiverName(response.data.realname);
                     }
@@ -64,9 +205,8 @@ const OrderComponent = () => {
                         setReceiverEmail(response.data.email);
                     }
                     
-                    // Handle address parsing if available
                     if (response.data.address) {
-                        parseAndSetAddress(response.data.address);
+                        setAddress(response.data.address);
                     }
                     
                 } catch (error) {
@@ -78,47 +218,6 @@ const OrderComponent = () => {
         
         fetchUserInfo();
     }, []);
-    
-    // Function to parse address into province, district, and detail
-    const parseAndSetAddress = (fullAddress) => {
-        if (!fullAddress) return;
-        
-        try {
-            let foundProvince = "";
-            let foundDistrict = "";
-            
-            // Find matching province in the address
-            for (const province of provinces) {
-                if (fullAddress.includes(province)) {
-                    foundProvince = province;
-                    setSelectedProvince(province);
-                    
-                    // Find matching district in the address
-                    const districtsInProvince = addressData[province];
-                    for (const district of districtsInProvince) {
-                        if (fullAddress.includes(district)) {
-                            foundDistrict = district;
-                            setSelectedDistrict(district);
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-            
-            // Set detail address by removing province and district
-            if (foundProvince && foundDistrict) {
-                let detail = fullAddress.replace(foundProvince, "").replace(foundDistrict, "").trim();
-                setDetailAddress(detail);
-            } else {
-                // If parsing fails, just set the whole thing as detail address
-                setDetailAddress(fullAddress);
-            }
-        } catch (error) {
-            console.error("주소 파싱 중 오류 발생:", error);
-            setDetailAddress(fullAddress);
-        }
-    };
 
     useEffect(() => {
         const total = selectedCartItems.reduce((sum, item) => sum + item.totalPrice, 0);
@@ -136,8 +235,8 @@ const OrderComponent = () => {
             alert("받는 사람을 입력해주세요.");
             return;
         }
-        if (!selectedProvince || !selectedDistrict || !detailAddress) {
-            alert("주소를 모두 입력해주세요.");
+        if (!address) {
+            alert("주소를 입력해주세요.");
             return;
         }
         if (!receiverPhone) {
@@ -156,9 +255,8 @@ const OrderComponent = () => {
             return;
         }
 
-        const fullAddress = `${selectedProvince} ${selectedDistrict} ${detailAddress}`;
         const orderData = {
-            shippingAddress: fullAddress,
+            shippingAddress: address,
             shippingMessage,
             paymentMethod,
             receiverName,
@@ -171,11 +269,11 @@ const OrderComponent = () => {
             usedPoints: Number(usedPoints),
         };
 
+        console.log("Order Data Sent to Backend:", orderData);
+
         try {
             const response = await axios.post(
-
                 `${API_BASE_URL}/buy/orderid`, 
-
                 orderData,
                 {
                     headers: {
@@ -216,235 +314,251 @@ const OrderComponent = () => {
     const remainingAmount = totalAmount - usedPoints;
 
     return (
-        <div className="container mt-5">
-            <h2>주문서 작성</h2>
+        <div style={styles.container}>
+            <h2 style={styles.heading}>주문서 작성</h2>
+            
             {selectedCartItems.length === 0 ? (
-                <div className="alert alert-warning">
-                    선택된 상품이 없습니다.
-                    <button className="btn btn-link" onClick={() => navigate("/cart")}>
+                <div style={{ padding: '20px', backgroundColor: '#f8f9fa', textAlign: 'center', marginBottom: '20px' }}>
+                    <p>선택된 상품이 없습니다.</p>
+                    <button 
+                        onClick={() => navigate("/cart")}
+                        style={styles.backBtn}
+                    >
                         장바구니로 돌아가기
                     </button>
                 </div>
             ) : (
                 <>
-                    <div className="card mb-4">
-                        <div className="card-header">주문 상품 목록</div>
-                        <div className="card-body">
-                            <table className="table">
+                    <div style={styles.card}>
+                        <div style={styles.sectionTitle}>주문상품내역</div>
+                        <div style={{ padding: '10px' }}>
+                            <table style={styles.table}>
                                 <thead>
                                     <tr>
-                                        <th>상품 이미지</th>
-                                        <th>상품명</th>
-                                        <th>수량</th>
-                                        <th>단가</th>
-                                        <th>금액</th>
+                                        <th style={{ ...styles.tableHeader, width: '50%' }}>상품/옵션 정보</th>
+                                        <th style={{ ...styles.tableHeader, width: '10%', textAlign: 'center' }}>수량</th>
+                                        <th style={{ ...styles.tableHeader, width: '20%', textAlign: 'right' }}>단가</th>
+                                        <th style={{ ...styles.tableHeader, width: '20%', textAlign: 'right' }}>금액</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {selectedCartItems.map((item, index) => (
                                         <tr key={index}>
-                                            <td>
-
-                                                <img 
-                                                    src={`${API_BASE_URL}/showimage?filename=${item.image}&obj=product`} 
-                                                    alt={item.productName || '상품 이미지'} 
-                                                    className="rounded" 
-
-                                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                                                />
+                                            <td style={styles.tableCell}>
+                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <img 
+                                                        src={`${API_BASE_URL}/showimage?filename=${item.image}&obj=product`} 
+                                                        alt={item.productName || '상품 이미지'} 
+                                                        style={styles.productImage}
+                                                    />
+                                                    <div style={{ marginLeft: '10px' }}>
+                                                        {item.productName || `상품 ID: ${item.productId}`}
+                                                    </div>
+                                                </div>
                                             </td>
-                                            <td>{item.productName || `상품 ID: ${item.productId}`}</td>
-                                            <td>{item.quantity}</td>
-                                            <td>{item.price ? item.price.toLocaleString() : (item.totalPrice / item.quantity).toLocaleString()}원</td>
-                                            <td>{item.totalPrice.toLocaleString()}원</td>
+                                            <td style={{ ...styles.tableCell, textAlign: 'center' }}>{item.quantity}</td>
+                                            <td style={{ ...styles.tableCell, textAlign: 'right' }}>{item.price ? item.price.toLocaleString() : (item.totalPrice / item.quantity).toLocaleString()}원</td>
+                                            <td style={{ ...styles.tableCell, textAlign: 'right', fontWeight: 'bold' }}>{item.totalPrice.toLocaleString()}원</td>
                                         </tr>
                                     ))}
                                 </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <td colSpan="4" className="text-end"><strong>총 결제 금액:</strong></td>
-                                        <td>
-                                            <strong>{totalAmount.toLocaleString()}원</strong>
-                                        </td>
+                                    <tr style={{ backgroundColor: '#f8f9fa' }}>
+                                        <td colSpan="3" style={{ ...styles.tableCell, textAlign: 'right', fontWeight: 'bold' }}>상품금액:</td>
+                                        <td style={{ ...styles.tableCell, textAlign: 'right', fontWeight: 'bold' }}>{totalAmount.toLocaleString()}원</td>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
                     </div>
 
-                    <div className="card mb-4">
-                        <div className="card-header">적립금 사용</div>
-                        <div className="card-body">
-                            <div className="mb-3 row">
-                                <label className="col-sm-2 col-form-label">보유 적립금</label>
-                                <div className="col-sm-10">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={`${memberPoints.toLocaleString()}점`}
-                                        readOnly
-                                    />
-                                </div>
+                    <div style={styles.card}>
+                        <div style={styles.sectionTitle}>적립금 사용</div>
+                        <div style={{ padding: '15px' }}>
+                            <div style={styles.formRow}>
+                                <label style={styles.label}>보유 적립금</label>
+                                <input
+                                    type="text"
+                                    style={{ ...styles.formField, backgroundColor: '#f9f9f9' }}
+                                    value={`${memberPoints.toLocaleString()}점`}
+                                    readOnly
+                                />
                             </div>
-                            <div className="mb-3 row">
-                                <label className="col-sm-2 col-form-label">사용할 적립금</label>
-                                <div className="col-sm-10">
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        value={usedPoints}
-                                        onChange={handleUsedPointsChange}
-                                        min="0"
-                                        max={Math.min(memberPoints, totalAmount)}
-                                        placeholder="사용할 적립금을 입력하세요"
-                                    />
-                                    <small className="text-muted">최대 사용 가능 적립금: {Math.min(memberPoints, totalAmount).toLocaleString()}점</small>
-                                </div>
+                            <div style={styles.formRow}>
+                                <label style={styles.label}>사용할 적립금</label>
+                                <input
+                                    type="number"
+                                    style={styles.formField}
+                                    value={usedPoints}
+                                    onChange={handleUsedPointsChange}
+                                    min="0"
+                                    max={Math.min(memberPoints, totalAmount)}
+                                    placeholder="사용할 적립금을 입력하세요"
+                                />
                             </div>
-                            <div className="mb-3 row">
-                                <label className="col-sm-2 col-form-label">최종 결제 금액</label>
-                                <div className="col-sm-10">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={`${remainingAmount.toLocaleString()}원`}
-                                        readOnly
-                                    />
-                                </div>
+                            <div style={{ fontSize: '13px', color: '#666', padding: '0 0 10px 150px' }}>
+                                최대 사용 가능 적립금: {Math.min(memberPoints, totalAmount).toLocaleString()}점
+                            </div>
+                            <div style={styles.formRow}>
+                                <label style={styles.label}>최종 결제 금액</label>
+                                <input
+                                    type="text"
+                                    style={{ ...styles.formField, backgroundColor: '#f9f9f9', fontWeight: 'bold' }}
+                                    value={`${remainingAmount.toLocaleString()}원`}
+                                    readOnly
+                                />
                             </div>
                         </div>
                     </div>
 
-                    <div className="card mb-4">
-                        <div className="card-header">배송 정보</div>
-                        <div className="card-body">
-                            <div className="mb-3 row">
-                                <label className="col-sm-2 col-form-label">받는 사람 <span className="text-danger">*</span></label>
-                                <div className="col-sm-10">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={receiverName}
-                                        onChange={(e) => setReceiverName(e.target.value)}
-                                        placeholder="받는 사람 이름을 입력해주세요"
-                                        required
-                                    />
-                                </div>
+                    <div style={styles.card}>
+                        <div style={styles.sectionTitle}>배송 정보</div>
+                        <div style={{ padding: '15px' }}>
+                            <div style={styles.formRow}>
+                                <label style={styles.label}>받는 사람 <span style={{ color: 'red' }}>*</span></label>
+                                <input
+                                    type="text"
+                                    style={styles.formField}
+                                    value={receiverName}
+                                    onChange={(e) => setReceiverName(e.target.value)}
+                                    placeholder="받는 사람 이름을 입력해주세요"
+                                    required
+                                />
                             </div>
-                            <div className="mb-3 row">
-                                <label className="col-sm-2 col-form-label">주소 <span className="text-danger">*</span></label>
-                                <div className="col-sm-10">
-                                    <div className="row mb-2">
-                                        <div className="col-md-6">
-                                            <select
-                                                className="form-select"
-                                                value={selectedProvince}
-                                                onChange={handleProvinceChange}
-                                                required
-                                            >
-                                                <option value="">시/도 선택</option>
-                                                {provinces.map(province => (
-                                                    <option key={province} value={province}>{province}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <select
-                                                className="form-select"
-                                                value={selectedDistrict}
-                                                onChange={(e) => setSelectedDistrict(e.target.value)}
-                                                disabled={!selectedProvince}
-                                                required
-                                            >
-                                                <option value="">시/군/구 선택</option>
-                                                {districts.map(district => (
-                                                    <option key={district} value={district}>{district}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={detailAddress}
-                                        onChange={(e) => setDetailAddress(e.target.value)}
-                                        placeholder="상세 주소를 입력해주세요 (예: 도로명, 건물명, 동, 호수 등)"
-                                        required
-                                    />
-                                </div>
+                            <div style={styles.formRow}>
+                                <label style={styles.label}>주소 <span style={{ color: 'red' }}>*</span></label>
+                                <input
+                                    type="text"
+                                    style={styles.formField}
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    placeholder="주소를 입력해주세요"
+                                    required
+                                />
                             </div>
-                            <div className="mb-3 row">
-                                <label className="col-sm-2 col-form-label">휴대전화 <span className="text-danger">*</span></label>
-                                <div className="col-sm-10">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={receiverPhone}
-                                        onChange={handlePhoneChange}
-                                        placeholder="휴대전화 번호를 입력해주세요 (예: 010-1234-5678)"
-                                        required
-                                    />
-                                </div>
+                            <div style={styles.formRow}>
+                                <label style={styles.label}>휴대전화 <span style={{ color: 'red' }}>*</span></label>
+                                <input
+                                    type="text"
+                                    style={styles.formField}
+                                    value={receiverPhone}
+                                    onChange={handlePhoneChange}
+                                    placeholder="휴대전화 번호를 입력해주세요 (예: 010-1234-5678)"
+                                    required
+                                />
                             </div>
-                            <div className="mb-3 row">
-                                <label className="col-sm-2 col-form-label">이메일 <span className="text-danger">*</span></label>
-                                <div className="col-sm-10">
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        value={receiverEmail}
-                                        onChange={(e) => setReceiverEmail(e.target.value)}
-                                        placeholder="이메일을 입력해주세요"
-                                    />
-                                </div>
+                            <div style={styles.formRow}>
+                                <label style={styles.label}>이메일 <span style={{ color: 'red' }}>*</span></label>
+                                <input
+                                    type="email"
+                                    style={styles.formField}
+                                    value={receiverEmail}
+                                    onChange={(e) => setReceiverEmail(e.target.value)}
+                                    placeholder="이메일을 입력해주세요"
+                                />
                             </div>
-                            <div className="mb-3 row">
-                                <label className="col-sm-2 col-form-label">배송 메시지</label>
-                                <div className="col-sm-10">
-                                    <select
-                                        className="form-select"
-                                        value={shippingMessage}
-                                        onChange={(e) => setShippingMessage(e.target.value)}
-                                    >
-                                        <option value="">선택하세요</option>
-                                        <option value="배송 전에 미리 연락바랍니다">배송 전에 미리 연락바랍니다</option>
-                                        <option value="부재 시 경비실에 맡겨주세요">부재 시 경비실에 맡겨주세요</option>
-                                        <option value="부재 시 문 앞에 놓아주세요">부재 시 문 앞에 놓아주세요</option>
-                                        <option value="빠른 배송 부탁드립니다">빠른 배송 부탁드립니다</option>
-                                        <option value="택배함에 보관해주세요">택배함에 보관해주세요</option>
-                                    </select>
-                                </div>
+                            <div style={styles.formRow}>
+                                <label style={styles.label}>배송 메시지</label>
+                                <select
+                                    style={styles.select}
+                                    value={shippingMessage}
+                                    onChange={(e) => setShippingMessage(e.target.value)}
+                                >
+                                    <option value="">선택하세요</option>
+                                    <option value="배송 전에 미리 연락바랍니다">배송 전에 미리 연락바랍니다</option>
+                                    <option value="부재 시 경비실에 맡겨주세요">부재 시 경비실에 맡겨주세요</option>
+                                    <option value="부재 시 문 앞에 놓아주세요">부재 시 문 앞에 놓아주세요</option>
+                                    <option value="빠른 배송 부탁드립니다">빠른 배송 부탁드립니다</option>
+                                    <option value="택배함에 보관해주세요">택배함에 보관해주세요</option>
+                                </select>
                             </div>
                         </div>
                     </div>
 
-                    <div className="card mb-4">
-                        <div className="card-header">결제 정보</div>
-                        <div className="card-body">
-                            <div className="mb-3 row">
-                                <label className="col-sm-2 col-form-label">결제 방식</label>
-                                <div className="col-sm-10">
-                                    <select
-                                        className="form-select"
-                                        value={paymentMethod}
+                    <div style={styles.card}>
+                        <div style={styles.sectionTitle}>결제 정보</div>
+                        <div style={{ padding: '15px' }}>
+                            <div style={{ marginBottom: '15px' }}>결제 방식</div>
+                            
+                            <div style={styles.radioContainer}>
+                                <label style={styles.radioLabel}>
+                                    <input
+                                        type="radio"
+                                        style={styles.radioInput}
+                                        name="paymentMethod"
+                                        value="무통장입금"
+                                        checked={paymentMethod === "무통장입금"}
                                         onChange={(e) => setPaymentMethod(e.target.value)}
-                                    >
-                                        <option value="무통장입금">무통장입금</option>
-                                        <option value="네이버페이">네이버페이</option>
-                                        <option value="카카오페이">카카오페이</option>
-                                        <option value="신용카드">신용카드</option>
-                                    </select>
+                                    />
+                                    무통장입금
+                                </label>
+                                <label style={styles.radioLabel}>
+                                    <input
+                                        type="radio"
+                                        style={styles.radioInput}
+                                        name="paymentMethod"
+                                        value="네이버페이"
+                                        checked={paymentMethod === "네이버페이"}
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                    />
+                                    네이버페이
+                                </label>
+                                <label style={styles.radioLabel}>
+                                    <input
+                                        type="radio"
+                                        style={styles.radioInput}
+                                        name="paymentMethod"
+                                        value="카카오페이"
+                                        checked={paymentMethod === "카카오페이"}
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                    />
+                                    카카오페이
+                                </label>
+                                <label style={styles.radioLabel}>
+                                    <input
+                                        type="radio"
+                                        style={styles.radioInput}
+                                        name="paymentMethod"
+                                        value="신용카드"
+                                        checked={paymentMethod === "신용카드"}
+                                        onChange={(e) => setPaymentMethod(e.target.value)}
+                                    />
+                                    신용카드
+                                </label>
+                            </div>
+                            
+                            <div style={styles.summaryBox}>
+                                <div style={styles.priceRow}>
+                                    <div style={styles.priceLabel}>상품금액</div>
+                                    <div style={styles.priceValue}>{totalAmount.toLocaleString()}원</div>
+                                </div>
+                                <div style={styles.priceRow}>
+                                    <div style={styles.priceLabel}>적립금</div>
+                                    <div style={styles.priceValue}>-{usedPoints.toLocaleString()}원</div>
+                                </div>
+                                <div style={styles.totalRow}>
+                                    <div style={styles.totalLabel}>합계</div>
+                                    <div style={styles.totalValue}>{remainingAmount.toLocaleString()}원</div>
+                                </div>
+                                <div style={styles.mileageInfo}>
+                                    적립예정 마일리지 : {usedPoints > 0 ? 0 : Math.floor(totalAmount * 0.05).toLocaleString()} 원
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="d-flex justify-content-between mb-4">
-                        <button className="btn btn-secondary" onClick={() => navigate("/cart")}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
+                        <button 
+                            style={styles.backBtn} 
+                            onClick={() => navigate("/cart")}
+                        >
                             장바구니로 돌아가기
                         </button>
-                        <button className="btn btn-info" onClick={handleOrderSubmit}>
-                            주문 완료
+                        <button 
+                            style={styles.submitBtn} 
+                            onClick={handleOrderSubmit}
+                        >
+                            결제하기
                         </button>
                     </div>
                 </>
