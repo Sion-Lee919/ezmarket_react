@@ -20,6 +20,7 @@ const Modify = () => {
   });
 
   const [nicknameCheckResult, setNicknameCheckResult] = useState('');
+  const [phoneCheckResult, setPhoneCheckResult] = useState('');
   const [isRegisterDisabled, setIsRegisterDisabled] = useState(false);
   const [passwordCheckResult, setPasswordCheckResult] = useState('');
   const navigate = useNavigate();
@@ -64,7 +65,28 @@ const Modify = () => {
       setNicknameCheckResult(response.data);
       setIsRegisterDisabled(response.data.includes('중복된 닉네임'));
     } catch (error) {
-        alert(error.response.data.message);
+      alert(error.response.data.message);
+    }
+  };
+
+  const checkPhone = async (e) => {
+    const enteredPhone = e.target.value;
+    setForm({ ...form, phone: enteredPhone });
+
+    if (enteredPhone.length === 0) {
+      setPhoneCheckResult('');
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${API_BASE_URL}/checkPhone`, {
+        params: { phone: enteredPhone },
+      });
+
+      setPhoneCheckResult(response.data);
+      setIsRegisterDisabled(response.data.includes('중복된 전화번호'));
+    } catch (error) {
+      alert(error.response.data.message);
     }
   };
 
@@ -187,7 +209,8 @@ const Modify = () => {
         </div>
 
         <div>
-          <input type="text" name="phone" value={form.phone} disabled/>
+          <input type="text" name="phone" value={form.phone} onChange={checkPhone} pattern="010-\d{3,4}-\d{4}" title="010-XXXX-XXXX 형식으로 입력하세요."/>
+          <div className="check">{phoneCheckResult}</div>
         </div>
 
         <div>
@@ -195,10 +218,7 @@ const Modify = () => {
         </div>
 
         <div className="join-button-form">
-          <button type="button" className="prev-join" onClick={() => navigate(-1)}>이전</button>
           <button type="submit" className="join-join" disabled={isRegisterDisabled}>수정하기</button>
-        </div>
-        <div>
           <button type="button" className="resign-modify" onClick={handleResign}>회원 탈퇴 요청</button>
         </div>
       </form>

@@ -19,17 +19,17 @@ const MyPage = () => {
   });
 
   const [orderCounts, setOrderCounts] = useState({
-    pay: 0,
     preparing: 0,
     shipping: 0,
-    shipped: 0
+    shipped: 0,
+    return: 0
   });
 
   // 쿠키에서 최근 본 상품 목록 가져오기
   const [recently_viewed, setRecently_viewed] = useState([]);
 
   useEffect(() => {
-    const viewed_items = JSON.parse(Cookies.get('recently_viewed'));
+    const viewed_items = JSON.parse(Cookies.get('recently_viewed') || '[]');
     setRecently_viewed(viewed_items); 
 }, []);
   
@@ -59,14 +59,20 @@ const MyPage = () => {
 
   //주문 상황 가져오기
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/orderFlowCount`)
-      .then((response) => {
-        setOrderCounts(response.data);
+    const token = Cookies.get('jwt_token'); 
+        
+    if (token) {
+      axios.get(`${API_BASE_URL}/buy/orderFlowCount`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        withCredentials: true
       })
-      .catch((error) => {
-        console.error('주문 상황 가져오기 실패:', error);
-      });
-  }, []);
+        .then((response) => {
+          setOrderCounts(response.data);
+        })
+        .catch((error) => {
+          console.error('주문 상황 가져오기 실패:', error);
+        });
+    }}, []);  
 
   const handleAdminPageClick = () => {
     navigate(`/my/admin`);
@@ -106,16 +112,9 @@ const MyPage = () => {
         <div className="mypage-box-order-flow">
           <div className="order-flow-detail">
               <div>
-                <div>결제 완료</div>
-                <div className="order-flow-box">
-                  <img src="/images/pay.jpg" alt="결제 완료"></img>
-                </div>
-                <div className="order-flow-count">{orderCounts.pay}</div>
-              </div>
-              <div>
                 <div>상품 준비중</div>
                 <div className="order-flow-box">
-                  <img src="/images/preparing.jpg" alt="상품 준비중"></img>
+                  <img src="/images/preparing.jpg" alt="결제 확인"></img>
                 </div>
                 <div className="order-flow-count">{orderCounts.preparing}</div>
               </div>
@@ -133,13 +132,20 @@ const MyPage = () => {
                 </div>
                 <div className="order-flow-count">{orderCounts.shipped}</div>
               </div>
+              <div>
+                <div>반품</div>
+                <div className="order-flow-box">
+                  <img src="/images/pay.jpg" alt="반품"></img>
+                </div>
+                <div className="order-flow-count">{orderCounts.return}</div>
+              </div>
           </div> 
         </div>
         <div className="mypage-box-order-image">
           <div style={{ fontSize : "18px" , fontWeight: "bold", marginBottom: "10px" }}>최근 본 게시물</div>
           <div className="order-image-detail">
             <div>
-              <div>{recently_viewed[0] ? recently_viewed[0].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[0] ? recently_viewed[0].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[0] ? recently_viewed[0].product_id : '#'}`}
                 style={recently_viewed[0] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
@@ -148,7 +154,7 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div>{recently_viewed[1] ? recently_viewed[1].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[1] ? recently_viewed[1].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[1] ? recently_viewed[1].product_id : '#'}`}
                 style={recently_viewed[1] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
@@ -157,7 +163,7 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div>{recently_viewed[2] ? recently_viewed[2].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[2] ? recently_viewed[2].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[2] ? recently_viewed[2].product_id : '#'}`}
                 style={recently_viewed[2] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
@@ -166,7 +172,7 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div>{recently_viewed[3] ? recently_viewed[3].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[3] ? recently_viewed[3].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[3] ? recently_viewed[3].product_id : '#'}`}
                 style={recently_viewed[3] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
@@ -175,7 +181,7 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div>{recently_viewed[4] ? recently_viewed[4].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px'}}>{recently_viewed[4] ? recently_viewed[4].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[4] ? recently_viewed[4].product_id : '#'}`}
                 style={recently_viewed[4] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
