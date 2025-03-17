@@ -74,10 +74,6 @@ const MyPageSideBar = () => {
       navigate(`/my/order`);
     }
 
-    const handleCart= () => {
-      navigate(`/cart`);
-    }
-
     const handleMyQna= () => {
       navigate(`/my/qna`);
     }
@@ -98,8 +94,6 @@ return(
       <div>
         <button onClick={handleMyReview}>후기 내역</button>
       </div>
-      <hr style={{ width: "75px" }}></hr>
-      <button onClick={handleCart}>장바구니</button>
       <hr style={{ width: "75px" }}></hr>
       <div>
         <button onClick={handleModify}>회원 정보 수정</button>

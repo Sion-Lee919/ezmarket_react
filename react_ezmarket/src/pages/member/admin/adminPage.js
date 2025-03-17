@@ -44,6 +44,10 @@ const AdminPage = () => {
         navigate('/my/admin/seller');  
     };
 
+    const handleMoneyManageClick = () => {
+        navigate('/my/admin/money_manage');  
+    };
+
     return (
         <div className="mypage-form">
             <MyPageSideBar></MyPageSideBar>
@@ -51,6 +55,7 @@ const AdminPage = () => {
                 <div className="admin-select">
                     <button className="admin-select-button" onClick={handleUserManageClick}>회원 관리</button>
                     <button className="admin-select-button" onClick={handleSellerManageClick}>판매자 관리</button>
+                    <button className="admin-select-button" onClick={handleMoneyManageClick}>정산 관리</button>
                 </div>
             </div>
         </div>

@@ -101,7 +101,7 @@ const MyQna = () => {
               </div>
               <div>
                 <div className="history-box" onClick={() => handleQnaClick(index)} style={{ cursor: 'pointer', width: '500px'}}>
-                {qna.chat}
+                  {qna.chat}
                 </div>
               </div>
               <div>
@@ -112,7 +112,15 @@ const MyQna = () => {
             </div>
             {selectedQna === index && (
               <div className="chat-box" style={{ position: 'relative', zIndex: 1 }}>
-                <QnAChatComponent channel_id={qna.channel_id} /> 
+                <QnAChatComponent 
+                  channel={qna.channel_id}  
+                  memberId={qna.member_id}   
+                  product={{                 
+                    product_id: qna.product_id,
+                    brand_id: qna.brand_id
+                  }}
+                  isSeller={false}
+                  />
               </div>
             )}
           </div> 
