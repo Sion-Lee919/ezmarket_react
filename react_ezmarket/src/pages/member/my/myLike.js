@@ -7,12 +7,12 @@ import MyPageSideBar from './myPageSideBar';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 
-const MyReview = () => {
+const MyLike = () => {
   const [user, setUser] = useState({
       member_id: '',
     });
 
-  const[reviews, setReviews] = useState([]);
+  const[likes, setLikes] = useState([]);
   const navigate = useNavigate();
   
   //로그인 안했을 때 내정보 접근시 리디렉트
@@ -41,15 +41,15 @@ const MyReview = () => {
     const token = Cookies.get('jwt_token'); 
     
     if (token) {
-      axios.get(`${API_BASE_URL}/getUserReviews`, {
+      axios.get(`${API_BASE_URL}/getLike`, {
         headers: { 'Authorization': `Bearer ${token}` },
         withCredentials: true
       })
-      .then(reviewResponse => {
-        setReviews(reviewResponse.data);
+      .then(likeResponse => {
+        setLikes(likeResponse.data);
       })
-      .catch(reviewError => {
-        console.log("리뷰를 가져오는 데 문제가 발생했습니다.");
+      .catch(likeError => {
+        console.log("찜 목록을 가져오는 데 문제가 발생했습니다.");
       });
 
     } else {
@@ -61,41 +61,37 @@ const MyReview = () => {
     <div className="mypage-form">
       <MyPageSideBar></MyPageSideBar>
       <div className="mypage-info">
-      {reviews.length > 0 && reviews.map((review, index) => (
+      {likes.length > 0 && likes.map((like, index) => (
         <div key={index} className="my-history">
           <div className="history-detail">
             <div> 
               <div className="history-box" style={{ width: '50px' }}>
-                <a href={`/item/${review.product_id}`}>
-                  <img src={review.product_image_url} alt="상품 이미지"></img>
+                <a href={`/item/${like.product_id}`}>
+                  <img src={like.product_image_url} alt="상품 이미지"></img>
                 </a>
               </div>
               </div>
               <div>
                 <div className="history-box" style={{ width: '80px', maxHeight: '120px', overflow: 'auto' , wordBreak: 'break-word'}}>
-                  {review.name}
+                  {like.name}
+                </div>
+              </div>
+              <div>
+                <div className="history-box" style={{ width: '360px', maxHeight: '120px', overflow: 'auto' , wordBreak: 'break-word'}}>
+                  {like.description}
                 </div>
               </div>
               <div className="history-box" style={{ width: '50px' }}>
-                {review.image_url ? (
-                  <img src={review.image_url} alt="리뷰 이미지" />
-                ) : (
-                  <div style={{ height: '50px', width: '50px' }} /> 
-                )}
+                  {like.price}원
               </div>
               <div>
-                <div className="history-box" style={{ width: '200px', maxHeight: '120px', overflow: 'auto' , wordBreak: 'break-word'}}>
-                  {review.comments}
+                <div className="history-box" style={{ width: '50px', maxHeight: '120px', overflow: 'auto' , wordBreak: 'break-word'}}>
+                  {like.volume}ml
                 </div>
               </div>
               <div>
-                <div className="history-box" style={{ marginLeft: '51px' }}>
-                {'⭐'.repeat(review.rating)}
-                </div>
-              </div>
-              <div>
-                <div className="history-box">
-                  {new Date(review.review_date).toLocaleDateString('ko-KR')}
+                <div className="history-box" style={{ width: '50px', maxHeight: '120px', overflow: 'auto' , wordBreak: 'break-word'}}>
+                  {like.alcohol}º
                 </div>
               </div>
             </div>
@@ -106,4 +102,4 @@ const MyReview = () => {
   );
 };
 
-export default MyReview;
+export default MyLike;
