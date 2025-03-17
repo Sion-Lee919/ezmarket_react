@@ -149,8 +149,7 @@ function BrandPage() {
             {showOverlay && (
                 <div className="overlay">
                     <div className="overlay-content">
-                        <button className="close-btn" onClick={() => setShowOverlay(false)}>X</button>
-                        <ItemRegister />
+                        <ItemRegister onClose={() => setShowOverlay(false)}/>
                     </div>
                 </div>
             )}
