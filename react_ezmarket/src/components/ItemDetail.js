@@ -19,6 +19,7 @@ function ItemDetail() {
     const [user, setUser] = useState(null);
     const [brandid, setBrandid] = useState();
     const [reviewList, setReviewList] = useState([]);
+    const [isLiked, setIsLiked] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -185,6 +186,68 @@ function ItemDetail() {
         }
     };
 
+    useEffect(() => {
+        const fetchLikeStatus = async () => {
+            try {
+                const token = Cookies.get("jwt_token");
+                if (!token) return;
+    
+                const response = await axios.get(`${API_BASE_URL}/checkLike`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                    params: { product_id: itemid },
+                    withCredentials: true
+                });
+    
+                setIsLiked(response.data); // 서버에서 true/false 반환
+            } catch (error) {
+                console.error("찜 상태를 불러오는 중 오류 발생:", error);
+            }
+        };
+    
+        fetchLikeStatus();
+    }, [itemid]);
+
+    const handleLike = async() => {
+        const token = Cookies.get("jwt_token")
+        if (!token) {
+            alert("로그인이 필요합니다!")
+        }
+
+        try {
+            await axios.post(`${API_BASE_URL}/like`, null, {
+                headers: { Authorization: `Bearer ${token}` },
+                params: { product_id: itemid },
+                withCredentials: true
+            });
+
+            alert("찜 목록에 추가되었습니다!");
+        } catch (error) {
+            alert("찜하기에 실패했습니다.");
+            console.log(error);
+        }
+    }
+
+    const handleUnlike = 
+    async () => {
+        try {
+            const token = Cookies.get("jwt_token");
+            if (!token) {
+                alert("로그인이 필요합니다.");
+                return;
+            }
+    
+            await axios.post(`${API_BASE_URL}unlike`, null, {
+                headers: { Authorization: `Bearer ${token}` },
+                params: { product_id: itemid },
+                withCredentials: true
+            });
+
+            alert("찜 목록에서 제거되었습니다!");
+        } catch (error) {
+            alert("찜 취소에 실패했습니다.");
+        }
+    }
+
     if (!dto) {
         return <div>Loading...</div>;
     }
@@ -267,6 +330,10 @@ function ItemDetail() {
                                 </div>
                                 <button className="product-handle-button" onClick={() => handleAddToCart(itemid, quantity)}>장바구니에 추가</button>
                                 <button className="product-handle-button" onClick={handleBuyNow}>즉시 구매</button>
+                                {isLiked ? (
+                                    <button className="product-handle-button" onClick={handleUnlike}>💙 찜 취소</button>):
+                                    (<button className="product-handle-button" onClick={handleLike}>🤍 찜 하기</button>)
+                                }
                             </>
                         ) : (
                             <button className="product-handle-button" onClick={handleLoginClick}>회원가입 후 구매</button>

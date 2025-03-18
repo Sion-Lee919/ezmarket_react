@@ -42,6 +42,8 @@ import SellerModify from './pages/member/seller/sellerModify.js';
 import JoinSuccess from './pages/member/join/joinSuccess.js';
 import MyReview from './pages/member/my/myReview.js';
 import MyQna from './pages/member/my/myQna.js';
+import ManageMoney from './pages/member/admin/manageMoney.js';
+import MyLike from './pages/member/my/myLike.js';
 
 
 function App() {
@@ -75,11 +77,13 @@ function App() {
         <Route path="/my/order" element={<MyOrder />} />
         <Route path="/my/review" element={<MyReview />} />
         <Route path="/my/qna" element={<MyQna />} />
+        <Route path="/my/like" element={<MyLike />} />
         <Route path="/" element={<Main />} />
         <Route path="/commerce" element={<SellerApplication />} />
         <Route path="/my/admin" element={<AdminPage/>} />
         <Route path="/my/admin/user" element={<ManageUser />} />
         <Route path="/my/admin/seller" element={<ManageSeller />} />
+        <Route path="/my/admin/money_manage" element={<ManageMoney />} />
         <Route path='/brand/:brandid/modify/' element={<SellerModify/>}/>
         
         

@@ -12,6 +12,7 @@ function BrandPage() {
     const [pageSize] = useState(10);  // 페이지당 아이템 수
     const { brandid } = useParams();
     const [showOverlay, setShowOverlay] = useState(false); // 오버레이 상태 추가
+    const [brandInfo, setBrandInfo] = useState([]);
 
     useEffect(() => {
         axios({
@@ -20,6 +21,14 @@ function BrandPage() {
         })
         .then(function(res) {
             setItems(res.data);
+            if (res.data && res.data.length > 0) {
+                setBrandInfo({
+                    brandname: res.data[0].brandname,
+                    calculate_possible: res.data[0].calculate_possible,
+                    calculated_money: res.data[0].calculated_money,
+                    calculating_money: res.data[0].calculating_money,
+                }
+            )}
         });
     }, [brandid]);
 
@@ -51,6 +60,36 @@ function BrandPage() {
         return <div>Loading...</div>;
     }
 
+    // 정산 신청
+    const handleRequest = (brand_id) => {
+        const calculatePossible = brandInfo.calculate_possible;
+      
+        const request_money = prompt("정산 요청 금액을 입력하세요:");
+      
+        if (request_money && !isNaN(request_money)) {
+          const parsedRequestMoney = parseInt(request_money);
+      
+          if (parsedRequestMoney > calculatePossible) {
+            alert(`요청한 금액이 정산 가능한 금액을 ${request_money - calculatePossible}원 초과합니다.`);
+          } else {
+            axios
+              .post(`${API_BASE_URL}/buy/calculateRequest`, null, {
+                params: { brand_id, request_money: parsedRequestMoney },
+              })
+              .then(() => {
+                alert("정산 요청 완료!");
+                window.location.reload();
+              })
+              .catch((error) => {
+                console.error(error);
+                alert("정산 요청 오류 발생!");
+              });
+          }
+        } else {
+          alert("정상적인 금액을 입력해주세요.");
+        }
+      };
+
     return (
         <div id="wrapper">
             <div id="content">
@@ -61,6 +100,17 @@ function BrandPage() {
                         <Link to={`/brand/${brandid}/modify`}>
                             <button className="btn_link">판매자 정보 수정</button>
                         </Link>
+                        <br/><button className="btn_link" style={{ textAlign: "right" }} onClick={() => handleRequest(brandid)}>정산 요청</button>
+                        <div style={{ textAlign: "right" }}>
+                        {brandInfo.brandname != null && (
+                                <>
+                                    <div>{brandInfo.brandname}</div>
+                                    <span>총 정산 금액: {brandInfo.calculated_money}원&nbsp;&nbsp;</span>
+                                    <span>정산 가능한 금액: {brandInfo.calculate_possible}원&nbsp;&nbsp;</span>
+                                    <span>정산 대기 금액: {brandInfo.calculating_money}원</span>
+                                </>
+                            )}
+                        </div>
                     </div>
                     <div className="tbl_head02">
                         <table id="sodr_list" className="tablef">
