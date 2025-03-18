@@ -172,7 +172,7 @@ const MyOrder = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="mb-4">나의 주문 목록</h2>
+            <h2 className="text-center fw-bold mb-4">나의 주문 목록</h2>
             
             {orders.map((order, orderIndex) => {
                 const productAmount = order.productInfo.reduce((sum, product) => sum + (product.price * product.quantity), 0);
@@ -267,17 +267,18 @@ const MyOrder = () => {
                                 <div className="col-md-6">
                                     <h5>결제 정보</h5>
                                     <p><strong>결제 방법:</strong> {order.paymentMethod || '정보 없음'}</p>
-                                    <div className="d-flex justify-content-end mt-3">
-                                        {order.status === '처리 중' && (
-                                            <button 
-                                                className="btn btn-danger"
-                                                onClick={() => handleReturnOrder(order.orderId)}
-                                            >
-                                                반품 신청
-                                            </button>
-                                        )}
-                                    </div>
                                 </div>
+                            </div>
+                            
+                            <div className="d-flex justify-content-end mt-4">
+                                {order.status === '처리 중' && (
+                                    <button 
+                                        className="btn btn-danger"
+                                        onClick={() => handleReturnOrder(order.orderId)}
+                                    >
+                                        반품 신청
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
