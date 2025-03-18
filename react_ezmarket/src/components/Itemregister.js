@@ -204,6 +204,7 @@ const ItemRegister = ({ onClose }) => {
                 /><br />
                 
                 <button type="submit">상품등록</button>
+                <button className="register-close-btn" onClick={() => onClose()}>X</button>
             </form>
         </div>
     );

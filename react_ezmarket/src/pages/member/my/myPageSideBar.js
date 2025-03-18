@@ -30,6 +30,8 @@ const MyPageSideBar = () => {
         setSideBarTitle('후기 내역');
       } else if (location.pathname === '/my/modify') {
         setSideBarTitle('회원 정보 수정');
+      } else if (location.pathname === '/my/like') {
+        setSideBarTitle('찜 목록');
       } else if (location.pathname === ('/my/admin')) {
         setSideBarTitle('관리자 페이지');
       } else if (location.pathname === ('/my/admin/user')) {
@@ -74,12 +76,12 @@ const MyPageSideBar = () => {
       navigate(`/my/order`);
     }
 
-    const handleCart= () => {
-      navigate(`/cart`);
-    }
-
     const handleMyQna= () => {
       navigate(`/my/qna`);
+    }
+
+    const handleLike= () => {
+      navigate(`/my/like`);
     }
 
 return(
@@ -99,7 +101,9 @@ return(
         <button onClick={handleMyReview}>후기 내역</button>
       </div>
       <hr style={{ width: "75px" }}></hr>
-      <button onClick={handleCart}>장바구니</button>
+      <div>
+        <button onClick={handleLike}>찜 목록</button>
+      </div>
       <hr style={{ width: "75px" }}></hr>
       <div>
         <button onClick={handleModify}>회원 정보 수정</button>
