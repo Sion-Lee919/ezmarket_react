@@ -14,7 +14,7 @@ const styles = {
     fontFamily: 'Arial, sans-serif'
   },
   heading: {
-    fontSize: '24px',
+    fontSize: '40px',
     fontWeight: 'bold',
     textAlign: 'center',
     margin: '30px 0',
@@ -22,7 +22,7 @@ const styles = {
     paddingBottom: '15px'
   },
   sectionTitle: {
-    fontSize: '18px',
+    fontSize: '28px',
     fontWeight: 'bold',
     backgroundColor: '#f8f9fa',
     padding: '10px 15px',
@@ -43,11 +43,13 @@ const styles = {
     textAlign: 'left',
     padding: '10px',
     borderBottom: '1px solid #ddd',
-    backgroundColor: '#f8f9fa'
+    backgroundColor: '#f8f9fa',
+    fontSize: '24px'
   },
   tableCell: {
     padding: '10px',
-    borderBottom: '1px solid #eee'
+    borderBottom: '1px solid #eee',
+    fontSize: '20px'
   },
   productImage: {
     width: '60px',
@@ -63,7 +65,7 @@ const styles = {
   label: {
     width: '150px',
     textAlign: 'left',
-    fontSize: '14px',
+    fontSize: '20px',
     color: '#333',
     padding: '0 15px 0 0'
   },
@@ -72,13 +74,13 @@ const styles = {
     border: '1px solid #ddd',
     padding: '8px 12px',
     borderRadius: '4px',
-    fontSize: '14px'
+    fontSize: '20px'
   },
   select: {
     border: '1px solid #ddd',
     padding: '8px 12px',
     borderRadius: '4px',
-    fontSize: '14px',
+    fontSize: '20px',
     width: '100%',
     backgroundColor: '#fff'
   },
@@ -88,7 +90,7 @@ const styles = {
     border: 'none',
     borderRadius: '4px',
     padding: '10px 20px',
-    fontSize: '16px',
+    fontSize: '22px',
     fontWeight: 'bold',
     cursor: 'pointer',
   },
@@ -98,7 +100,7 @@ const styles = {
     border: 'none',
     borderRadius: '4px',
     padding: '10px 20px',
-    fontSize: '16px',
+    fontSize: '22px',
     cursor: 'pointer',
   },
   radioContainer: {
@@ -110,7 +112,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     cursor: 'pointer',
-    fontSize: '14px'
+    fontSize: '20px'
   },
   radioInput: {
     marginRight: '8px'
@@ -129,10 +131,10 @@ const styles = {
     margin: '10px 0'
   },
   priceLabel: {
-    fontSize: '15px'
+    fontSize: '24px'
   },
   priceValue: {
-    fontSize: '15px',
+    fontSize: '24px',
     fontWeight: 'bold'
   },
   totalRow: {
@@ -144,16 +146,16 @@ const styles = {
     paddingTop: '10px'
   },
   totalLabel: {
-    fontSize: '16px',
+    fontSize: '26px',
     fontWeight: 'bold'
   },
   totalValue: {
-    fontSize: '20px',
+    fontSize: '30px',
     fontWeight: 'bold',
     color: '#0066cc'
   },
   mileageInfo: {
-    fontSize: '12px',
+    fontSize: '18px',
     color: '#666',
     textAlign: 'right',
     marginTop: '5px'
@@ -396,7 +398,7 @@ const OrderComponent = () => {
                                     placeholder="사용할 적립금을 입력하세요"
                                 />
                             </div>
-                            <div style={{ fontSize: '13px', color: '#666', padding: '0 0 10px 150px' }}>
+                            <div style={{ fontSize: '18px', color: '#666', padding: '0 0 10px 150px' }}>
                                 최대 사용 가능 적립금: {Math.min(memberPoints, totalAmount).toLocaleString()}점
                             </div>
                             <div style={styles.formRow}>
