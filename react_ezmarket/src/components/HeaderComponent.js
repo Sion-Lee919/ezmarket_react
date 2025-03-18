@@ -79,6 +79,9 @@ const HeaderComponent = () => {
             </>
           ) : (
             <>
+              <button className="btn custom-outline-primary px-3 me-1" onClick={handleCartClick}>
+                장바구니
+              </button>
               <button className="btn custom-outline-primary px-3 me-1" onClick={handleLoginClick}>
                 로그인
               </button>
