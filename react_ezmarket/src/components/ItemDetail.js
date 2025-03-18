@@ -333,16 +333,12 @@ function ItemDetail() {
                             ) : (
                                 <button className="product-handle-button" onClick={handleLoginClick}>회원가입 후 구매</button>
                             )}
-                        </>
-
                                 {isLiked ? (
                                     <button className="product-handle-button" onClick={handleUnlike}>💙 찜 취소</button>):
                                     (<button className="product-handle-button" onClick={handleLike}>🤍 찜 하기</button>)
                                 }
                             </>
-                        ) : (
-                            <button className="product-handle-button" onClick={handleLoginClick}>회원가입 후 구매</button>
-                        )}
+                      
 
                         <h3 style={{ marginTop: "20px" }}>이 전통주가 취향에 맞으셨다면?</h3>
                         <button className="product-handle-button" onClick={() => navigate(`/brandItems?brand_id=${dto.brand_id}`)}>브랜드의 다른 제품도 만나보세요</button>
