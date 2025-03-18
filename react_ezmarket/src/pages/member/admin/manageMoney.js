@@ -11,6 +11,7 @@ const ManageMoney = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+
   //관리자가 아니면 리디렉션
   useEffect(() => {
     const token = Cookies.get('jwt_token');  
@@ -55,11 +56,11 @@ const ManageMoney = () => {
   }, []);
 
   // 정산 신청 수락
-  const handleAccept = (brand_id) => {
+  const handleAccept = (brand_id, calculating_money) => {
     if (window.confirm("정말 판매자의 정산 요청을 승인하시겠습니까?")) {
     axios
       .post(`${API_BASE_URL}/buy/calculateSuccess`, null, {
-        params: { brand_id },
+        params: { brand_id, request_money : calculating_money },
       })
       .then(() => {
         alert("정산 신청 승인 완료");
@@ -73,11 +74,11 @@ const ManageMoney = () => {
   };
 
   // 정산 신청 거절
-  const handleRefuse = (brand_id) => {
+  const handleRefuse = (brand_id, calculating_money ) => {
     if (window.confirm(`정말 ${brand_id}의 정산 요청을 거절하시겠습니까?`)) {
       axios
         .post(`${API_BASE_URL}/buy/calculateRefuse`, null, {
-          params: { brand_id },
+          params: { brand_id, request_money : calculating_money },
         })
         .then(() => {
           alert("정산 신청 거절 완료");
@@ -122,8 +123,8 @@ const ManageMoney = () => {
                   <td>{brand.calculating_money}</td>
                   <td>{brand.calculating_money + brand.calculate_possible}</td>
                   <td>
-                      <button className="positive-button" onClick={() => handleAccept(brand.brand_id)}>승인</button>
-                      <button className="negative-button" onClick={() => handleRefuse(brand.brand_id)}>거절</button>
+                      <button className="positive-button" onClick={() => handleAccept(brand.brand_id, brand.calculating_money)}>승인</button>
+                      <button className="negative-button" onClick={() => handleRefuse(brand.brand_id, brand.calculating_money)}>거절</button>
                   </td>
                 </tr>
               ))}

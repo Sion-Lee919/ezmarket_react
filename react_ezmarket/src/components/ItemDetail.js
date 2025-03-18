@@ -221,11 +221,14 @@ function ItemDetail() {
             });
 
             alert("찜 목록에 추가되었습니다!");
+            window.location.reload();
         } catch (error) {
             alert("찜하기에 실패했습니다.");
             console.log(error);
         }
     }
+
+    
 
     const handleUnlike = 
     async () => {
@@ -236,15 +239,17 @@ function ItemDetail() {
                 return;
             }
     
-            await axios.post(`${API_BASE_URL}unlike`, null, {
+            await axios.post(`${API_BASE_URL}/unlike`, null, {
                 headers: { Authorization: `Bearer ${token}` },
                 params: { product_id: itemid },
                 withCredentials: true
             });
 
             alert("찜 목록에서 제거되었습니다!");
+            window.location.reload();
         } catch (error) {
             alert("찜 취소에 실패했습니다.");
+            console.log(error);
         }
     }
 

@@ -63,7 +63,7 @@ function BrandPage() {
     // 정산 신청
     const handleRequest = (brand_id) => {
         const calculatePossible = brandInfo.calculate_possible;
-      
+        console.log(brand_id);
         const request_money = prompt("정산 요청 금액을 입력하세요:");
       
         if (request_money && !isNaN(request_money)) {
@@ -73,9 +73,8 @@ function BrandPage() {
             alert(`요청한 금액이 정산 가능한 금액을 ${request_money - calculatePossible}원 초과합니다.`);
           } else {
             axios
-              .post(`${API_BASE_URL}/buy/calculateRequest`, {
-                brand_id: brand_id,
-                request_money: parsedRequestMoney
+            .post(`${API_BASE_URL}/buy/calculateRequest`, null, {
+                params: { brand_id, request_money: parsedRequestMoney },
               })
               .then(() => {
                 alert("정산 요청 완료!");
