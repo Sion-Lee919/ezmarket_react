@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
 const WEBSOCKET_BASE_URL = process.env.REACT_APP_WEBSOCKET_URL || "ws://localhost:9090";
+const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
+
 
 const style = {
   container: {
@@ -100,7 +102,7 @@ const QnAChatComponent = (props) => {
 
   const fetchChatHistory = async (channelId) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/chat/records`, {
+      const response = await axios.get(`${BASE_URL}/chat/records`, {
         params: { channelId },
       });
       setChatList(response.data);  // DB에서 가져온 채팅 기록을 상태에 저장
