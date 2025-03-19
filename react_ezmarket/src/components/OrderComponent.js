@@ -187,7 +187,7 @@ const OrderComponent = () => {
             const token = getTokenFromCookie();
             if (token) {
                 try {
-                    const response = await axios.get("http://localhost:9090/userinfo", {
+                    const response = await axios.get(`${API_BASE_URL}/userinfo`, {
                         headers: { 'Authorization': `Bearer ${token}` },
                         withCredentials: true
                     });

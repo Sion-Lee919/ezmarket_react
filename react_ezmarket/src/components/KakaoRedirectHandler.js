@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const API_BASE_URL = "http://localhost:9090";
+const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
 
 const KakaoRedirectHandler = () => {
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ const KakaoRedirectHandler = () => {
     if (code) {
       console.log("받은 카카오 인가 코드:", code);
 
-      fetch(`${API_BASE_URL}/api/login/kakao`, {
+      fetch(`${BASE_URL}/api/login/kakao`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),

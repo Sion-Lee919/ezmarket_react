@@ -8,6 +8,7 @@ import QnAChatComponent from "./QnAChatComponent";
 import QnAChatRoomListComponent from "./QnAChatRoomListComponent";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
 
 function ItemDetail() {
     const [dto, setDto] = useState(null);
@@ -154,7 +155,7 @@ function ItemDetail() {
         if (token) {
             try {
                 const response = await axios.post(
-                    `${API_BASE_URL}/api/cart/add`,
+                    `${BASE_URL}/api/cart/add`,
                     null,
                     {
                         params: { productId: productId, quantity: quantity },

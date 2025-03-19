@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import QnAChatComponent from "./QnAChatComponent";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
 
 const QnAChatRoomListComponent = (props) => {
 
@@ -14,7 +15,7 @@ const QnAChatRoomListComponent = (props) => {
 
     useEffect(() => {
         axios({
-            url: `${API_BASE_URL}/chatroom/getmemberlistinchatroom?productId=${product_id}`,
+            url: `${BASE_URL}/chatroom/getmemberlistinchatroom?productId=${product_id}`,
             method: 'GET',
         })
         .then(function (res) {

@@ -7,6 +7,7 @@ import MyPageSideBar from './myPageSideBar';
 import QnAChatComponent from '../../../components/QnAChatComponent';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
 
 const MyQna = () => {
   const [user, setUser] = useState({
@@ -44,7 +45,7 @@ const MyQna = () => {
     const token = Cookies.get('jwt_token'); 
     
     if (token) {
-      axios.get(`${API_BASE_URL}/getMyChat`, {
+      axios.get(`${BASE_URL}/getMyChat`, {
         headers: { 'Authorization': `Bearer ${token}` },
         withCredentials: true
       })
