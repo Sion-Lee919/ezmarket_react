@@ -143,7 +143,7 @@ function ItemDetail() {
             image: dto.image_url,
             totalPrice: dto.price * quantity
         };
-        navigate("/order", {
+        navigate("/buy/orderid", {
             state: {
                 selectedCartItems: [productInfo]
             }
