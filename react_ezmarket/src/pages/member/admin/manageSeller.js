@@ -56,8 +56,8 @@ const ManageSeller = () => {
   }, []);
 
   // 판매자 신청 수락
-  const handleAccept = (brand_id) => {
-    if (window.confirm("정말 판매자의 신청을 승인하시겠습니까?")) {
+  const handleAccept = (brand_id, username) => {
+    if (window.confirm(`정말 ${username}의 판매자 신청을 승인하시겠습니까?`)) {
     axios
       .post(`${API_BASE_URL}/sellAccept`, null, {
         params: { brand_id },
@@ -74,8 +74,8 @@ const ManageSeller = () => {
   };
 
   // 판매자 신청 거절
-  const handleRefuse = (brand_id) => {
-    if (window.confirm(`정말 ${brand_id}의 신청을 거절하시겠습니까?`)) {
+  const handleRefuse = (brand_id, username) => {
+    if (window.confirm(`정말 ${username}의 판매자 신청을 거절하시겠습니까?`)) {
       const comment = prompt("거절 사유를 입력하세요:");
       if (!comment) return;
 
@@ -95,8 +95,8 @@ const ManageSeller = () => {
   };
 
   // 판매자 승인 취소
-  const handleCancel = (brand_id) => {
-    if (window.confirm("정말 판매자의 승인을 취소하시겠습니까?")) {
+  const handleCancel = (brand_id, username) => {
+    if (window.confirm(`정말 ${username}의 판매자 승인을 취소하시겠습니까?`)) {
       const comment = prompt("승인 취소 사유를 입력하세요:");
       if (!comment) return;
 
@@ -157,15 +157,15 @@ const ManageSeller = () => {
                   <td>
                     {brand.brand_status === "검토 중" && (
                       <>
-                        <button className="positive-button" onClick={() => handleAccept(brand.brand_id)}>승인</button>
-                        <button className="negative-button" onClick={() => handleRefuse(brand.brand_id)}>거절</button>
+                        <button className="positive-button" onClick={() => handleAccept(brand.brand_id, brand.username)}>승인</button>
+                        <button className="negative-button" onClick={() => handleRefuse(brand.brand_id, brand.username)}>거절</button>
                       </>
                     )}
                     {brand.brand_status == "승인" && (
-                        <button className="negative-button" onClick={() => handleCancel(brand.brand_id)}>승인취소</button>
+                        <button className="negative-button" onClick={() => handleCancel(brand.brand_id, brand.username)}>승인취소</button>
                     )}
                     {brand.brand_status == "거절" && (
-                        <button className="positive-button" onClick={() => handleAccept(brand.brand_id)}>승인</button>
+                        <button className="positive-button" onClick={() => handleAccept(brand.brand_id, brand.username)}>승인</button>
                     )}
                   </td>
                 </tr>

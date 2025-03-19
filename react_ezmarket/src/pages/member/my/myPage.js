@@ -91,7 +91,7 @@ const MyPage = () => {
           <button className="admin-page-button" onClick={handleAdminPageClick}>관리자 페이지</button>
           )}
           {user.userauthor === 1 && (
-          <button className="admin-page-button" onClick={handleAdminPageClick} style = {{ pointerEvents: 'none' }}>총 구매 회수는 {orderCounts.pay+orderCounts.preparing+orderCounts.shipping+orderCounts.shipped}회 입니다.</button>
+          <button className="admin-page-button" onClick={handleAdminPageClick} style = {{ pointerEvents: 'none' }}>총 구매 회수는 {orderCounts.preparing+orderCounts.shipping+orderCounts.shipped+orderCounts.return}회 입니다.</button>
           )}
           {user.userauthor === 2 && (
           <button className="seller-page-button" onClick={handleSellerPageClick}>판매자 페이지</button>

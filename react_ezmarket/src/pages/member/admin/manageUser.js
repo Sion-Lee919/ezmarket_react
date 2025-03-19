@@ -50,8 +50,8 @@ const ManageUser = () => {
   }, []);
 
   //사용자 강퇴
-  const handleKick = (member_id) => {
-    if (window.confirm(`정말 ${member_id}를 강퇴하시겠습니까?`)) {
+  const handleKick = (member_id, username) => {
+    if (window.confirm(`정말 ${username}를 강퇴하시겠습니까?`)) {
       const comment = prompt("강퇴 사유를 입력하세요:");
       if (!comment) return;
 
@@ -71,8 +71,8 @@ const ManageUser = () => {
   };
 
   //사용자 복구 -> 1년 이내
-  const handleRestore = (member_id) => {
-    if (window.confirm(`정말 ${member_id}의 정보를 복구 하시겠습니까?`)) {
+  const handleRestore = (member_id, username) => {
+    if (window.confirm(`정말 ${username}의 정보를 복구 하시겠습니까?`)) {
 
       axios
         .post(`${API_BASE_URL}/restore`, null, {
@@ -128,10 +128,10 @@ const ManageUser = () => {
                   <td style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em'}}>{user.member_kick_comment}</td>
                   <td>
                       {user.member_status !== "정상" && (
-                        <button className="positive-button" onClick={() => handleRestore(user.member_id)}>복구</button>
+                        <button className="positive-button" onClick={() => handleRestore(user.member_id, user.username)}>복구</button>
                       )}
                       {user.member_status === "정상" && (
-                        <button className="negative-button" onClick={() => handleKick(user.member_id)}>강퇴</button>
+                        <button className="negative-button" onClick={() => handleKick(user.member_id, user.username)}>강퇴</button>
                       )}
                   </td>
                 </tr>
