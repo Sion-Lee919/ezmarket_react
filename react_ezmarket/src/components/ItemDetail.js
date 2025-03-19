@@ -74,7 +74,13 @@ function ItemDetail() {
     }, [itemid]);
 
     const handleLoginClick = () => {
-        navigate(`/login?redirect=/item/${itemid}?brand_id=${dto.brand_id}`);
+        const userConfirmed = window.confirm("구매하시려면 회원가입 및 로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?");
+    
+        if (userConfirmed) {
+            navigate(`/login?redirect=/item/${itemid}?brand_id=${dto.brand_id}`);
+        } else {
+            navigate(`/item/${itemid}?brand_id=${dto.brand_id}`);
+        }
     };
 
     const handleIncreaseQuantity = () => {

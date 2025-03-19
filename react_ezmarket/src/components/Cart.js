@@ -149,6 +149,7 @@ const Cart = () => {
     const handleCheckout = () => {
         const token = getTokenFromCookie();
         if (!token) {
+            alert("구매하시려면 회원가입 및 로그인이 필요합니다.");
             navigate('/login', { state: { redirect: '/cart' } });
         } else {
             const selectedCartItems = cartItems
