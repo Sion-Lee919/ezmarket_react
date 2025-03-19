@@ -32,8 +32,6 @@ const Main = () => {
         Cookies.remove('jwt_token');
         navigate('/login');
       });
-    } else {
-      navigate('/login');
     }
   }, [navigate]);
 
