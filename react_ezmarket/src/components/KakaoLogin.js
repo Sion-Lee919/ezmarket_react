@@ -1,9 +1,10 @@
 import React from "react";
 import kakaoLoginImage from "../assets/kakao_login_large_wide.png";
 
-const API_BASE_URL = "http://localhost:9090";
+const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
+
 const REST_API_KEY = "c0841fbae75476b0a18ac9c9644e416c";
-const REDIRECT_URI = `${API_BASE_URL}/login/oauth2/code/kakao`;
+const REDIRECT_URI = `${BASE_URL}/login/oauth2/code/kakao`;
 
 const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=profile_nickname,profile_image,account_email`;
 

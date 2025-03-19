@@ -4,6 +4,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -22,7 +23,7 @@ const Cart = () => {
         const token = getTokenFromCookie();
         if (token) {
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/cart/me`, {
+                const response = await axios.get(`${BASE_URL}/api/cart/me`, {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true
                 });
@@ -65,7 +66,7 @@ const Cart = () => {
         try {
             for (const item of mergedCart) {
                 await axios.post(
-                    `${API_BASE_URL}/api/cart/add`,
+                    `${BASE_URL}/api/cart/add`,
                     null,
                     {
                         params: { productId: item.productId, quantity: item.quantity },
@@ -125,7 +126,7 @@ const Cart = () => {
         const token = getTokenFromCookie();
         if (token) {
             try {
-                await axios.delete(`${API_BASE_URL}/api/cart/remove/${cartId}`, {
+                await axios.delete(`${BASE_URL}/api/cart/remove/${cartId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true
                 });
