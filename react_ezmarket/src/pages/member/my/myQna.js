@@ -91,7 +91,7 @@ const MyQna = () => {
             <div> 
               <div className="history-box" style={{ width: '50px' }}>
                 <a href={`/item/${qna.product_id}`}>
-                  <img src={qna.image_url} alt="상품 이미지"></img>
+                  <img src={`${API_BASE_URL}/showimage?filename=${qna.image_url}&obj=product`} width="80" height="80" alt="상품 이미지" />
                 </a>
               </div>
               </div>

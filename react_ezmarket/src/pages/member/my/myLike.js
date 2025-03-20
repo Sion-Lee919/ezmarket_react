@@ -67,7 +67,7 @@ const MyLike = () => {
           <div className="history-detail">
             <div> 
               <div className="history-box" style={{ width: '50px' }}>
-                <img src={like.product_image_url} alt="상품 이미지"></img>
+                <img src={`${API_BASE_URL}/showimage?filename=${like.image_url}&obj=product`} width="80" height="80" alt="상품 이미지" />
               </div>
               </div>
               <div>
