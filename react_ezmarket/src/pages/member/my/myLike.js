@@ -63,7 +63,7 @@ const MyLike = () => {
       <div className="mypage-info">
       {likes.length > 0 && likes.map((like, index) => (
         <div key={index} className="my-history">
-          <a href={`/item/${like.product_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <a href={`/item/${like.product_id}?brand_id=${like.brand_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <div className="history-detail">
             <div> 
               <div className="history-box" style={{ width: '50px' }}>
