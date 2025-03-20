@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
+const BASE_URL = process.env.REACT_APP_URL || "http://13.208.47.23:8911";
 
 const KakaoRedirectHandler = () => {
   const [loading, setLoading] = useState(true);

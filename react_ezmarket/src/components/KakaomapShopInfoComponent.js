@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // useNavigate 훅을 import
 import "../styles/KakaomapShopInfoComponent.css";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://13.208.47.23:8911/api";
 
 const KakaomapShopInfoComponent = () => {
     const [location, setLocation] = useState({ latitude: null, longitude: null });

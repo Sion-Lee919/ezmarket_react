@@ -4,7 +4,7 @@ import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import axios from "axios";
 import "../styles/BrandItem.css";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://13.208.47.23:8911/api";
 
 // URL에서 쿼리 파라미터 가져오는 함수
 const useQuery = () => {

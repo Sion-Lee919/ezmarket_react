@@ -5,8 +5,8 @@ import Cookies from 'js-cookie';
 import '../../../styles/Login.css';
 import { Placeholder } from 'react-bootstrap';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
-const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://13.208.47.23:8911/api";
+const BASE_URL = process.env.REACT_APP_URL || "http://13.208.47.23:8911";
 
 const Login = () => {
     const [username, setUsername] = useState('');

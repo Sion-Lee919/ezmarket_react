@@ -1,7 +1,7 @@
 import React from "react";
 import kakaoLoginImage from "../assets/kakao_login_large_wide.png";
 
-const BASE_URL = process.env.REACT_APP_URL || "http://localhost:9090";
+const BASE_URL = process.env.REACT_APP_URL || "http://13.208.47.23:8911";
 
 const REST_API_KEY = "c0841fbae75476b0a18ac9c9644e416c";
 const REDIRECT_URI = `${BASE_URL}/login/oauth2/code/kakao`;
