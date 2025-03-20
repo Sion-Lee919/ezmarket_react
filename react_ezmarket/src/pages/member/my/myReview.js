@@ -63,11 +63,11 @@ const MyReview = () => {
       <div className="mypage-info">
       {reviews.length > 0 && reviews.map((review, index) => (
         <div key={index} className="my-history">
-          <a href={`/item/${review.product_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <a href={`/item/${review.product_id}?brand_id=${review.brand_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <div className="history-detail">
             <div> 
               <div className="history-box" style={{ width: '50px' }}>
-                <img src={review.product_image_url} alt="상품 이미지"></img>
+                <img src={`${API_BASE_URL}/showimage?filename=${review.product_image_url}&obj=product`} width="80" height="80" alt="상품 이미지" />
               </div>
               </div>
               <div>
@@ -77,7 +77,7 @@ const MyReview = () => {
               </div>
               <div className="history-box" style={{ width: '50px' }}>
                 {review.image_url ? (
-                  <img src={review.image_url} alt="리뷰 이미지" />
+                  <img src={`${API_BASE_URL}/showimage?filename=${review.image_url}&obj=review`} width="80" height="80" alt="상품 이미지" />
                 ) : (
                   <div style={{ height: '50px', width: '50px' }} /> 
                 )}

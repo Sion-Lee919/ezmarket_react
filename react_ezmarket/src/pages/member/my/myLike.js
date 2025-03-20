@@ -63,11 +63,11 @@ const MyLike = () => {
       <div className="mypage-info">
       {likes.length > 0 && likes.map((like, index) => (
         <div key={index} className="my-history">
-          <a href={`/item/${like.product_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <a href={`/item/${like.product_id}?brand_id=${like.brand_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <div className="history-detail">
             <div> 
               <div className="history-box" style={{ width: '50px' }}>
-                <img src={like.product_image_url} alt="상품 이미지"></img>
+                <img src={`${API_BASE_URL}/showimage?filename=${like.image_url}&obj=product`} width="80" height="80" alt="상품 이미지" />
               </div>
               </div>
               <div>
