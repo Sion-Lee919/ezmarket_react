@@ -5,7 +5,7 @@ import BrandPageLink from "./BrandPageLink";
 import "../styles/BrandHeader.css";
 import SearchComponent from "./SearchComponent";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://13.208.47.23:8911/api";
 
 
 
