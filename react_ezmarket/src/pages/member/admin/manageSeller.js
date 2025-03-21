@@ -143,7 +143,7 @@ const ManageSeller = () => {
                   <td>{brand.brand_update_date}</td>
                   <td>{brand.brandname}</td>
                   <td>{brand.brand_number}</td>
-                  <td><img src={`${API_BASE_URL}/showimage?filename=${brand.brandlogo_url}&obj=brand`} alt="브랜드 로고" style = {{ width:'9%', objectFit: 'cover' }} /></td>
+                  <td><img src={`${API_BASE_URL}/showimage?filename=${brand.brandlogo_url}&obj=brand`} alt="브랜드 로고" style = {{ width:'100%', objectFit: 'cover' }} /></td>
                   <td  style={{maxHeight: '3em', overflow: 'auto', lineHeight: '1.5em', whiteSpace: 'nowrap'}}>
                     <a href={`${API_BASE_URL}/downloadFile?filename=${brand.brandlicense_url}`} target="_blank" rel="noopener noreferrer">
                       {brand.brandlicense_url}
