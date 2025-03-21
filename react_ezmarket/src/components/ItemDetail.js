@@ -30,7 +30,7 @@ function ItemDetail() {
         .then(function(res) {
             setReviewList(res.data);
         });
-    }, [reviewList]);
+    }, [itemid]);
 
     useEffect(() => {
         const token = Cookies.get('jwt_token');
