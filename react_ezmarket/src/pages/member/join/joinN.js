@@ -170,6 +170,12 @@ const JoinN = () => {
   }, [idCheckResult, nicknameCheckResult, emailCheckResult, phoneCheckResult, passwordCheckResult]);
 
   const checkRegisterDisabled = (idResult, nicknameResult, emailResult, phoneResult, passwordCheckResult) => {
+      idResult = idResult || '';
+      nicknameResult = nicknameResult || '';
+      emailResult = emailResult || '';
+      phoneResult = phoneResult || '';
+      passwordCheckResult = passwordCheckResult || '';
+
     if (
       idResult.includes('중복된 아이디') ||
       nicknameResult.includes('중복된 닉네임') ||
