@@ -14,7 +14,8 @@ const MyPageSideBar = () => {
       nickname: '',
       phone: '',
       email: '',
-      address: ''
+      address: '',
+      userauthor: ''
     });
   
     const navigate = useNavigate();

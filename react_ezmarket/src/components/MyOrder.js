@@ -11,6 +11,16 @@ const MyOrder = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [productsInfo, setProductsInfo] = useState({});
+    const [user, setUser] = useState({
+        member_id: '',
+        username: '',
+        realname: '',
+        nickname: '',
+        phone: '',
+        email: '',
+        address: '',
+        userauthor: ''
+      });
     const navigate = useNavigate();
 
     const getTokenFromCookie = () => {
@@ -55,6 +65,52 @@ const MyOrder = () => {
             alert("반품 처리 중 오류가 발생했습니다: " + (error.response?.data?.message || error.message));
         }
     };
+
+    const handleStatusChange = async (id, newStatus) => {
+        const token = getTokenFromCookie();
+        if (!token) {
+            setError("로그인이 필요합니다.");
+            return;
+        }
+
+        try {
+            await axios.post(`${API_BASE_URL}/buy/change/${id}`, {}, {
+                headers: { 'Authorization': `Bearer ${token}` },
+                withCredentials: true,
+                params: { status: newStatus}
+            });
+
+            setOrders((prevOrders) => 
+                prevOrders.map((order) => order.orderId === id ? {...order, status: newStatus} : order)
+            )
+            
+        } catch (error) {
+            console.error("주문 상태 처리 실패:", error);
+            alert("주문 상태 중 오류가 발생했습니다: " + (error.response?.data?.message || error.message));
+        }
+
+    }
+
+    useEffect(() => {
+        const token = Cookies.get('jwt_token'); 
+        
+        if (token) {
+          axios.get(`${API_BASE_URL}/userinfo`, { 
+            headers: { 'Authorization': `Bearer ${token}` }, 
+            withCredentials: true
+          })
+          .then(response => {
+            setUser(response.data);
+          })
+          .catch(error => {
+            alert(error.response.data.message);
+            Cookies.remove('jwt_token');
+            navigate('/login');
+          });
+        } else {
+          navigate('/login');
+        }
+      }, [navigate]);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -170,6 +226,7 @@ const MyOrder = () => {
         );
     }
 
+
     return (
         <div className="container mt-5">
             <h2 className="text-center fw-bold mb-4">나의 주문 목록</h2>
@@ -181,7 +238,15 @@ const MyOrder = () => {
                 return (
                     <div key={orderIndex} className="card mb-4">
                         <div className="card-header d-flex justify-content-between align-items-center">
-                            <span>주문번호: {order.orderId || "정보 없음"}</span>
+                            <span>주문번호: {order.orderId || "정보 없음"}                  
+                                {user.userauthor == 2 &&(
+                                    <select value={order.status} onChange={(e) => handleStatusChange(order.orderId, e.target.value)}>
+                                        <option value="처리 중">처리 중</option>
+                                        <option value="배송 중">배송 중</option>
+                                        <option value="배송 완료">배송 완료</option>
+                                        <option value="반품중">반품중</option>
+                                    </select>
+                                )}</span>
                             <span className={`badge ${
                                 order.status === '처리 중' ? 'bg-warning' : 
                                 order.status === '배송 중' ? 'bg-info' : 
@@ -271,7 +336,7 @@ const MyOrder = () => {
                             </div>
                             
                             <div className="d-flex justify-content-end mt-4">
-                                {order.status === '처리 중' && (
+                                {order.status === '처리 중' && user.userauthor == 1 && (
                                     <button 
                                         className="btn btn-danger"
                                         onClick={() => handleReturnOrder(order.orderId)}
