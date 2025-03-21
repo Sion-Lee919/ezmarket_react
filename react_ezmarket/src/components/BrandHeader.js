@@ -55,7 +55,12 @@ const BrandHeader = () => {
     useEffect(() => {
       if (brand_id) {
         fetch(`${API_BASE_URL}/brand/logo/${brand_id}`)
-          .then((res) => res.json())
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error("서버 응답 오류");
+            }
+            return res.json();
+          })
           .then((data) => {
             if (data.logo_filename) {
               setLogoFileName(data.logo_filename);
@@ -109,18 +114,20 @@ const BrandHeader = () => {
                 </div>
             </div>
         
-        <div className={`brand-banner brand-${brand_id} d-flex justify-content-center border-bottom`} >
-          <img 
-            src={`${API_BASE_URL}/showimage?filename=${logoFileName}&obj=brand`} 
-            alt="Brand Logo" 
-            className="img-fluid"
-            style={{ maxHeight: "80px", cursor: "pointer" }}
-            onClick={() => navigate(`/brandItems?brand_id=${brand_id}`)}
-          />
-        </div>
-        </header>
-        <div style={{ height: "140px" }} aria-hidden="true" role="presentation"></div>
-      </>
+          {logoFileName && (
+          <div className={`brand-banner brand-${brand_id} d-flex justify-content-center border-bottom`}>
+            <img
+              src={`${API_BASE_URL}/showimage?filename=${logoFileName}&obj=brand`}
+              alt="Brand Logo"
+              className="img-fluid"
+              style={{ maxHeight: "80px", cursor: "pointer" }}
+              onClick={() => navigate(`/brandItems?brand_id=${brand_id}`)}
+            />
+          </div>
+        )}
+      </header>
+      <div style={{ height: "140px" }} aria-hidden="true" role="presentation"></div>
+    </>
     )
 };
 
