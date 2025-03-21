@@ -146,7 +146,7 @@ const MyPage = () => {
           <div className="order-image-detail">
             <div>
               <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px' }}>{recently_viewed[0] ? recently_viewed[0].name : '　'}</div>
-              <div className="order-image-box">
+              <div className="order-image-box" style = {{ overflow: 'hidden', width: '130px', height: '130px' }} >
                 <a href={`/item/${recently_viewed[0] ? recently_viewed[0].product_id : '#'}`}
                 style={recently_viewed[0] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
                   <img src={recently_viewed[0] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[0].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`1번`}
@@ -155,8 +155,8 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px', objectFit: 'cover' }}>{recently_viewed[1] ? recently_viewed[1].name : '　'}</div>
-              <div className="order-image-box">
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px', }}>{recently_viewed[1] ? recently_viewed[1].name : '　'}</div>
+              <div className="order-image-box" style = {{ overflow: 'hidden', width: '130px', height: '130px' }} >
                 <a href={`/item/${recently_viewed[1] ? recently_viewed[1].product_id : '#'}`}
                 style={recently_viewed[1] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
                   <img src={recently_viewed[1] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[1].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`2번`}
@@ -165,8 +165,8 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px', objectFit: 'cover' }}>{recently_viewed[2] ? recently_viewed[2].name : '　'}</div>
-              <div className="order-image-box">
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px' }}>{recently_viewed[2] ? recently_viewed[2].name : '　'}</div>
+              <div className="order-image-box" style = {{ overflow: 'hidden', width: '130px', height: '130px' }} >
                 <a href={`/item/${recently_viewed[2] ? recently_viewed[2].product_id : '#'}`}
                 style={recently_viewed[2] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
                   <img src={recently_viewed[2] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[2].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`3번`}
@@ -175,8 +175,8 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px', objectFit: 'cover' }}>{recently_viewed[3] ? recently_viewed[3].name : '　'}</div>
-              <div className="order-image-box">
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px' }}>{recently_viewed[3] ? recently_viewed[3].name : '　'}</div>
+              <div className="order-image-box" style = {{ overflow: 'hidden', width: '130px', height: '130px' }} >
                 <a href={`/item/${recently_viewed[3] ? recently_viewed[3].product_id : '#'}`}
                 style={recently_viewed[3] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
                  <img src={recently_viewed[3] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[3].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`4번`}
@@ -185,8 +185,8 @@ const MyPage = () => {
               </div>
             </div>
             <div>
-              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px', objectFit: 'cover' }}>{recently_viewed[4] ? recently_viewed[4].name : '　'}</div>
-              <div className="order-image-box">
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px' }}>{recently_viewed[4] ? recently_viewed[4].name : '　'}</div>
+              <div className="order-image-box" style = {{ overflow: 'hidden', width: '130px', height: '130px' }} >
                 <a href={`/item/${recently_viewed[4] ? recently_viewed[4].product_id : '#'}`}
                 style={recently_viewed[4] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
                   <img src={recently_viewed[4] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[4].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`5번`}
