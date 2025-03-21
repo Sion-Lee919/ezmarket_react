@@ -4,7 +4,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://13.208.47.23:8911/api";
-const WEBSOCKET_BASE_URL = process.env.REACT_APP_WEBSOCKET_URL || "ws:http://13.208.47.23:8911/api";
+const WEBSOCKET_BASE_URL = process.env.REACT_APP_WEBSOCKET_URL || "ws://13.208.47.23:8911";
 const BASE_URL = process.env.REACT_APP_URL || "http://13.208.47.23:8911";
 
 
