@@ -20,6 +20,7 @@ const BrandHeader = () => {
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [logoFileName, setLogoFileName] = useState("");
 
     useEffect(() => {
         const token = Cookies.get('jwt_token');
@@ -50,6 +51,21 @@ const BrandHeader = () => {
     const handleCartClick = () => {
       navigate("/cart");
     };
+
+    useEffect(() => {
+      if (brand_id) {
+        fetch(`${API_BASE_URL}/brand/logo/${brand_id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.logo_filename) {
+              setLogoFileName(data.logo_filename);
+            }
+          })
+          .catch((err) => {
+            console.error("로고 요청 실패", err);
+          });
+      }
+    }, [brand_id]);
 
     return (
       <>
@@ -95,7 +111,7 @@ const BrandHeader = () => {
         
         <div className={`brand-banner brand-${brand_id} d-flex justify-content-center border-bottom`} >
           <img 
-            src={`${API_BASE_URL}/showimage?filename=logo${brand_id}.png&obj=brand`} 
+            src={`${API_BASE_URL}/showimage?filename=${logoFileName}&obj=brand`} 
             alt="Brand Logo" 
             className="img-fluid"
             style={{ maxHeight: "80px", cursor: "pointer" }}
