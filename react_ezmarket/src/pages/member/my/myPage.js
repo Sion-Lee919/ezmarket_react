@@ -145,11 +145,12 @@ const MyPage = () => {
           <div style={{ fontSize : "18px" , fontWeight: "bold", marginBottom: "10px" }}>최근 본 게시물</div>
           <div className="order-image-detail">
             <div>
-              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px', objectFit: 'cover' }}>{recently_viewed[0] ? recently_viewed[0].name : '　'}</div>
+              <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', width: '130px' }}>{recently_viewed[0] ? recently_viewed[0].name : '　'}</div>
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[0] ? recently_viewed[0].product_id : '#'}`}
                 style={recently_viewed[0] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
-                  <img src={recently_viewed[0] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[0].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`1번`}/>
+                  <img src={recently_viewed[0] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[0].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`1번`}
+                  style = {{ objectFit: 'cover' , width: '100%', height: '100%' }}/>
                 </a>
               </div>
             </div>
@@ -158,7 +159,8 @@ const MyPage = () => {
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[1] ? recently_viewed[1].product_id : '#'}`}
                 style={recently_viewed[1] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
-                  <img src={recently_viewed[1] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[1].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`2번`}/>
+                  <img src={recently_viewed[1] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[1].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`2번`}
+                  style = {{ objectFit: 'cover' , width: '100%', height: '100%' }}/>
                 </a>
               </div>
             </div>
@@ -167,7 +169,8 @@ const MyPage = () => {
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[2] ? recently_viewed[2].product_id : '#'}`}
                 style={recently_viewed[2] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
-                  <img src={recently_viewed[2] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[2].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`3번`}/>
+                  <img src={recently_viewed[2] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[2].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`3번`}
+                  style = {{ objectFit: 'cover' , width: '100%', height: '100%' }}/>
                 </a>
               </div>
             </div>
@@ -176,7 +179,8 @@ const MyPage = () => {
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[3] ? recently_viewed[3].product_id : '#'}`}
                 style={recently_viewed[3] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
-                 <img src={recently_viewed[3] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[3].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`4번`}/>
+                 <img src={recently_viewed[3] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[3].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`4번`}
+                 style = {{ objectFit: 'cover' , width: '100%', height: '100%' }}/>
                 </a>
               </div>
             </div>
@@ -185,7 +189,8 @@ const MyPage = () => {
               <div className="order-image-box">
                 <a href={`/item/${recently_viewed[4] ? recently_viewed[4].product_id : '#'}`}
                 style={recently_viewed[4] ? {} : { pointerEvents: 'none', cursor: 'not-allowed' }}>
-                  <img src={recently_viewed[4] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[4].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`5번`} />
+                  <img src={recently_viewed[4] ? `${API_BASE_URL}/showimage?filename=${recently_viewed[4].image_url}&obj=product` : 'https://img.freepik.com/free-vector/cross-mark-hand-drawn-scribble-line_78370-1425.jpg?semt=ais_hybrid'} alt={`5번`}
+                  style = {{ objectFit: 'cover' , width: '100%', height: '100%' }}/>
                 </a>
               </div>
             </div>
