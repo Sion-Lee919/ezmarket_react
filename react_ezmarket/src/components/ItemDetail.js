@@ -341,8 +341,8 @@ function ItemDetail() {
                                 <button className="product-handle-button" onClick={handleLoginClick}>회원가입 후 구매</button>
                             )}
                                 {isLiked ? (
-                                    <button className="product-handle-button" onClick={handleUnlike}>💙 찜 취소</button>):
-                                    (<button className="product-handle-button" onClick={handleLike}>🤍 찜 하기</button>)
+                                    <button className="product-handle-button-like" onClick={handleUnlike}>찜취소</button>):
+                                    (<button className="product-handle-button" onClick={handleLike}>찜하기</button>)
                                 }
                             </>
                       
