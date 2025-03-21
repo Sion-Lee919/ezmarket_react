@@ -15,7 +15,7 @@ const QnAChatRoomListComponent = (props) => {
 
     useEffect(() => {
         axios({
-            url: `${BASE_URL}/chatroom/getmemberlistinchatroom?productId=${product_id}`,
+            url: `${API_BASE_URL}/chatroom/getmemberlistinchatroom?productId=${product_id}`,
             method: 'GET',
         })
         .then(function (res) {

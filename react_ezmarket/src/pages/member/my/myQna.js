@@ -45,7 +45,7 @@ const MyQna = () => {
     const token = Cookies.get('jwt_token'); 
     
     if (token) {
-      axios.get(`${BASE_URL}/getMyChat`, {
+      axios.get(`${API_BASE_URL}/getMyChat`, {
         headers: { 'Authorization': `Bearer ${token}` },
         withCredentials: true
       })
