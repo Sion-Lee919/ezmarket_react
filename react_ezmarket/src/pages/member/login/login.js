@@ -48,7 +48,7 @@ const Login = () => {
             window.location.reload();
         })
         .catch(error => {
-            alert(error.response.data.message);
+            alert('로그인 오류! 잠시 후 다시 시도해주세요.');
         });
     };
 

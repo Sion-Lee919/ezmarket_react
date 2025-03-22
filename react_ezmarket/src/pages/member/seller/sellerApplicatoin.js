@@ -64,7 +64,6 @@ const SellerApplication = () => {
         }));
       })
       .catch(error => {
-        alert(error.response.data.message);
         Cookies.remove('jwt_token');
         navigate('/login');
       });
@@ -95,7 +94,7 @@ const SellerApplication = () => {
         setIsSubmitDisabled(false);
       }
     } catch (error) {
-      console.error('사업자 번호 중복 확인 오류', error);
+      console.error('사업자 번호 중복 확인 오류');
     }
   };
 

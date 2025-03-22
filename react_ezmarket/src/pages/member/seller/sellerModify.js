@@ -31,7 +31,6 @@ const SellerModify = () => {
         setBrandLogoPreview(response.data.brandlogo_url);
       })
       .catch(error => {
-        alert(error.response.data.message);
         Cookies.remove('jwt_token');
         navigate('/login');
       });

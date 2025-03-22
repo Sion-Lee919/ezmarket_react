@@ -29,7 +29,6 @@ const ManageMoney = () => {
             }
         })
         .catch(error => {
-            alert(error.response.data.message); 
             Cookies.remove('jwt_token');  
             navigate('/login');
         });
@@ -51,7 +50,7 @@ const ManageMoney = () => {
         setAllBrands(filteredBrands);
       })
       .catch((error) => {
-        console.error("데이터 가져오기 실패:", error);
+        console.error("데이터 가져오기 실패");
       });
   }, []);
 
@@ -67,7 +66,6 @@ const ManageMoney = () => {
         window.location.reload();
       })
       .catch((error) => {
-        console.error(error);
         alert("승인 오류 발생!");
       });
     }
@@ -85,7 +83,6 @@ const ManageMoney = () => {
           window.location.reload();
         })
         .catch((error) => {
-          console.error(error);
           alert("거절 오류 발생!");
         });
       }

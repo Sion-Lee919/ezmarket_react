@@ -60,7 +60,7 @@ const ResetPw = () => {
             navigate('/login'); 
         })
         .catch(error => {
-            alert(error.response.data.message);  
+            alert('비밀번호 재설정 오류!');  
         });
     };
 

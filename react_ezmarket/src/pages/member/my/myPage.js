@@ -48,7 +48,6 @@ const MyPage = () => {
         setUser(response.data);
       })
       .catch(error => {
-        alert(error.response.data.message);
         Cookies.remove('jwt_token');
         navigate('/login');
       });

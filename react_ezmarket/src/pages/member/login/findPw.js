@@ -30,7 +30,7 @@ const FindPw = () => {
             navigate(`/login/findPw/resetPw?username=${username}`); 
         })
         .catch(error => {
-            alert(error.response.data.message);  
+            alert('비밀번호 찾기 오류!');  
         });
     };
 

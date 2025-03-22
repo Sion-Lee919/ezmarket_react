@@ -78,7 +78,7 @@ const JoinN = () => {
       setIdCheckResult(response.data);
       checkRegisterDisabled(response.data, nicknameCheckResult, emailCheckResult, phoneCheckResult);
     } catch (error) {
-      console.error('아이디 중복 확인 오류', error);
+      console.error('아이디 중복 확인 오류');
     }
   };
 
@@ -99,7 +99,7 @@ const JoinN = () => {
       setNicknameCheckResult(response.data);
       checkRegisterDisabled(idCheckResult, response.data, emailCheckResult, phoneCheckResult);
     } catch (error) {
-      console.error('닉네임 중복 확인 오류', error);
+      console.error('닉네임 중복 확인 오류');
     }
   };
 
@@ -143,7 +143,7 @@ const JoinN = () => {
       setEmailCheckResult(response.data);
       checkRegisterDisabled(idCheckResult, response.data, nicknameCheckResult, phoneCheckResult);
     } catch (error) {
-      console.error('이메일 중복 확인 오류', error);
+      console.error('이메일 중복 확인 오류');
     }
   };
 
@@ -161,7 +161,7 @@ const JoinN = () => {
       setPhoneCheckResult(response.data);
       checkRegisterDisabled(idCheckResult, response.data, nicknameCheckResult, emailCheckResult);
     } catch (error) {
-      console.error('전화번호 중복 확인 오류', error);
+      console.error('전화번호 중복 확인 오류');
     }
   };
 

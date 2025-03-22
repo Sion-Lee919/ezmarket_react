@@ -38,7 +38,6 @@ const Modify = () => {
         setForm(response.data);
       })
       .catch(error => {
-        alert(error.response.data.message);
         Cookies.remove('jwt_token');
         navigate('/login');
       });
@@ -65,7 +64,7 @@ const Modify = () => {
       setNicknameCheckResult(response.data);
       setIsRegisterDisabled(response.data.includes('중복된 닉네임'));
     } catch (error) {
-      alert(error.response.data.message);
+      console.error('닉네임 중복 확인 오류');
     }
   };
 
@@ -86,7 +85,7 @@ const Modify = () => {
       setPhoneCheckResult(response.data);
       setIsRegisterDisabled(response.data.includes('중복된 전화번호'));
     } catch (error) {
-      alert(error.response.data.message);
+      console.error('전화번호 중복 확인 오류');
     }
   };
 

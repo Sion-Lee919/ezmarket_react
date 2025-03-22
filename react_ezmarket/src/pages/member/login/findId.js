@@ -25,7 +25,7 @@ const FindId = () => {
         setFoundId(response.data.username);
     })
     .catch(error => {
-        alert(error.response.data.message);
+        alert('아이디 찾기 오류!');
     });
   };
 

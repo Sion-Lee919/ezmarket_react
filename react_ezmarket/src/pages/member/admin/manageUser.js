@@ -28,7 +28,6 @@ const ManageUser = () => {
             }
         })
         .catch(error => {
-            alert(error.response.data.message); 
             Cookies.remove('jwt_token');  
             navigate('/login');
         });
@@ -45,7 +44,7 @@ const ManageUser = () => {
         setAllUsers(response.data);
       })
       .catch((error) => {
-        console.error("데이터 가져오기 실패:", error);
+        console.error("데이터 가져오기 실패:");
       });
   }, []);
 
@@ -64,7 +63,6 @@ const ManageUser = () => {
           window.location.reload();
         })
         .catch((error) => {
-          console.error(error);
           alert("강퇴 오류 발생!");
         });
       }
@@ -83,7 +81,6 @@ const ManageUser = () => {
           window.location.reload();
         })
         .catch((error) => {
-          console.error(error);
           alert("복구 오류 발생!");
         });
       }
