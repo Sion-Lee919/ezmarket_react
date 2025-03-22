@@ -177,18 +177,40 @@ const Cart = () => {
                 <p className="text-center" style={{ fontSize: '1.5rem' }}>장바구니가 비어 있습니다.</p>
             ) : (
                 <div className="card p-3">
-                    <div className="d-flex justify-content-between mb-3">
+                    {/* <div className="d-flex justify-content-between mb-3">
                         <input
                             type="checkbox"
                             checked={selectedItems.length === cartItems.length}
                             onChange={() => setSelectedItems(selectedItems.length === cartItems.length ? [] : cartItems.map((item) => item.cartId))}
                         />
                         <span style={{ fontSize: '1.1rem' }}>전체 선택</span>
+                    </div> */}
+                    <div
+                        className="d-flex justify-content-between align-items-center mb-3"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() =>
+                            setSelectedItems(
+                            selectedItems.length === cartItems.length
+                                ? []
+                                : cartItems.map((item) => item.cartId)
+                            )
+                        }
+                        >
+                        <input
+                            type="checkbox"
+                            checked={selectedItems.length === cartItems.length}
+                            onChange={(e) => e.stopPropagation()}
+                            style={{ width: '20px', height: '20px' }}
+                        />
+                        <span style={{ fontSize: '1.3rem', fontWeight: 'bold', marginLeft: '8px' }}>
+                            전체 선택
+                        </span>
                     </div>
                     {cartItems.map((item) => (
                         <div key={item.cartId} className="d-flex align-items-center border-bottom pb-3 mb-3">
                             <input
                                 type="checkbox"
+                                style={{ width: '20px', height: '20px' }}
                                 checked={selectedItems.includes(item.cartId)}
                                 onChange={() => setSelectedItems((prev) =>
                                     prev.includes(item.cartId) ? prev.filter((id) => id !== item.cartId) : [...prev, item.cartId])
