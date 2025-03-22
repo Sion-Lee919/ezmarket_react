@@ -2,9 +2,10 @@ import { useRef, useState, useEffect } from 'react';
 import * as StompJs from '@stomp/stompjs';
 import axios from "axios";
 import Cookies from 'js-cookie';
+import SockJS from 'sockjs-client';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://13.208.47.23:8911/api";
-const WEBSOCKET_BASE_URL = process.env.REACT_APP_WEBSOCKET_URL || "ws://13.208.47.23:8911";
+//const WEBSOCKET_BASE_URL = process.env.REACT_APP_WEBSOCKET_URL || "ws://13.208.47.23:8911";
 const BASE_URL = process.env.REACT_APP_URL || "http://13.208.47.23:8911";
 
 
@@ -102,7 +103,7 @@ const QnAChatComponent = (props) => {
 
   const fetchChatHistory = async (channelId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/chat/records`, {
+      const response = await axios.get(`${API_BASE_URL}/chat/records`, {
         params: { channelId },
       });
       setChatList(response.data);  // DB에서 가져온 채팅 기록을 상태에 저장
@@ -113,7 +114,8 @@ const QnAChatComponent = (props) => {
 
   const connect = () => {
     client.current = new StompJs.Client({
-      brokerURL: `${WEBSOCKET_BASE_URL}/ws`,
+      //brokerURL: `${WEBSOCKET_BASE_URL}/ws`,
+      webSocketFactory: () => new SockJS(`${BASE_URL}/ws`),
       onConnect: () => {
         subscribe();
       },
