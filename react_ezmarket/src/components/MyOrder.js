@@ -50,11 +50,11 @@ const MyOrder = () => {
                 withCredentials: true
             });
             
-            alert("반품 처리중입니다.");
+            alert("반품 신청하셨습니다. 판매자의 승인을 기다리고 있으니 잠시만 기다려 주세요");
             
             const updatedOrders = orders.map(order => {
                 if (order.orderId === orderId) {
-                    return { ...order, status: '반품중' };
+                    return { ...order, status: '반품 신청중' };
                 }
                 return order;
             });
@@ -66,6 +66,32 @@ const MyOrder = () => {
         }
     };
 
+    const handleApproveReturn = async (orderId) => {
+        const token = getTokenFromCookie();
+        if (!token) {
+            setError("로그인이 필요합니다.");
+            return;
+        }
+    
+        try {
+            await axios.post(`${API_BASE_URL}/buy/change/${orderId}`, {}, {
+                headers: { 'Authorization': `Bearer ${token}` },
+                withCredentials: true,
+                params: { status: '반품중' }
+            });
+    
+            alert("반품이 승인되었습니다.");
+    
+            const updatedOrders = orders.map(order =>
+                order.orderId === orderId ? { ...order, status: '반품중' } : order
+            );
+            setOrders(updatedOrders);
+        } catch (error) {
+            console.error("반품 승인 실패:", error);
+            alert("반품 승인 중 오류가 발생했습니다: " + (error.response?.data?.message || error.message));
+        }
+    };
+    
     const handleStatusChange = async (id, newStatus) => {
         const token = getTokenFromCookie();
         if (!token) {
@@ -239,12 +265,12 @@ const MyOrder = () => {
                     <div key={orderIndex} className="card mb-4">
                         <div className="card-header d-flex justify-content-between align-items-center">
                             <span>주문번호: {order.orderId || "정보 없음"}                  
-                                {user.userauthor == 2 &&(
-                                    <select value={order.status} onChange={(e) => handleStatusChange(order.orderId, e.target.value)}>
+                                {user.userauthor == 0 &&
+                                     !['반품 신청중', '반품중'].includes(order.status) && (
+                                        <select value={order.status} onChange={(e) => handleStatusChange(order.orderId, e.target.value)}>
                                         <option value="처리 중">처리 중</option>
                                         <option value="배송 중">배송 중</option>
                                         <option value="배송 완료">배송 완료</option>
-                                        <option value="반품중">반품중</option>
                                     </select>
                                 )}</span>
                             <span className={`badge ${
@@ -342,6 +368,14 @@ const MyOrder = () => {
                                         onClick={() => handleReturnOrder(order.orderId)}
                                     >
                                         반품 신청
+                                    </button>
+                                )}
+                                {order.status === '반품 신청중' && user.userauthor == 2 && (
+                                    <button 
+                                        className="btn btn-warning" 
+                                        onClick={() => handleApproveReturn(order.orderId)}
+                                    >
+                                        반품 승인
                                     </button>
                                 )}
                             </div>
