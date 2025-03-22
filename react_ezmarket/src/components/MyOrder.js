@@ -263,7 +263,7 @@ const MyOrder = () => {
 
                 return (
                     <div key={orderIndex} className="card mb-4">
-                        <div className="card-header d-flex justify-content-between align-items-center">
+                        <div className="card-header d-flex justify-content-between align-items-center" style={{ backgroundColor: '#fdfdfd' }}>
                             <span>주문번호: {order.orderId || "정보 없음"}                  
                                 {user.userauthor == 0 &&
                                      !['반품 신청중', '반품중'].includes(order.status) && (
@@ -274,6 +274,7 @@ const MyOrder = () => {
                                     </select>
                                 )}</span>
                             <span className={`badge ${
+                                order.status === '반품 신청중' ? 'bg-dark' :
                                 order.status === '처리 중' ? 'bg-warning' : 
                                 order.status === '배송 중' ? 'bg-info' : 
                                 order.status === '배송 완료' ? 'bg-success' : 
@@ -289,7 +290,7 @@ const MyOrder = () => {
                             
                             <div className="table-responsive mb-3">
                                 <table className="table table-bordered">
-                                    <thead>
+                                    <thead style={{ backgroundColor: '#f8f9fa' }}>
                                         <tr>
                                             <th>상품 정보</th>
                                             <th>수량</th>
@@ -329,7 +330,7 @@ const MyOrder = () => {
                                             </tr>
                                         )}
                                     </tbody>
-                                    <tfoot>
+                                    <tfoot style={{ backgroundColor: '#f8f9fa' }}>
                                         <tr>
                                             <td colSpan="3" className="text-end"><strong>상품 금액</strong></td>
                                             <td>{productAmount.toLocaleString()}원</td>
