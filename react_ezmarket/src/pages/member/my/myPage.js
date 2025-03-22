@@ -133,7 +133,7 @@ const MyPage = () => {
                 <div className="order-flow-count">{orderCounts.shipped}</div>
               </div>
               <div>
-                <div>반품</div>
+                <div>반품 완료</div>
                 <div className="order-flow-box">
                   <img src="/images/pay.jpg" alt="반품"></img>
                 </div>
