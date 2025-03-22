@@ -83,33 +83,36 @@ const SellerModify = () => {
   };
 
   return (
-    <div>
-      <h1>판매자 정보 수정</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="join-form-container">
+      
+      <form onSubmit={handleSubmit} className="join-form">
+        <div className="join-form-title">판매자 정보 수정</div>
+        <hr></hr>
         <div>
           <input type="hidden" name="brand_id" value={Number(form.brand_id)} />
         </div>
 
         <div>
-          <label htmlFor="brandname">상호명: </label>
+          <label htmlFor="brandname">상호명</label>
           <input type="text" name="brandname" value={form.brandname} onChange={(e) => setForm({ ...form, brandname: e.target.value })} />
         </div>
 
         <div>
-          <label htmlFor="brand_number">사업자번호: </label>
+          <label htmlFor="brand_number">사업자번호</label>
           <input type="text" name="brand_number" value={form.brand_number} onChange={(e) => setForm({ ...form, brand_number: e.target.value })} disabled />
         </div>
 
         <div>
-          <label htmlFor="brandLicenseFile">상호 로고: </label>
-          {/* {form.brandlogo_url && !previewLogo && (<img src={aws 배포 후 설정} alt="상호 로고") */}
-          {brandLogoPreview && <img src={brandLogoPreview} alt="상호 로고 미리보기"/>}
+          <label htmlFor="brandLicenseFile">상호 로고</label>
+          <div>{brandLogoPreview && <img src={brandLogoPreview} alt="상호 로고 미리보기"/>}</div>
           <input type="file" id="brandLogoFile" accept="image/*" onChange={handleBrandLogoChange} />
         </div>
         
+        <hr></hr>
+
         <div>
-          <button type="submit">수정하기</button>
-          <button type="button" onClick={() => navigate(-1)}>이전</button>
+          <button type="button" className="prev-join" onClick={() => navigate(-1)}>이전</button>
+          <button type="submit" className="join-join" >수정하기</button>
         </div>
 
       </form>
