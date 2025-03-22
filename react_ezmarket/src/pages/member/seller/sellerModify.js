@@ -103,8 +103,11 @@ const SellerModify = () => {
         </div>
 
         <div>
+
           <label htmlFor="brandLicenseFile">상호 로고</label>
-          <div>{brandLogoPreview && <img src={brandLogoPreview} alt="상호 로고 미리보기"/>}</div>
+         <div>
+          {brandLogoPreview && <img src={`${API_BASE_URL}/showimage?filename=${form.brandlogo_url}&obj=brand`} alt="상호 로고 미리보기"/>}
+         </div>
           <input type="file" id="brandLogoFile" accept="image/*" onChange={handleBrandLogoChange} />
         </div>
         
